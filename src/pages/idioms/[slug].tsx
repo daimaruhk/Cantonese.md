@@ -118,7 +118,7 @@ const HeroSection = ({ idiomData }: { idiomData: IdiomData }) => {
           variant="outline"
           render={
             <Link
-              href={`${homepage}/blob/master/src/contents/idioms/${encodeURIComponent(idiomData.term)}.md`}
+              href={`${homepage}/blob/main/src/contents/idioms/${encodeURIComponent(idiomData.term)}.md`}
             />
           }
           nativeButton={false}
