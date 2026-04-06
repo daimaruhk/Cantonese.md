@@ -15,7 +15,7 @@ type IdiomCardProps = {
 };
 
 const cardClassNames =
-  "absolute inset-0 backface-hidden grid place-items-center text-center bg-[url('/card_bg.png')] bg-cover bg-center bg-no-repeat";
+  "absolute inset-0 backface-hidden grid place-items-center text-center bg-[url('/card_bg.webp')] bg-cover bg-center bg-no-repeat";
 
 const cardButtonClassNames =
   'absolute bottom-3 md:bottom-6 inset-x-0 text-muted-foreground';

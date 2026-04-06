@@ -100,7 +100,7 @@ const HeroSection = () => {
       <div className="flex-1">
         <div className="relative mt-8 mr-4 ml-auto w-[90%] max-w-[480px] md:mt-0 md:mr-0 md:w-[85%] lg:w-[80%]">
           <Image
-            src="/hero.jpg"
+            src="/hero.webp"
             alt="Hong Kong Neon Street"
             className="aspect-4/5 rounded-[2rem] object-cover shadow-[0_20px_50px_rgba(0,0,0,0.3)] grayscale sm:aspect-3/4"
           />
