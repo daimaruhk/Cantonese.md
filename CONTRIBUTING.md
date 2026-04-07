@@ -8,97 +8,134 @@ The following is a set of guidelines for contributing to Cantonese.md. These are
 
 - [Code of Conduct](#code-of-conduct)
 - [How Can I Contribute?](#how-can-i-contribute)
+  - [Improving Cantonese Library](#improving-cantonese-library)
   - [Reporting Bugs](#reporting-bugs)
-  - [Suggesting Enhancements](#suggesting-enhancements)
+  - [Requesting Features](#requesting-features)
+  - [Writing Code](#writing-code)
+- [Project Structure](#project-structure)
 - [Local Development Setup](#local-development-setup)
 - [Pull Request Process](#pull-request-process)
-- [Styleguides](#styleguides)
+- [Commit Styleguide](#commit-styleguide)
 
 ---
 
 ## Code of Conduct
 
-By participating in this project, you are expected to uphold our [Code of Conduct](CODE_OF_CONDUCT.md). Please report unacceptable behavior to [Email Address].
+By participating in this project, you are expected to uphold our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## How Can I Contribute?
 
+### Improving Cantonese Library
+
+#### Adding New Content
+
+You can add new Cantonese idioms (歇後語) using the generation script:
+
+1. Run the script with the idiom term:
+   ```bash
+   pnpm run gen:idiom "賣魚佬沖涼"
+   ```
+2. This creates a new file in `src/contents/idioms/賣魚佬沖涼.md`.
+3. Fill in the required frontmatter and the markdown body.
+
+#### Improving Existing Content
+
+Feel free to edit any markdown file in `src/contents/idioms/` for typos, grammatical errors, missing or incorrect information. Please ensure:
+
+- The Jyutping follows the standard format (lowercase syllables followed by tone numbers 1-6).
+- Do not use anything other than Jyutping, such as Yale or other romanization systems.
+- The `id` in the frontmatter remains untouched.
+
+### Writing Code
+
+Bug fixes, new features, UI/UX improvements, etc. are all welcome.
+
 ### Reporting Bugs
 
-Before creating bug reports, please check the existing issues as you might find out that you don't need to create one. When you are creating a bug report, please include as many details as possible:
+If you find a bug, please check the existing issues as you might find out that you don't need to create one. If you do need to create one, please use the [bug report template](https://github.com/daimaruhk/Cantonese.md/issues/new?template=bug_report.md).
 
-- **Use a clear and descriptive title** for the issue to identify the problem.
-- **Describe the exact steps** to reproduce the problem.
-- **Provide specific examples** to demonstrate the steps (e.g., code snippets or links to a reproducible repository).
-- **Describe the behavior you observed** after following the steps and point out what exactly is the problem with that behavior.
-- **Explain which behavior you expected** to see instead and why.
-- **Include environment details** (OS, framework version, language version, etc.).
+### Requesting Features
 
-### Suggesting Enhancements
+Before creating a feature request, check the existing issues. If you do need to create one, please use the [feature request template](https://github.com/daimaruhk/Cantonese.md/issues/new?template=feature_request.md).
 
-Enhancement suggestions are tracked as GitHub issues. Before creating an enhancement request, check the existing issues. When creating one, please provide:
+## Project Structure
 
-- **A clear and descriptive title**.
-- **A step-by-step description** of the suggested enhancement.
-- **Specific examples** to demonstrate the steps or intended usage.
-- **An explanation of why** this enhancement would be useful to most users.
+```text
+src/
+├── components/   # Reusable UI components
+│   ├── features/ # Feature-specific components
+│   └── ui/       # Core UI primitives
+├── contents/     # Markdown-based content
+├── lib/          # Shared utilities and logic
+├── pages/        # Next.js routes (Page Router)
+├── schema/       # Zod data validation schemas
+├── styles/       # Global CSS (Tailwind 4)
+└── tests/        # Testing suite (Vitest)
+scripts/          # Developer tooling and automation
+```
+
+### Dependencies
+
+1. **Next.js Page Router**: Intentionally using Page Router SSG because the entire website is designed to be static.
+2. **Tailwind**: Leveraging the latest utility-first CSS framework.
+3. **Shadcn with Base UI**: If you need new components, please refer to [Shadcn UI](https://ui.shadcn.com/). We use **Base UI** instead of Radix for its superior flexibility and active maintenance.
+4. **Vitest**: Our primary testing framework for unit and content validation.
 
 ## Local Development Setup
 
-To build and run [Project Name] locally, follow these steps:
+### Requirements
 
-1. **Fork the repository** on GitHub.
-2. **Clone your fork locally**:
+- **Node.js**: 24.x or higher
+- **pnpm**: 10.x or higher
+
+### Steps
+
+1. **Fork and Clone**: Fork the repository and clone it to your local machine.
+2. **Install Dependencies**:
    ```bash
-   git clone [https://github.com/YOUR-USERNAME/](https://github.com/YOUR-USERNAME/)[Project Name].git
-   cd [Project Name]
+   pnpm install
    ```
-3. **Install dependencies**:
+3. **Start Development Server**:
+   ```bash
+   pnpm dev
+   ```
+   The site will be available at `http://localhost:3000`.
 
-```Bash
-# [Insert your package manager command, e.g., npm install, pip install -r requirements.txt, cargo build]
-```
+### Other Commands
 
-4. **Run the local development server/build**:
-
-```Bash
-# [Insert command, e.g., npm run dev]
-```
-
-5. **Run the test suite to ensure everything is working**:
-
-```Bash
-# [Insert test command, e.g., npm test]
-```
+| Command       | Description                                 |
+| :------------ | :------------------------------------------ |
+| `pnpm build`  | Build the project for production            |
+| `pnpm lint`   | Run ESLint to check for code quality issues |
+| `pnpm format` | Run Prettier to format the codebase         |
+| `pnpm test`   | Run the test suite using Vitest             |
 
 ## Pull Request Process
 
-1. Branching: Create a new branch from main (e.g., feature/add-new-api or bugfix/issue-123).
+1. **Branch**: Create a new branch from `main` (e.g., `feat/new-idiom` or `fix/typo`).
+2. **Develop**: Make your changes and ensure they follow the project standards.
+3. **Commit**: Follow the [Commit Styleguide](#commit-styleguide).
+4. **Tests**: Add new tests if necessary.
+5. **Quality Check**: Run `pnpm test`, `pnpm lint`, and `pnpm format` to ensure the code is production-ready.
+6. **Push & PR**: Push to your fork and submit a Pull Request to the upstream `main` branch.
+7. **Review**: Wait for maintainer review and address any feedback.
 
-2. Commit: Make your changes. Ensure your commit messages follow our Commit Styleguide.
+## Commit Styleguide
 
-3. Test: Add tests for your changes. Ensure the entire test suite passes locally.
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification for our commit messages. This helps us maintain a clean git history.
 
-4. Document: If you changed the API, UI, or setup process, update the README.md or documentation folder accordingly.
+- **feat**: A new feature
+- **fix**: A bug fix
+- **docs**: Documentation only changes
+- **style**: Changes that do not affect the meaning of the code (white-space, formatting, etc.)
+- **refactor**: A code change that neither fixes a bug nor adds a feature
+- **perf**: A code change that improves performance
+- **test**: Adding missing tests or correcting existing tests
+- **chore**: Changes to the build process or auxiliary tools and libraries
 
-5. Push & PR: Push to your fork and submit a Pull Request against the main branch of the upstream repository.
+Example:
 
-6. Review: Maintainers will review your PR. Be prepared to respond to feedback and make necessary updates.
-
-_Note: All PRs must pass the CI/CD pipeline checks before they can be merged._
-
-## Styleguides
-
-### Code Style
-
-- We follow [Insert Standard, e.g., PEP 8, Airbnb JavaScript Style Guide].
-- We use [Insert Linter/Formatter, e.g., Prettier, ESLint, Ruff] to enforce this. Run the formatter before committing:
-
-```Bash
-# [Insert format command, e.g., npm run format]
+```bash
+feat: add idiom recommendation section to detail page
+fix: resolve jyutping regex failing on single character terms
 ```
-
-### Commit Messages
-
-We use Conventional Commits for our commit messages.
-
-- Examples: feat: add user authentication, fix: resolve crash on startup, docs: update setup instructions.
