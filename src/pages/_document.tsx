@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html lang="zh-Hant">
       <Head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
       <body className="bg-background text-foreground font-sans antialiased">
         <Main />

@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://cantonese.md">
+    <img src="./public/brand.webp" width="300" alt="Cantonese.md Logo">
+  </a>
+</p>
+
 # Cantonese.md
 
 > **Preserving and promoting the beauty of Cantonese through open-source data and modern technology.**
