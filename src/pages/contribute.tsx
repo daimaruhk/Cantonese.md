@@ -13,7 +13,7 @@ import { Typography } from '@/components/ui/Typography';
 import { Backdrop } from '@/components/Backdrop';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
-import { homepage } from '../../package.json';
+import { getGithubHomepageUrl } from '@/lib/utils';
 
 export default function ContributePage() {
   return (
@@ -29,7 +29,7 @@ export default function ContributePage() {
         </Typography>
         <Button
           size="xl"
-          render={<Link href={homepage} />}
+          render={<Link href={getGithubHomepageUrl()} />}
           nativeButton={false}
         >
           <IconBrandGithub />

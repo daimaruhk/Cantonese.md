@@ -26,7 +26,7 @@ import { Section } from '@/components/Section';
 import { IdiomSuggestionSection } from '@/components/features/idioms/IdiomSuggestionSection';
 import type { IdiomData, Idiom } from '@/schema/idioms';
 import { getAllIdioms, getIdiomDataByTerm } from '@/lib/idioms';
-import { homepage } from '../../../package.json';
+import { getGithubMarkdownUrl } from '@/lib/utils';
 
 type IdiomPageProps = {
   idiomData: IdiomData;
@@ -116,11 +116,7 @@ const HeroSection = ({ idiomData }: { idiomData: IdiomData }) => {
         </Button>
         <Button
           variant="outline"
-          render={
-            <Link
-              href={`${homepage}/blob/main/src/contents/idioms/${encodeURIComponent(idiomData.term)}.md`}
-            />
-          }
+          render={<Link href={getGithubMarkdownUrl(idiomData.term)} />}
           nativeButton={false}
         >
           <IconBrandGithub />

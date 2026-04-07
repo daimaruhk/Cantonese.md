@@ -4,7 +4,7 @@ import { Separator } from '@/components/ui/Separator';
 import { Typography } from '@/components/ui/Typography';
 import { Container } from '@/components/Container';
 import { Logo } from '@/components/Logo';
-import { homepage } from '../../../package.json';
+import { getGithubHomepageUrl } from '@/lib/utils';
 
 export const Footer = () => {
   return (
@@ -20,7 +20,7 @@ export const Footer = () => {
           <Button
             variant="link"
             size="sm"
-            render={<Link href={homepage} />}
+            render={<Link href={getGithubHomepageUrl()} />}
             nativeButton={false}
           >
             GitHub
