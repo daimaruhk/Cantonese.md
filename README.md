@@ -1,47 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Cantonese.md
 
-## Getting Started
+> **Preserving and promoting the beauty of Cantonese through open-source data and modern technology.**
 
-First, run the development server:
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-https%3A%2F%2Fcantonese.md-blue?style=for-the-badge)](https://cantonese.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](./LICENSE)
+[![Data: CC0](https://img.shields.io/badge/Data-CC0-green.svg?style=for-the-badge)](./LICENSE-DATA)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🌟 The Vision
+
+**Cantonese.md** is an open-source initiative dedicated to the preservation of Cantonese language and culture.
+
+In the age of AI, the survival of a language depends on the quality and quantity of its digital footprint. Current Large Language Models (LLMs) often struggle with Cantonese due to a lack of high-quality training data. This project aims to bridge that gap by building a human-supervised, high-quality dataset of idioms, slangs, and the cultural nuances that define the language.
+
+## ✨ Features
+
+- **Open for All:** Everyone is welcome to contribute, from the classic idioms you find in books to the slangs your grandma uses, anything is welcome as long as they are related to Cantonese.
+- **Wide Coverage:** With over **100 million** people speaking Cantonese worldwide, we aim to document as much of the language as possible.
+- **High-Quality Data:** Human supervision ensures data integrity, correct grammar, and authentic word usage.
+- **Modern UI:** A modern and user-friendly interface for browsing and discovering Cantonese idioms and slangs.
+- **Portable:** Fully statically generated for maximum performance and easy hosting.
+
+---
+
+## 📝 Dataset
+
+Every entry in `src/contents/` is a Markdown file. A typical entry looks like this:
+
+```markdown
+---
+id: iRNL7TmVZbOW
+term: 阿茂整餅
+termJyutping: aa3 mau6 zing2 beng2
+answer: 冇嗰樣整嗰樣
+answerJyutping: mou5 go2 joeng6 zing2 go2 joeng6
+type: 歇後語
+---
+
+# 阿茂整餅──冇嗰樣整嗰樣
+
+## 字面意思
+
+相傳以前廣州有位出色嘅做餅師傅叫「阿茂」...
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Why Markdown?
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+We use Markdown as our primary storage format because:
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- **AI-Friendly:** It’s one of the best formats for LLM parsing and training.
+- **Human-Readable:** Anyone can read, edit, and contribute without specialized tools.
+- **Flexible:** It allows for rich context beyond simple key-value pairs, such as origin stories, examples, usage, images, etc.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Local Setup
 
-## Learn More
+```bash
+# 1. Clone the repository
+git clone https://github.com/daimaruhk/Cantonese.md.git
 
-To learn more about Next.js, take a look at the following resources:
+# 2. Install dependencies
+pnpm install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+# 3. Start the development server
+pnpm dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Visit `http://localhost:3000` to view the website locally.
 
-## Deploy on Vercel
+## 🤝 How to Contribute
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+We need your help! Whether you are a native speaker, a researcher, or a developer:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+1.  **Add Content:** Extend the Cantonese library with more idioms, slangs, and other Cantonese-related content.
+2.  **Improve Quality:** Fact check content, correct grammar, or refine word usage.
+3.  **Improve Code:** Enhance UI/UX components.
 
-## License
+Check out our [**Contributing Guide**](./CONTRIBUTING.md) to get started.
 
-This project is dual-licensed:
+### Get in Touch
 
-- **Software & Codebase:** The application code is licensed under the [MIT License](./LICENSE).
+- **General Discussion:** [GitHub Discussions](https://github.com/daimaruhk/Cantonese.md/discussions)
+- **Found a Bug?** [Report it here](https://github.com/daimaruhk/Cantonese.md/issues/new?template=bug_report.md)
+- **Have an Idea?** [Request a feature](https://github.com/daimaruhk/Cantonese.md/issues/new?template=feature_request.md)
+
+---
+
+## ⚖️ License
+
+This project is dual-licensed to ensure both the software and the data are used appropriately:
+
+- **Software & Codebase:** Licensed under the [MIT License](./LICENSE).
 - **Data & Content:** All markdown files in the `src/contents/` directory are dedicated to the public domain under the [CC0 1.0 Universal License](./LICENSE-DATA).
