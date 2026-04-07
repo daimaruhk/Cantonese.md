@@ -1,16 +1,16 @@
 import { IconMenu2, IconSearch } from '@tabler/icons-react';
 
-import { Button } from '@/components/atoms/Button';
-import { Link } from '@/components/atoms/Link';
-import { Logo } from '@/components/atoms/Logo';
+import { Button } from '@/components/ui/Button';
+import { Link } from '@/components/ui/Link';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/atoms/Sheet';
-import { Container } from '@/components/templates/Container';
+} from '@/components/ui/Sheet';
+import { Container } from '@/components/Container';
+import { Logo } from '@/components/Logo';
 import { SearchBar } from './SearchBar';
 
 export const Header = () => {

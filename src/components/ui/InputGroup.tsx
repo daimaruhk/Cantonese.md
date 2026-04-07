@@ -2,7 +2,7 @@
 import type { ComponentProps } from 'react';
 import { type VariantProps, cva } from 'class-variance-authority';
 
-import { Input } from '@/components/atoms/Input';
+import { Input } from '@/components/ui/Input';
 import { cn } from '@/lib/utils';
 
 export const InputGroup = ({ className, ...props }: ComponentProps<'div'>) => {

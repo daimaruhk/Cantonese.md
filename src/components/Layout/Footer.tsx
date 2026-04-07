@@ -1,10 +1,10 @@
-import { Button } from '@/components/atoms/Button';
-import { Link } from '@/components/atoms/Link';
-import { Logo } from '@/components/atoms/Logo';
-import { Separator } from '@/components/atoms/Separator';
-import { Typography } from '@/components/atoms/Typography';
-import { Container } from '@/components/templates/Container';
-import { homepage } from '../../../../package.json';
+import { Button } from '@/components/ui/Button';
+import { Link } from '@/components/ui/Link';
+import { Separator } from '@/components/ui/Separator';
+import { Typography } from '@/components/ui/Typography';
+import { Container } from '@/components/Container';
+import { Logo } from '@/components/Logo';
+import { homepage } from '../../../package.json';
 
 export const Footer = () => {
   return (

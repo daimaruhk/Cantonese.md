@@ -1,20 +1,20 @@
 import type { GetStaticProps } from 'next';
 import { IconArchive, IconBook, IconRobot } from '@tabler/icons-react';
 
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/ui/Button';
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/atoms/Card';
-import { Icon } from '@/components/atoms/Icon';
-import { Image } from '@/components/atoms/Image';
-import { Link } from '@/components/atoms/Link';
-import { Typography } from '@/components/atoms/Typography';
-import { Layout } from '@/components/templates/Layout';
-import { Section } from '@/components/templates/Section';
-import { IdiomSuggestionSection } from '@/components/organisms/IdiomSuggestionSection';
+} from '@/components/ui/Card';
+import { Icon } from '@/components/ui/Icon';
+import { Image } from '@/components/ui/Image';
+import { Link } from '@/components/ui/Link';
+import { Typography } from '@/components/ui/Typography';
+import { Layout } from '@/components/Layout';
+import { Section } from '@/components/Section';
+import { IdiomSuggestionSection } from '@/components/features/idioms/IdiomSuggestionSection';
 import { getAllIdioms } from '@/lib/idioms';
 import type { Idiom } from '@/schema/idioms';
 

@@ -4,7 +4,7 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from '@/components/atoms/InputGroup';
+} from '@/components/ui/InputGroup';
 
 type SearchBarProps = {
   className?: string;

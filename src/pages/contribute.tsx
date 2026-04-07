@@ -5,14 +5,14 @@ import {
   IconBrandGithub,
 } from '@tabler/icons-react';
 
-import { Backdrop } from '@/components/atoms/Backdrop';
-import { Button } from '@/components/atoms/Button';
-import { Icon } from '@/components/atoms/Icon';
-import { Link } from '@/components/atoms/Link';
-import { Separator } from '@/components/atoms/Separator';
-import { Typography } from '@/components/atoms/Typography';
-import { Layout } from '@/components/templates/Layout';
-import { Section } from '@/components/templates/Section';
+import { Button } from '@/components/ui/Button';
+import { Icon } from '@/components/ui/Icon';
+import { Link } from '@/components/ui/Link';
+import { Separator } from '@/components/ui/Separator';
+import { Typography } from '@/components/ui/Typography';
+import { Backdrop } from '@/components/Backdrop';
+import { Layout } from '@/components/Layout';
+import { Section } from '@/components/Section';
 import { homepage } from '../../package.json';
 
 export default function ContributePage() {

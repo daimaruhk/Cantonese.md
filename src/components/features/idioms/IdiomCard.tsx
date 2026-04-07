@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { IconArrowRight, IconRefresh } from '@tabler/icons-react';
 
-import { Button, buttonVariants } from '@/components/atoms/Button';
-import { Card, CardContent } from '@/components/atoms/Card';
-import { Link } from '@/components/atoms/Link';
-import { Skeleton } from '@/components/atoms/Skeleton';
-import { Typography } from '@/components/atoms/Typography';
+import { Button, buttonVariants } from '@/components/ui/Button';
+import { Card, CardContent } from '@/components/ui/Card';
+import { Link } from '@/components/ui/Link';
+import { Skeleton } from '@/components/ui/Skeleton';
+import { Typography } from '@/components/ui/Typography';
 import { cn, isMobile } from '@/lib/utils';
 import type { Idiom } from '@/schema/idioms';
 

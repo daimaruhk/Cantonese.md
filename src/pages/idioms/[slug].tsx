@@ -14,16 +14,16 @@ import {
   AvatarFallback,
   AvatarGroup,
   AvatarImage,
-} from '@/components/atoms/Avatar';
-import { Backdrop } from '@/components/atoms/Backdrop';
-import { Button } from '@/components/atoms/Button';
-import { Link } from '@/components/atoms/Link';
-import { Typography } from '@/components/atoms/Typography';
-import { MarkdownRenderer } from '@/components/molecules/MarkdownRenderer';
-import { IdiomSuggestionSection } from '@/components/organisms/IdiomSuggestionSection';
-import { Container } from '@/components/templates/Container';
-import { Layout } from '@/components/templates/Layout';
-import { Section } from '@/components/templates/Section';
+} from '@/components/ui/Avatar';
+import { Button } from '@/components/ui/Button';
+import { Link } from '@/components/ui/Link';
+import { Typography } from '@/components/ui/Typography';
+import { Backdrop } from '@/components/Backdrop';
+import { Container } from '@/components/Container';
+import { MarkdownRenderer } from '@/components/MarkdownRenderer';
+import { Layout } from '@/components/Layout';
+import { Section } from '@/components/Section';
+import { IdiomSuggestionSection } from '@/components/features/idioms/IdiomSuggestionSection';
 import type { IdiomData, Idiom } from '@/schema/idioms';
 import { getAllIdioms, getIdiomDataByTerm } from '@/lib/idioms';
 import { homepage } from '../../../package.json';

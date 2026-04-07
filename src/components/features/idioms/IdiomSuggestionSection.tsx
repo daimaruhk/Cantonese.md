@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { IconArrowRight, IconRefresh } from '@tabler/icons-react';
 
-import { Button } from '@/components/atoms/Button';
-import { Link } from '@/components/atoms/Link';
-import { IdiomCard, IdiomCardSkeleton } from '@/components/molecules/IdiomCard';
-import { Section } from '@/components/templates/Section';
+import { Button } from '@/components/ui/Button';
+import { Link } from '@/components/ui/Link';
+import { Section } from '@/components/Section';
+import {
+  IdiomCard,
+  IdiomCardSkeleton,
+} from '@/components/features/idioms/IdiomCard';
 import type { Idiom } from '@/schema/idioms';
 
 type IdiomSuggestionSectionProps = {

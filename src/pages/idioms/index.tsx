@@ -1,8 +1,8 @@
 import type { GetStaticProps } from 'next';
 
-import { IdiomCard } from '@/components/molecules/IdiomCard';
-import { Layout } from '@/components/templates/Layout';
-import { Section } from '@/components/templates/Section';
+import { Layout } from '@/components/Layout';
+import { Section } from '@/components/Section';
+import { IdiomCard } from '@/components/features/idioms/IdiomCard';
 import { getAllIdioms } from '@/lib/idioms';
 import type { Idiom } from '@/schema/idioms';
 

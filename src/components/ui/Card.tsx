@@ -1,10 +1,7 @@
 // Shadcn component
 import type { ComponentProps } from 'react';
 
-import {
-  type TypographyVariant,
-  Typography,
-} from '@/components/atoms/Typography';
+import { type TypographyVariant, Typography } from '@/components/ui/Typography';
 import { cn } from '@/lib/utils';
 
 export const Card = ({

@@ -1,8 +1,8 @@
 import ReactMarkdown from 'react-markdown';
 
-import { Link } from '@/components/atoms/Link';
-import { Separator } from '@/components/atoms/Separator';
-import { Typography } from '@/components/atoms/Typography';
+import { Link } from '@/components/ui/Link';
+import { Separator } from '@/components/ui/Separator';
+import { Typography } from '@/components/ui/Typography';
 
 type MarkdownRendererProps = {
   content: string;

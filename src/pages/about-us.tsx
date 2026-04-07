@@ -1,11 +1,11 @@
 import { IconHeartHandshake, IconCpu, IconBook } from '@tabler/icons-react';
 
-import { Backdrop } from '@/components/atoms/Backdrop';
-import { Icon } from '@/components/atoms/Icon';
-import { Separator } from '@/components/atoms/Separator';
-import { Typography } from '@/components/atoms/Typography';
-import { Layout } from '@/components/templates/Layout';
-import { Section } from '@/components/templates/Section';
+import { Icon } from '@/components/ui/Icon';
+import { Separator } from '@/components/ui/Separator';
+import { Typography } from '@/components/ui/Typography';
+import { Backdrop } from '@/components/Backdrop';
+import { Layout } from '@/components/Layout';
+import { Section } from '@/components/Section';
 
 export default function AboutUsPage() {
   return (

@@ -3,7 +3,7 @@ import type { ComponentProps } from 'react';
 import { Dialog as SheetPrimitive } from '@base-ui/react/dialog';
 import { IconX } from '@tabler/icons-react';
 
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 
 export const Sheet = ({ ...props }: SheetPrimitive.Root.Props) => {

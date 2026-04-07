@@ -1,5 +1,5 @@
-import { Typography } from '@/components/atoms/Typography';
-import { Container } from '@/components/templates/Container';
+import { Typography } from '@/components/ui/Typography';
+import { Container } from '@/components/Container';
 import { cn } from '@/lib/utils';
 
 type SectionProps = {
