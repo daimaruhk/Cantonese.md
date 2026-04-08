@@ -1,33 +1,29 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import matter from 'gray-matter';
 import { beforeEach, expect, it } from 'vitest';
 
-import { idiomsDirectory } from '@/lib/idioms';
-import { type Idiom, IdiomSchema } from '@/schema/idioms';
+import { type IdiomFrontmatter, IdiomFrontmatterSchema } from '@/schema/idioms';
+import { getMarkdownFilePaths, readContentFile } from '@/lib/content';
 
-let markdownFiles: {
-  frontmatter: Idiom;
+type MarkdownFile = {
+  frontmatter: IdiomFrontmatter;
   content: string;
   fileName: string;
-}[];
+};
+
+let markdownFiles: MarkdownFile[];
 
 beforeEach(() => {
-  const fileNames = fs
-    .readdirSync(idiomsDirectory)
-    .filter((name) => name.endsWith('.md'));
+  const filePaths = getMarkdownFilePaths('idioms');
 
-  markdownFiles = fileNames.map((fileName) => {
-    const filePath = path.join(idiomsDirectory, fileName);
-    const fileContents = fs.readFileSync(filePath, 'utf-8');
-    const { data, content } = matter(fileContents);
-    return { frontmatter: data as Idiom, content, fileName };
+  markdownFiles = filePaths.map((filePath) => {
+    const { frontmatter, content } = readContentFile(filePath);
+    const fileName = filePath.split('/').pop()!;
+    return { frontmatter, content, fileName } as MarkdownFile;
   });
 });
 
 it('should ensure all idiom markdown files fulfill the schema', () => {
   for (const { frontmatter, content, fileName } of markdownFiles) {
-    const result = IdiomSchema.safeParse(frontmatter);
+    const result = IdiomFrontmatterSchema.safeParse(frontmatter);
 
     expect(result.success, `File ${fileName} failed validation`).toBe(true);
     expect(

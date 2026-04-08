@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import type { GetStaticPaths, GetStaticProps } from 'next';
 import {
   IconBrandGithub,
   IconCalendar,
@@ -24,57 +23,33 @@ import { MarkdownRenderer } from '@/components/MarkdownRenderer';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
 import { IdiomSuggestionSection } from '@/components/features/idioms/IdiomSuggestionSection';
-import type { IdiomData, Idiom } from '@/schema/idioms';
-import { getAllIdioms, getIdiomDataByTerm } from '@/lib/idioms';
+import type { Idiom, IdiomFrontmatter } from '@/schema/idioms';
+import { idiomRegistry, type ContentPageProps } from '@/lib/registry';
 import { getGithubMarkdownUrl } from '@/lib/utils';
 
-type IdiomPageProps = {
-  idiomData: IdiomData;
-  idioms: Idiom[];
-};
-
-export default function IdiomPage({ idiomData, idioms }: IdiomPageProps) {
+export default function IdiomPage({
+  entry: idiom,
+  restEntries: restIdioms,
+}: ContentPageProps<IdiomFrontmatter>) {
   return (
     <Layout
-      title={`${idiomData.term} | Cantonese.md`}
-      description={`${idiomData.term} ── ${idiomData.answer}。粵拼：${idiomData.termJyutping} ── ${idiomData.answerJyutping}。`}
+      title={`${idiom.term} | Cantonese.md`}
+      description={`${idiom.term} ── ${idiom.answer}。粵拼：${idiom.termJyutping} ── ${idiom.answerJyutping}。`}
     >
-      <HeroSection idiomData={idiomData} />
+      <HeroSection idiom={idiom} />
       <Container>
-        <MarkdownRenderer content={idiomData.content} />
+        <MarkdownRenderer content={idiom.content} />
       </Container>
-      <IdiomSuggestionSection idioms={idioms} excludeId={idiomData.id} />
+      <IdiomSuggestionSection idioms={restIdioms} />
     </Layout>
   );
 }
 
-type Params = { slug: string };
+export const getStaticPaths = idiomRegistry.getStaticPaths;
 
-export const getStaticPaths = (() => {
-  const idioms = getAllIdioms();
-  return {
-    paths: idioms.map((idiom) => ({ params: { slug: idiom.term } })),
-    fallback: false,
-  };
-}) satisfies GetStaticPaths<Params>;
+export const getStaticProps = idiomRegistry.getStaticProps;
 
-export const getStaticProps = (({ params }) => {
-  if (!params) {
-    return { notFound: true };
-  }
-
-  const { slug } = params;
-  const idiomData = getIdiomDataByTerm(slug);
-  const idioms = getAllIdioms();
-  return {
-    props: {
-      idiomData,
-      idioms,
-    },
-  };
-}) satisfies GetStaticProps<IdiomPageProps, Params>;
-
-const HeroSection = ({ idiomData }: { idiomData: IdiomData }) => {
+const HeroSection = ({ idiom }: { idiom: Idiom }) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleShare = async () => {
@@ -83,7 +58,7 @@ const HeroSection = ({ idiomData }: { idiomData: IdiomData }) => {
     }
 
     // don't need to encode URI otherwise it becomes unreadable
-    const url = `${window.location.origin}/idioms/${idiomData.term}`;
+    const url = `${window.location.origin}/idioms/${idiom.term}`;
     await navigator.clipboard.writeText(url);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
@@ -93,10 +68,10 @@ const HeroSection = ({ idiomData }: { idiomData: IdiomData }) => {
     <Section className="flex flex-col items-center gap-6 text-center">
       <Backdrop />
       <Typography variant="h1">
-        {idiomData.term} ── {idiomData.answer}
+        {idiom.term} ── {idiom.answer}
       </Typography>
       <Typography variant="code" as="span" className="text-base">
-        {idiomData.termJyutping} ── {idiomData.answerJyutping}
+        {idiom.termJyutping} ── {idiom.answerJyutping}
       </Typography>
       <div className="mt-2 flex items-center gap-3">
         <Button
@@ -116,7 +91,7 @@ const HeroSection = ({ idiomData }: { idiomData: IdiomData }) => {
         </Button>
         <Button
           variant="outline"
-          render={<Link href={getGithubMarkdownUrl(idiomData.term)} />}
+          render={<Link href={getGithubMarkdownUrl(idiom.term)} />}
           nativeButton={false}
         >
           <IconBrandGithub />
@@ -130,7 +105,7 @@ const HeroSection = ({ idiomData }: { idiomData: IdiomData }) => {
             <Typography variant="muted">貢獻者</Typography>
           </div>
           <AvatarGroup>
-            {idiomData.contributors.map((username) => (
+            {idiom.contributors.map((username) => (
               <Link
                 href={`https://github.com/${username}`}
                 hideExternalIcon
@@ -154,14 +129,14 @@ const HeroSection = ({ idiomData }: { idiomData: IdiomData }) => {
             <IconCalendar size={16} />
             <Typography variant="muted">創建日期</Typography>
           </div>
-          <Typography className="text-sm">{idiomData.createdAt}</Typography>
+          <Typography className="text-sm">{idiom.createdAt}</Typography>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <IconGitCommit size={16} />
             <Typography variant="muted">最後更新</Typography>
           </div>
-          <Typography className="text-sm">{idiomData.updatedAt}</Typography>
+          <Typography className="text-sm">{idiom.updatedAt}</Typography>
         </div>
       </div>
     </Section>

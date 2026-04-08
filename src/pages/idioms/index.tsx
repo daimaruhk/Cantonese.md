@@ -6,7 +6,7 @@ import { Container } from '@/components/Container';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
 import { IdiomCard } from '@/components/features/idioms/IdiomCard';
-import { getAllIdioms } from '@/lib/idioms';
+import { idiomRegistry } from '@/lib/registry';
 import type { Idiom } from '@/schema/idioms';
 
 type IdiomsPageProps = {
@@ -45,7 +45,7 @@ export default function IdiomsPage({ idioms }: IdiomsPageProps) {
 }
 
 export const getStaticProps = (() => {
-  const idioms = getAllIdioms();
+  const idioms = idiomRegistry.getAllEntries();
   return {
     props: {
       idioms,

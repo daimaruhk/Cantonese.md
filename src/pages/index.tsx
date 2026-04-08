@@ -15,7 +15,7 @@ import { Typography } from '@/components/ui/Typography';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
 import { IdiomSuggestionSection } from '@/components/features/idioms/IdiomSuggestionSection';
-import { getAllIdioms } from '@/lib/idioms';
+import { idiomRegistry } from '@/lib/registry';
 import type { Idiom } from '@/schema/idioms';
 
 type HomeProps = {
@@ -36,7 +36,7 @@ export default function Home({ idioms }: HomeProps) {
 }
 
 export const getStaticProps = (() => {
-  const idioms = getAllIdioms();
+  const idioms = idiomRegistry.getAllEntries();
   return {
     props: {
       idioms,

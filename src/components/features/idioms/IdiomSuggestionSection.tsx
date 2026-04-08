@@ -12,22 +12,20 @@ import type { Idiom } from '@/schema/idioms';
 
 type IdiomSuggestionSectionProps = {
   idioms: Idiom[];
-  excludeId?: string;
 };
 
 export const IdiomSuggestionSection = ({
   idioms,
-  excludeId,
 }: IdiomSuggestionSectionProps) => {
   const [currentIdioms, setCurrentIdioms] = useState<Idiom[]>([]);
 
   useEffect(() => {
     // avoid hydration error
-    setCurrentIdioms(getRandomIdioms(idioms, 4, excludeId));
-  }, [idioms, excludeId]);
+    setCurrentIdioms(getRandomIdioms(idioms, 4));
+  }, [idioms]);
 
   const refreshIdioms = () => {
-    setCurrentIdioms(getRandomIdioms(idioms, 4, excludeId));
+    setCurrentIdioms(getRandomIdioms(idioms, 4));
   };
 
   return (
@@ -79,13 +77,6 @@ export const IdiomSuggestionSection = ({
 };
 
 // TODO: when the idiom list is getting larger, refactor this function to avoid array shuffle
-const getRandomIdioms = (
-  idioms: Idiom[],
-  count: number,
-  excludeId?: string,
-) => {
-  if (excludeId) {
-    idioms = idioms.filter((idiom) => idiom.id !== excludeId);
-  }
+const getRandomIdioms = (idioms: Idiom[], count: number) => {
   return idioms.toSorted(() => Math.random() - 0.5).slice(0, count);
 };
