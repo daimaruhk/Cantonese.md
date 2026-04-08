@@ -63,7 +63,13 @@ export const getGitMetadata = (filePath: string): GitMetadata => {
   const dates = runGitLog('%as').split('\n').filter(Boolean);
 
   if (contributors.length === 0 || dates.length === 0) {
-    throw new Error(`No git metadata found for "${filePath}"`);
+    // When the file is not committed yet, use a fallback metadata.
+    const today = new Date().toISOString().slice(0, 10);
+    return {
+      contributors: ['Development'],
+      createdAt: today,
+      updatedAt: today,
+    };
   }
 
   return {
