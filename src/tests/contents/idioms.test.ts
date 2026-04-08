@@ -3,8 +3,8 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import { beforeEach, expect, it } from 'vitest';
 
-import { idiomsDirectory } from '../../lib/idioms';
-import { type Idiom, IdiomSchema } from '../../schema/idioms';
+import { idiomsDirectory } from '@/lib/idioms';
+import { type Idiom, IdiomSchema } from '@/schema/idioms';
 
 let markdownFiles: {
   frontmatter: Idiom;
