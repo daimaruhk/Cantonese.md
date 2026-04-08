@@ -1,6 +1,6 @@
 # Contributing to Cantonese.md
 
-First off, thank you for considering contributing to **Cantonese.md**! We welcome everyone to help preserve and promote Cantonese culture.
+First off, thank you for considering contributing to **Cantonese.md**! We welcome everyone who wants to help preserve and promote Cantonese language and culture.
 
 The following is a set of guidelines for contributing to Cantonese.md. These are guidelines, not rules. Use your best judgment, and feel free to propose changes to this document in a pull request.
 
@@ -9,13 +9,15 @@ The following is a set of guidelines for contributing to Cantonese.md. These are
 - [Code of Conduct](#code-of-conduct)
 - [How Can I Contribute?](#how-can-i-contribute)
   - [Improving Cantonese Library](#improving-cantonese-library)
+  - [Writing Code](#writing-code)
   - [Reporting Bugs](#reporting-bugs)
   - [Requesting Features](#requesting-features)
-  - [Writing Code](#writing-code)
 - [Project Structure](#project-structure)
 - [Local Development Setup](#local-development-setup)
 - [Pull Request Process](#pull-request-process)
-- [Commit Styleguide](#commit-styleguide)
+- [Code Style Guidelines](#code-style-guidelines)
+  - [Commit Messages](#commit-messages)
+  - [Import Order](#import-order)
 
 ---
 
@@ -36,27 +38,27 @@ You can add new Cantonese idioms (歇後語) using the generation script:
    pnpm run gen:idiom "賣魚佬沖涼"
    ```
 2. This creates a new file in `src/contents/idioms/賣魚佬沖涼.md`.
-3. Fill in the required frontmatter and the markdown body.
+3. Fill in the required frontmatter and the Markdown body.
 
 #### Improving Existing Content
 
-Feel free to edit any markdown file in `src/contents/idioms/` for typos, grammatical errors, missing or incorrect information. Please ensure:
+Feel free to edit any Markdown file in `src/contents/` for typos, grammatical errors, missing details, or incorrect information. Please ensure:
 
-- The Jyutping follows the standard format (lowercase syllables followed by tone numbers 1-6).
+- The Jyutping follows the standard format: lowercase syllables followed by tone numbers 1-6.
 - Do not use anything other than Jyutping, such as Yale or other romanization systems.
 - The `id` in the frontmatter remains untouched.
 
 ### Writing Code
 
-Bug fixes, new features, UI/UX improvements, etc. are all welcome.
+Bug fixes, new features, UI/UX improvements, tooling updates, and documentation improvements are all welcome. Refer to [Style Guidelines](#style-guidelines) for more information.
 
 ### Reporting Bugs
 
-If you find a bug, please check the existing issues as you might find out that you don't need to create one. If you do need to create one, please use the [bug report template](https://github.com/daimaruhk/Cantonese.md/issues/new?template=bug_report.md).
+If you find a bug, please check the existing issues first. If you do need to create one, please use the [bug report template](https://github.com/daimaruhk/Cantonese.md/issues/new?template=bug_report.md).
 
 ### Requesting Features
 
-Before creating a feature request, check the existing issues. If you do need to create one, please use the [feature request template](https://github.com/daimaruhk/Cantonese.md/issues/new?template=feature_request.md).
+Before creating a feature request, check the existing issues first. If you do need to create one, please use the [feature request template](https://github.com/daimaruhk/Cantonese.md/issues/new?template=feature_request.md).
 
 ## Project Structure
 
@@ -85,17 +87,17 @@ scripts/          # Developer tooling and automation
 
 ### Requirements
 
-- **Node.js**: 24.x or higher
-- **pnpm**: 10.x or higher
+- **Node.js:** `24.x`
+- **pnpm:** `10.x`
 
 ### Steps
 
-1. **Fork and Clone**: Fork the repository and clone it to your local machine.
-2. **Install Dependencies**:
+1. **Fork and Clone:** Fork the repository and clone it to your local machine.
+2. **Install Dependencies:**
    ```bash
    pnpm install
    ```
-3. **Start Development Server**:
+3. **Start Development Server:**
    ```bash
    pnpm dev
    ```
@@ -105,24 +107,26 @@ scripts/          # Developer tooling and automation
 
 | Command       | Description                                 |
 | :------------ | :------------------------------------------ |
-| `pnpm build`  | Build the project for production            |
+| `pnpm build`  | Build the static export into `out/`         |
 | `pnpm lint`   | Run ESLint to check for code quality issues |
 | `pnpm format` | Run Prettier to format the codebase         |
 | `pnpm test`   | Run the test suite using Vitest             |
 
 ## Pull Request Process
 
-1. **Branch**: Create a new branch from `main` (e.g., `feat/new-idiom` or `fix/typo`).
-2. **Develop**: Make your changes and ensure they follow the project standards.
-3. **Commit**: Follow the [Commit Styleguide](#commit-styleguide).
-4. **Tests**: Add new tests if necessary.
-5. **Quality Check**: Run `pnpm test`, `pnpm lint`, and `pnpm format` to ensure the code is production-ready.
-6. **Push & PR**: Push to your fork and submit a Pull Request to the upstream `main` branch.
-7. **Review**: Wait for maintainer review and address any feedback.
+1. **Branch:** Create a new branch from `main` (for example, `feat/new-idiom` or `fix/typo`).
+2. **Develop:** Make your changes and ensure they follow the project standards.
+3. **Tests:** Add new tests if necessary.
+4. **Quality Check**: Run `pnpm test`, `pnpm lint`, and `pnpm format` to ensure the code is production-ready.
+5. **Commit:** Follow the [Commit Styleguide](#commit-messages).
+6. **Push & PR:** Push to your fork and submit a Pull Request to the upstream `main` branch.
+7. **Review:** Wait for maintainer review and address any feedback.
 
-## Commit Styleguide
+## Code Style Guidelines
 
-We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification for our commit messages. This helps us maintain a clean git history.
+### Commit Messages
+
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification for our commit messages. This helps us maintain a clean Git history.
 
 - **feat**: A new feature
 - **fix**: A bug fix
@@ -139,3 +143,13 @@ Example:
 feat: add idiom recommendation section to detail page
 fix: resolve jyutping regex failing on single character terms
 ```
+
+### Import Order
+
+Group import statements in the following order:
+
+1. Node.js Built-ins: `fs`, `path`, `process`, etc.
+2. External Packages: `react`, `zod`, etc.
+3. Internal Alias: `@/components`, `@/lib`, `@/schema`, etc.
+4. Relative Imports: `./`, `..`, etc.
+5. Side Effects: `"@/styles/globals.css"`

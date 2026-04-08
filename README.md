@@ -18,7 +18,9 @@
 
 **Cantonese.md** is an open-source initiative dedicated to the preservation of Cantonese language and culture.
 
-In the age of AI, the survival of a language depends on the quality and quantity of its digital footprint. Current Large Language Models (LLMs) often struggle with Cantonese due to a lack of high-quality training data. This project aims to bridge that gap by building a human-supervised, high-quality dataset of idioms, slangs, and the cultural nuances that define the language.
+In the age of AI, the survival of a language depends on the quality and quantity of its digital footprint. Current Large Language Models (LLMs) often struggle with Cantonese due to a lack of high-quality training data. This project aims to bridge that gap by building a human-supervised, high-quality dataset of Cantonese knowledge.
+
+We're starting with Cantonese idioms (歇後語), but this is just the beginning. We would love to grow beyond that over time, and we need your help.
 
 ## ✨ Features
 
@@ -57,11 +59,18 @@ We use Markdown as our primary storage format because:
 
 - **AI-Friendly:** It’s one of the best formats for LLM parsing and training.
 - **Human-Readable:** Anyone can read, edit, and contribute without specialized tools.
-- **Flexible:** It allows for rich context beyond simple key-value pairs, such as origin stories, examples, usage, images, etc.
+- **Flexible:** It supports richer context beyond simple key-value pairs, including explanations, examples, and cultural notes.
 
 ---
 
 ## 🚀 Local Setup
+
+### Requirements
+
+- **Node.js:** `24.x`
+- **pnpm:** `10.x`
+
+### Development
 
 ```bash
 # 1. Clone the repository
