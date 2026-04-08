@@ -19,12 +19,12 @@ export default function IdiomsPage({ idioms }: IdiomsPageProps) {
       title="歇後語 | Cantonese.md"
       description="探索所有粵語歇後語，暸解背後嘅文化同民間智慧。"
     >
-      <Section className="flex flex-col items-center gap-8">
+      <Section className="flex max-w-4xl flex-col items-center gap-8">
         <Backdrop />
         <Typography variant="h1">歇後語</Typography>
         <Typography
           variant="lead"
-          className="text-center sm:max-w-4/5 md:max-w-3xl"
+          className="text-center sm:max-w-xl md:max-w-3xl"
         >
           歇後語係粵語文化中極具智慧且風趣嘅表達方式，結構上分為「謎面」同「謎底」兩部分。謎面一般係比喻或情境描述，而謎底先係真正含意，通常交俾對方自己領悟。
           <br />

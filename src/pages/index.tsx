@@ -48,13 +48,13 @@ const features = [
   {
     icon: <IconArchive />,
     title: '保育粵語文化',
-    description: '記錄粵語嘅歇後語、俗語、文化，等呢啲珍貴嘅語言遺產唔會消失。',
+    description: '記錄粵語嘅歇後語、俗語、文化，等依啲珍貴嘅語言遺產唔會消失。',
   },
   {
     icon: <IconBook />,
     title: '開源 — 每個人都可以貢獻',
     description:
-      '所有內容都係開源嘅，任何人都可以透過 GitHub 貢獻新內容，一齊建設呢個知識庫。',
+      '所有內容完全開源，任何人都可以透過 GitHub 貢獻新內容，一齊擴建依個資料庫。',
   },
   {
     icon: <IconRobot />,
