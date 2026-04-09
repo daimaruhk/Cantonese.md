@@ -78,3 +78,7 @@ pnpm lint     # Ensure code quality standards are met
 pnpm format   # Ensure consistent code formatting
 pnpm build    # Ensure the static build succeeds without errors
 ```
+
+## Boundaries
+
+- **Never:** Edit `node_modules/`
