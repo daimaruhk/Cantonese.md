@@ -1,3 +1,4 @@
+import { useEffect, useEffectEvent, useState } from 'react';
 import { IconMenu2, IconSearch } from '@tabler/icons-react';
 
 import { Button } from '@/components/ui/Button';
@@ -11,15 +12,39 @@ import {
 } from '@/components/ui/Sheet';
 import { Container } from '@/components/Container';
 import { Logo } from '@/components/Logo';
-import { SearchBar } from './SearchBar';
+import { SearchModal } from '@/components/features/search/SearchModal';
+import { SearchBar } from '@/components/features/search/SearchBar';
 
 export const Header = () => {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const handleGlobalShortcutOpen = useEffectEvent((event: KeyboardEvent) => {
+    if (isSearchOpen || !isSearchShortcut(event)) {
+      return;
+    }
+
+    event.preventDefault();
+    setIsSearchOpen(true);
+  });
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      handleGlobalShortcutOpen(event);
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, []);
+
   return (
     <header className="border-border/40 bg-background/80 sticky top-0 z-50 w-full border-b backdrop-blur-lg">
       <Container className="flex h-16 items-center justify-between">
-        <MobileHeader />
-        <DesktopHeader />
+        <MobileHeader onOpenSearch={() => setIsSearchOpen(true)} />
+        <DesktopHeader onOpenSearch={() => setIsSearchOpen(true)} />
       </Container>
+      <SearchModal open={isSearchOpen} onOpenChange={setIsSearchOpen} />
     </header>
   );
 };
@@ -31,7 +56,11 @@ const navItems = [
   { label: '點樣貢獻', href: '/contribute' },
 ];
 
-const MobileHeader = () => {
+type ResponsiveHeaderProps = {
+  onOpenSearch: () => void;
+};
+
+const MobileHeader = ({ onOpenSearch }: ResponsiveHeaderProps) => {
   return (
     <>
       <div className="flex flex-1 items-center justify-start md:hidden">
@@ -71,7 +100,13 @@ const MobileHeader = () => {
       </div>
 
       <div className="flex flex-1 items-center justify-end md:hidden">
-        <Button variant="ghost" size="icon" className="text-muted-foreground">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="text-muted-foreground"
+          onClick={onOpenSearch}
+          aria-label="Open search"
+        >
           <IconSearch />
         </Button>
       </div>
@@ -79,7 +114,7 @@ const MobileHeader = () => {
   );
 };
 
-const DesktopHeader = () => {
+const DesktopHeader = ({ onOpenSearch }: ResponsiveHeaderProps) => {
   return (
     <>
       <div className="hidden flex-1 items-center justify-start md:flex">
@@ -103,8 +138,18 @@ const DesktopHeader = () => {
       </div>
 
       <div className="hidden flex-1 items-center justify-end md:flex">
-        <SearchBar className="w-full max-w-[200px] lg:max-w-[240px]" />
+        <SearchBar className="max-w-[240px]" onOpen={onOpenSearch} />
       </div>
     </>
+  );
+};
+
+const isSearchShortcut = (event: KeyboardEvent) => {
+  return (
+    (event.metaKey || event.ctrlKey) &&
+    !event.altKey &&
+    !event.shiftKey &&
+    !event.repeat &&
+    event.key.toLowerCase() === 'k'
   );
 };

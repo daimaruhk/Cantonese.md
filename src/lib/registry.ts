@@ -11,7 +11,7 @@ import {
   type GitMetadata,
 } from './content';
 
-type ContentType = 'idioms';
+export type ContentType = 'idioms';
 
 export type ContentData<T extends Frontmatter> = T &
   GitMetadata & {
