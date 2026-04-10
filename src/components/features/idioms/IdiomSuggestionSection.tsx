@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useEffectEvent, useState } from 'react';
 import { IconArrowRight, IconRefresh } from '@tabler/icons-react';
 
 import { Button } from '@/components/ui/Button';
@@ -19,18 +19,19 @@ export const IdiomSuggestionSection = ({
   excludedIdiomId,
 }: IdiomSuggestionSectionProps) => {
   const { status, data: idioms } = useIdiomsQuery();
-  const [nonce, setNonce] = useState(0);
-  const currentIdioms = useMemo(() => {
-    void nonce;
-    if (idioms) {
-      return getRandomIdioms(idioms, 4, excludedIdiomId);
-    }
-    return [];
-  }, [idioms, nonce, excludedIdiomId]);
+  const [currentIdioms, setCurrentIdioms] = useState<IdiomFrontmatter[]>([]);
 
   const refreshIdioms = () => {
-    setNonce((prev) => prev + 1);
+    if (idioms) {
+      setCurrentIdioms(getRandomIdioms(idioms, 4, excludedIdiomId));
+    }
   };
+
+  const refreshIdiomsEvent = useEffectEvent(refreshIdioms);
+
+  useEffect(() => {
+    refreshIdiomsEvent();
+  }, [idioms]);
 
   return (
     <Section
