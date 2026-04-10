@@ -26,7 +26,7 @@ export const IdiomSuggestionSection = ({
       return getRandomIdioms(idioms, 4, excludedIdiomId);
     }
     return [];
-  }, [idioms, nonce]);
+  }, [idioms, nonce, excludedIdiomId]);
 
   const refreshIdioms = () => {
     setNonce((prev) => prev + 1);
