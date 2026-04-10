@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { beforeEach, expect, it } from 'vitest';
 
 import { type IdiomFrontmatter, IdiomFrontmatterSchema } from '@/schema/idioms';
@@ -16,7 +17,7 @@ beforeEach(() => {
 
   markdownFiles = filePaths.map((filePath) => {
     const { frontmatter, content } = readContentFile(filePath);
-    const fileName = filePath.split('/').pop()!;
+    const fileName = path.basename(filePath, '.md');
     return { frontmatter, content, fileName } as MarkdownFile;
   });
 });
@@ -56,6 +57,6 @@ it('should ensure all terms and ids are unique', () => {
 
 it('should ensure all file names match the term', () => {
   for (const { frontmatter, fileName } of markdownFiles) {
-    expect(fileName).toBe(`${frontmatter.term}.md`);
+    expect(fileName).toBe(frontmatter.term);
   }
 });

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { IconArrowRight, IconRefresh } from '@tabler/icons-react';
 
 import { Button } from '@/components/ui/Button';
@@ -8,24 +8,28 @@ import {
   IdiomCard,
   IdiomCardSkeleton,
 } from '@/components/features/idioms/IdiomCard';
-import type { Idiom } from '@/schema/idioms';
+import { useIdiomsQuery } from '@/hooks/useIdiomsQuery';
+import type { IdiomFrontmatter } from '@/schema/idioms';
 
 type IdiomSuggestionSectionProps = {
-  idioms: Idiom[];
+  excludedIdiomId?: string;
 };
 
 export const IdiomSuggestionSection = ({
-  idioms,
+  excludedIdiomId,
 }: IdiomSuggestionSectionProps) => {
-  const [currentIdioms, setCurrentIdioms] = useState<Idiom[]>([]);
-
-  useEffect(() => {
-    // avoid hydration error
-    setCurrentIdioms(getRandomIdioms(idioms, 4));
-  }, [idioms]);
+  const { status, data: idioms } = useIdiomsQuery();
+  const [nonce, setNonce] = useState(0);
+  const currentIdioms = useMemo(() => {
+    void nonce;
+    if (idioms) {
+      return getRandomIdioms(idioms, 4, excludedIdiomId);
+    }
+    return [];
+  }, [idioms, nonce]);
 
   const refreshIdioms = () => {
-    setCurrentIdioms(getRandomIdioms(idioms, 4));
+    setNonce((prev) => prev + 1);
   };
 
   return (
@@ -37,6 +41,7 @@ export const IdiomSuggestionSection = ({
           <Button
             variant="outline"
             onClick={refreshIdioms}
+            disabled={status !== 'success'}
             className="hidden md:inline-flex"
           >
             <IconRefresh />
@@ -46,6 +51,7 @@ export const IdiomSuggestionSection = ({
             variant="outline"
             size="icon"
             onClick={refreshIdioms}
+            disabled={status !== 'success'}
             className="md:hidden"
           >
             <IconRefresh />
@@ -77,6 +83,16 @@ export const IdiomSuggestionSection = ({
 };
 
 // TODO: when the idiom list is getting larger, refactor this function to avoid array shuffle
-const getRandomIdioms = (idioms: Idiom[], count: number) => {
-  return idioms.toSorted(() => Math.random() - 0.5).slice(0, count);
+const getRandomIdioms = (
+  idioms: IdiomFrontmatter[],
+  count: number,
+  excludedId?: string,
+) => {
+  let filteredIdioms = idioms;
+
+  if (excludedId) {
+    filteredIdioms = idioms.filter((idiom) => idiom.id !== excludedId);
+  }
+
+  return filteredIdioms.toSorted(() => Math.random() - 0.5).slice(0, count);
 };

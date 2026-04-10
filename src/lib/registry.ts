@@ -1,8 +1,10 @@
+import path from 'node:path';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { z } from 'zod';
 import { IdiomFrontmatterSchema } from '@/schema/idioms';
 import {
   getGitMetadata,
+  getMarkdownFilePath,
   getMarkdownFilePaths,
   readContentFile,
   type Frontmatter,
@@ -20,17 +22,15 @@ type PathParams = { slug: string };
 
 export type ContentPageProps<T extends Frontmatter> = {
   entry: ContentData<T>;
-  restEntries: ContentData<T>[];
 };
 
 type ContentRegistryConfig<T extends Frontmatter> = {
   type: ContentType;
   schema: z.ZodType<T>;
-  getSlug: (entry: ContentData<T>) => string;
 };
 
 export type ContentRegistry<T extends Frontmatter> = {
-  getAllEntries: () => ContentData<T>[];
+  getAllFrontmatter: () => T[];
   getStaticPaths: GetStaticPaths<PathParams>;
   getStaticProps: GetStaticProps<ContentPageProps<T>, PathParams>;
 };
@@ -38,40 +38,47 @@ export type ContentRegistry<T extends Frontmatter> = {
 export const createContentRegistry = <T extends Frontmatter>({
   type,
   schema,
-  getSlug,
 }: ContentRegistryConfig<T>): ContentRegistry<T> => {
-  let cachedEntries: ContentData<T>[] | null = null;
+  const validateFrontmatter = (frontmatter: unknown, filePath: string) => {
+    const validationResult = schema.safeParse(frontmatter);
 
-  const getAllEntries = () => {
-    if (!cachedEntries) {
-      const filePaths = getMarkdownFilePaths(type);
-
-      cachedEntries = filePaths.map((filePath) => {
-        const { frontmatter, content } = readContentFile(filePath);
-        const validationResult = schema.safeParse(frontmatter);
-
-        if (!validationResult.success) {
-          throw new Error(
-            `Invalid frontmatter in "${filePath}": ${z.prettifyError(validationResult.error)}`,
-          );
-        }
-
-        return {
-          ...validationResult.data,
-          ...getGitMetadata(filePath),
-          content,
-        };
-      });
+    if (!validationResult.success) {
+      throw new Error(
+        `Invalid frontmatter in "${filePath}": ${z.prettifyError(validationResult.error)}`,
+      );
     }
 
-    return cachedEntries;
+    return validationResult.data;
+  };
+
+  const getAllFrontmatter = () => {
+    const filePaths = getMarkdownFilePaths(type);
+    return filePaths.map((filePath) => {
+      const { frontmatter } = readContentFile(filePath);
+      return validateFrontmatter(frontmatter, filePath);
+    });
+  };
+
+  const getFullEntry = (fileName: string) => {
+    const filePath = getMarkdownFilePath(type, fileName);
+    const { frontmatter, content } = readContentFile(filePath);
+    const validatedFrontmatter = validateFrontmatter(frontmatter, filePath);
+    const gitMetadata = getGitMetadata(filePath);
+
+    return {
+      ...validatedFrontmatter,
+      ...gitMetadata,
+      content,
+    };
   };
 
   const getStaticPaths: GetStaticPaths<PathParams> = () => {
-    const entries = getAllEntries();
+    const filePaths = getMarkdownFilePaths(type);
 
     return {
-      paths: entries.map((entry) => ({ params: { slug: getSlug(entry) } })),
+      paths: filePaths.map((filePath) => ({
+        params: { slug: path.basename(filePath, '.md') },
+      })),
       fallback: false,
     };
   };
@@ -85,28 +92,17 @@ export const createContentRegistry = <T extends Frontmatter>({
       return { notFound: true };
     }
 
-    const entries = getAllEntries();
-    const entry = entries.find((candidate) => getSlug(candidate) === slug);
-    const restEntries = entries.filter(
-      (candidate) => getSlug(candidate) !== slug,
-    );
-
-    if (!entry) {
-      throw new Error(
-        `Content entry with slug "${slug}" not found for type "${type}"`,
-      );
-    }
+    const entry = getFullEntry(slug);
 
     return {
       props: {
         entry,
-        restEntries,
       },
     };
   };
 
   return {
-    getAllEntries,
+    getAllFrontmatter,
     getStaticPaths,
     getStaticProps,
   };
@@ -115,5 +111,4 @@ export const createContentRegistry = <T extends Frontmatter>({
 export const idiomRegistry = createContentRegistry({
   type: 'idioms',
   schema: IdiomFrontmatterSchema,
-  getSlug: (entry) => entry.term,
 });

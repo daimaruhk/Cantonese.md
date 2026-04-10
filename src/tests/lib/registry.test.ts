@@ -9,22 +9,16 @@ beforeEach(() => {
   registry = createContentRegistry({
     type: 'idioms',
     schema: IdiomFrontmatterSchema,
-    getSlug: (entry) => entry.term,
   });
 });
 
 it('loads idiom entries with markdown body and git metadata', () => {
-  const [firstEntry] = registry.getAllEntries();
-
-  expect(firstEntry).toBeDefined();
-  expect(firstEntry!.content.trim().length).toBeGreaterThan(0);
-  expect(firstEntry!.contributors.length).toBeGreaterThan(0);
-  expect(firstEntry!.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-  expect(firstEntry!.updatedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  const frontmatterList = registry.getAllFrontmatter();
+  expect(frontmatterList.length).greaterThan(0);
 });
 
 it('creates handlers that derive paths', async () => {
-  const allEntries = registry.getAllEntries();
+  const allEntries = registry.getAllFrontmatter();
   const staticPaths = await registry.getStaticPaths({
     locales: [],
     defaultLocale: 'en',
@@ -39,9 +33,8 @@ it('creates handlers that derive paths', async () => {
 });
 
 it('creates handlers that derive props', async () => {
-  const allEntries = registry.getAllEntries();
+  const allEntries = registry.getAllFrontmatter();
   const [firstEntry] = allEntries;
-  const restEntries = allEntries.slice(1);
   const staticProps = registry.getStaticProps({
     params: { slug: firstEntry!.term },
   });
@@ -51,5 +44,8 @@ it('creates handlers that derive props', async () => {
   }
 
   expect(staticProps.props.entry.term).toBe(firstEntry!.term);
-  expect(staticProps.props.restEntries).toEqual(restEntries);
+  expect(staticProps.props.entry.content.trim().length).toBeGreaterThan(0);
+  expect(staticProps.props.entry.contributors.length).toBeGreaterThan(0);
+  expect(staticProps.props.entry.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  expect(staticProps.props.entry.updatedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 });

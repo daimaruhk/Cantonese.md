@@ -7,10 +7,10 @@ import { Link } from '@/components/ui/Link';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Typography } from '@/components/ui/Typography';
 import { cn, isMobile } from '@/lib/utils';
-import type { Idiom } from '@/schema/idioms';
+import type { IdiomFrontmatter } from '@/schema/idioms';
 
 type IdiomCardProps = {
-  idiom: Idiom;
+  idiom: IdiomFrontmatter;
   className?: string;
 };
 

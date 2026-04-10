@@ -1,4 +1,3 @@
-import type { GetStaticProps } from 'next';
 import { IconArchive, IconBook, IconRobot } from '@tabler/icons-react';
 
 import { Button } from '@/components/ui/Button';
@@ -15,14 +14,8 @@ import { Typography } from '@/components/ui/Typography';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
 import { IdiomSuggestionSection } from '@/components/features/idioms/IdiomSuggestionSection';
-import { idiomRegistry } from '@/lib/registry';
-import type { Idiom } from '@/schema/idioms';
 
-type HomeProps = {
-  idioms: Idiom[];
-};
-
-export default function Home({ idioms }: HomeProps) {
+export default function Home() {
   return (
     <Layout
       title="開源粵語知識庫 | Cantonese.md"
@@ -30,19 +23,10 @@ export default function Home({ idioms }: HomeProps) {
     >
       <HeroSection />
       <IntroductionSection />
-      <IdiomSuggestionSection idioms={idioms} />
+      <IdiomSuggestionSection />
     </Layout>
   );
 }
-
-export const getStaticProps = (() => {
-  const idioms = idiomRegistry.getAllEntries();
-  return {
-    props: {
-      idioms,
-    },
-  };
-}) satisfies GetStaticProps<HomeProps>;
 
 const features = [
   {
@@ -104,7 +88,7 @@ const HeroSection = () => {
             alt="Hong Kong Neon Street"
             className="aspect-4/5 rounded-[2rem] object-cover shadow-[0_20px_50px_rgba(0,0,0,0.3)] grayscale sm:aspect-3/4"
           />
-          <Card className="absolute -bottom-6 -left-8 w-[240px] shadow-xl sm:-bottom-12 sm:-left-16 sm:w-[320px]">
+          <Card className="absolute -bottom-6 -left-8 w-[240px] shadow-xl sm:-bottom-12 sm:-left-16 sm:w-xs">
             <CardHeader>
               <Typography variant="muted">每日一語</Typography>
               <CardTitle variant="h4">阿茂整餅</CardTitle>

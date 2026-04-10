@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { main } from '@/scripts/generate-idiom';
 
 vi.mock('node:fs', () => ({
@@ -25,6 +25,10 @@ describe('main', () => {
     vi.spyOn(process, 'cwd').mockReturnValue('/mock-cwd');
     vi.spyOn(console, 'error').mockImplementation(() => undefined);
     vi.spyOn(console, 'log').mockImplementation(() => undefined);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('returns 0 when a valid term creates a new idiom file', () => {

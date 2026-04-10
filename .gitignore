@@ -43,3 +43,5 @@ next-env.d.ts
 # AI agents
 .agents
 skills-lock.json
+
+public/api/*

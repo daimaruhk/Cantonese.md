@@ -29,6 +29,9 @@ export const getMarkdownFilePaths = (type: string) => {
     .map((name) => path.join(directory, name));
 };
 
+export const getMarkdownFilePath = (type: string, fileName: string) =>
+  path.join(getContentDirectory(type), `${fileName}.md`);
+
 export const readContentFile = (filePath: string) => {
   const fileContents = fs.readFileSync(filePath, 'utf8');
   const { data: frontmatter, content } = matter(fileContents);

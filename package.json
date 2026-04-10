@@ -6,16 +6,19 @@
   "homepage": "https://github.com/daimaruhk/Cantonese.md",
   "scripts": {
     "dev": "next dev",
+    "prebuild": "pnpm gen:api",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
     "test": "vitest run",
+    "gen:api": "tsx ./src/scripts/generate-api.ts",
     "gen:idiom": "tsx ./src/scripts/generate-idiom.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",
     "@tabler/icons-react": "^3.41.1",
+    "@tanstack/react-query": "^5.97.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "gray-matter": "^4.0.3",

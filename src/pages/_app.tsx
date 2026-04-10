@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Noto_Sans_TC, JetBrains_Mono } from 'next/font/google';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import '@/styles/globals.css';
 
@@ -16,6 +17,8 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 });
 
+const queryClient = new QueryClient();
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -28,7 +31,9 @@ export default function App({ Component, pageProps }: AppProps) {
           --font-jetbrains-mono: ${jetbrainsMono.style.fontFamily};
         }
       `}</style>
-      <Component {...pageProps} />
+      <QueryClientProvider client={queryClient}>
+        <Component {...pageProps} />
+      </QueryClientProvider>
     </>
   );
 }

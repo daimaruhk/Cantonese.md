@@ -1,19 +1,16 @@
-import type { GetStaticProps } from 'next';
-
 import { Typography } from '@/components/ui/Typography';
 import { Backdrop } from '@/components/Backdrop';
 import { Container } from '@/components/Container';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
-import { IdiomCard } from '@/components/features/idioms/IdiomCard';
-import { idiomRegistry } from '@/lib/registry';
-import type { Idiom } from '@/schema/idioms';
+import {
+  IdiomCard,
+  IdiomCardSkeleton,
+} from '@/components/features/idioms/IdiomCard';
+import { useIdiomsQuery } from '@/hooks/useIdiomsQuery';
 
-type IdiomsPageProps = {
-  idioms: Idiom[];
-};
-
-export default function IdiomsPage({ idioms }: IdiomsPageProps) {
+export default function IdiomsPage() {
+  const { status, data: idioms } = useIdiomsQuery();
   return (
     <Layout
       title="歇後語 | Cantonese.md"
@@ -35,20 +32,13 @@ export default function IdiomsPage({ idioms }: IdiomsPageProps) {
       </Section>
       <Container>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
-          {idioms.map((idiom) => (
-            <IdiomCard key={idiom.id} idiom={idiom} />
-          ))}
+          {status === 'success'
+            ? idioms.map((idiom) => <IdiomCard key={idiom.id} idiom={idiom} />)
+            : Array.from({ length: 4 }).map((_, i) => (
+                <IdiomCardSkeleton key={i} />
+              ))}
         </div>
       </Container>
     </Layout>
   );
 }
-
-export const getStaticProps = (() => {
-  const idioms = idiomRegistry.getAllEntries();
-  return {
-    props: {
-      idioms,
-    },
-  };
-}) satisfies GetStaticProps<IdiomsPageProps>;

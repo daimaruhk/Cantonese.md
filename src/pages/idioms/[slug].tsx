@@ -29,7 +29,6 @@ import { getGithubMarkdownUrl } from '@/lib/utils';
 
 export default function IdiomPage({
   entry: idiom,
-  restEntries: restIdioms,
 }: ContentPageProps<IdiomFrontmatter>) {
   return (
     <Layout
@@ -40,7 +39,7 @@ export default function IdiomPage({
       <Container>
         <MarkdownRenderer content={idiom.content} />
       </Container>
-      <IdiomSuggestionSection idioms={restIdioms} />
+      <IdiomSuggestionSection excludedIdiomId={idiom.id} />
     </Layout>
   );
 }
