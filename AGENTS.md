@@ -8,6 +8,7 @@
 - **Package Manager**: pnpm 10
 - **UI Framework**: Next.js 16 (Page Router SSG), React 19, TypeScript 5, Tailwind CSS 4, Shadcn UI (using **Base UI** primitives and **Tabler** icons)
 - **Validation**: Zod for both runtime and build-time content validation
+- **Data Fetching**: TanStack Query for data fetching and state management
 - **Testing**: Vitest for unit and integration testing
 
 ## Folder Structure
@@ -18,12 +19,13 @@ src/
 │   ├── features/ # Feature-specific components (e.g., IdiomCard)
 │   └── ui/       # Core UI primitives (mostly from Shadcn)
 ├── contents/     # Primary data storage (Markdown files with frontmatter)
+├── hooks/        # Custom React hooks (e.g., useSearch, useQuery wrappers)
 ├── lib/          # Shared utilities, hooks, and data-fetching logic
 ├── pages/        # Next.js routes using the Page Router (SSG)
 ├── schema/       # Zod data validation schemas (ensures data integrity)
+├── scripts/      # Developer tooling (e.g., idiom generator)
 ├── styles/       # Global CSS and Tailwind 4 configuration
 └── tests/        # Comprehensive testing suite (Vitest)
-scripts/          # Developer tooling (e.g., idiom generator)
 ```
 
 ## Data & Content
@@ -44,6 +46,7 @@ Perform these actions using `pnpm`:
 - `pnpm format`: Format code with Prettier
 - `pnpm test`: Execute Vitest suites (includes content validation)
 - `pnpm gen:<type> <term>`: Create a new entry template
+- `pnpm gen:api`: Generate API files to `src/lib/api/`
 
 ## Code Style Guidelines
 

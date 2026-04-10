@@ -64,16 +64,17 @@ Before creating a feature request, check the existing issues first. If you do ne
 
 ```text
 src/
-├── components/   # Reusable UI components
-│   ├── features/ # Feature-specific components
-│   └── ui/       # Core UI primitives
-├── contents/     # Markdown-based content
-├── lib/          # Shared utilities and logic
-├── pages/        # Next.js routes (Page Router)
-├── schema/       # Zod data validation schemas
-├── styles/       # Global CSS (Tailwind 4)
-└── tests/        # Testing suite (Vitest)
-scripts/          # Developer tooling and automation
+├── components/   # UI components
+│   ├── features/ # Feature-specific components (e.g., IdiomCard)
+│   └── ui/       # Core UI primitives (mostly from Shadcn)
+├── contents/     # Primary data storage (Markdown files with frontmatter)
+├── hooks/        # Custom React hooks (e.g., useSearch, useQuery wrappers)
+├── lib/          # Shared utilities, hooks, and data-fetching logic
+├── pages/        # Next.js routes using the Page Router (SSG)
+├── schema/       # Zod data validation schemas (ensures data integrity)
+├── scripts/      # Developer tooling (e.g., idiom generator)
+├── styles/       # Global CSS and Tailwind 4 configuration
+└── tests/        # Comprehensive testing suite (Vitest)
 ```
 
 ### Dependencies
@@ -81,7 +82,8 @@ scripts/          # Developer tooling and automation
 1. **Next.js Page Router**: Intentionally using Page Router SSG because the entire website is designed to be static.
 2. **Tailwind**: Leveraging the latest utility-first CSS framework.
 3. **Shadcn with Base UI**: If you need new components, please refer to [Shadcn UI](https://ui.shadcn.com/). We use **Base UI** instead of Radix for its superior flexibility and active maintenance.
-4. **Vitest**: Our primary testing framework for unit and content validation.
+4. **TanStack Query**: For data fetching and state management.
+5. **Vitest**: Our primary testing framework for unit and content validation.
 
 ## Local Development Setup
 
@@ -105,12 +107,14 @@ scripts/          # Developer tooling and automation
 
 ### Other Commands
 
-| Command       | Description                                 |
-| :------------ | :------------------------------------------ |
-| `pnpm build`  | Build the static export into `out/`         |
-| `pnpm lint`   | Run ESLint to check for code quality issues |
-| `pnpm format` | Run Prettier to format the codebase         |
-| `pnpm test`   | Run the test suite using Vitest             |
+| Command                  | Description                                 |
+| :----------------------- | :------------------------------------------ |
+| `pnpm build`             | Build the static export into `out/`         |
+| `pnpm lint`              | Run ESLint to check for code quality issues |
+| `pnpm format`            | Run Prettier to format the codebase         |
+| `pnpm test`              | Run the test suite using Vitest             |
+| `pnpm gen:<type> <term>` | Create a new entry template                 |
+| `pnpm gen:api`           | Generate API files to `src/lib/api/`        |
 
 ## Pull Request Process
 
