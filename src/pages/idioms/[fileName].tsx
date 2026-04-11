@@ -94,7 +94,14 @@ const HeroSection = ({
         </Button>
         <Button
           variant="outline"
-          render={<Link href={getGithubMarkdownUrl(contentData.fileName)} />}
+          render={
+            <Link
+              href={getGithubMarkdownUrl(
+                contentData.contentType,
+                contentData.fileName,
+              )}
+            />
+          }
           nativeButton={false}
         >
           <IconBrandGithub />
