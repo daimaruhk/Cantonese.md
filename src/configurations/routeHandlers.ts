@@ -1,3 +1,5 @@
+// Server only
+
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { contentRegistry, type ContentType } from './registry';
 import type { ContentData } from './types';

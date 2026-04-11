@@ -1,11 +1,11 @@
 import { Fragment } from 'react';
 import { Typography } from '@/components/ui/Typography';
 import { Backdrop } from '@/components/Backdrop';
+import { Container } from '@/components/Container';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
 import { useContentMetadataQuery } from '@/hooks/useContentMetadataQuery';
-import { contentCardRenderers } from '@/configurations/renderers';
-import { Container } from '@/components/Container';
+import { renderers } from '@/configurations/renderers';
 
 export default function IdiomsPage() {
   const { status, data: idioms } = useContentMetadataQuery('idioms');
@@ -33,12 +33,12 @@ export default function IdiomsPage() {
           {status === 'success'
             ? idioms.map((idiom) => (
                 <Fragment key={idiom.id}>
-                  {contentCardRenderers.idioms.renderCard(idiom)}
+                  {renderers.idioms.renderCard(idiom)}
                 </Fragment>
               ))
             : Array.from({ length: 4 }).map((_, i) => (
                 <Fragment key={i}>
-                  {contentCardRenderers.idioms.renderSkeleton()}
+                  {renderers.idioms.renderCardSkeleton()}
                 </Fragment>
               ))}
         </div>

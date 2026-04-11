@@ -6,7 +6,7 @@ import { Section } from '@/components/Section';
 import { useContentMetadataQuery } from '@/hooks/useContentMetadataQuery';
 import type { ContentMetadata } from '@/configurations/types';
 import { contentRegistry, type ContentType } from '@/configurations/registry';
-import { contentCardRenderers } from '@/configurations/renderers';
+import { renderers } from '@/configurations/renderers';
 
 type ContentGridProps<T extends ContentType> = {
   contentType: T;
@@ -68,12 +68,12 @@ export const ContentGrid = <T extends ContentType>({
           {currentEntries.length > 0
             ? currentEntries.map((entry) => (
                 <Fragment key={entry.id}>
-                  {contentCardRenderers[contentType].renderCard(entry)}
+                  {renderers[contentType].renderCard(entry)}
                 </Fragment>
               ))
             : Array.from({ length: 4 }).map((_, i) => (
                 <Fragment key={i}>
-                  {contentCardRenderers[contentType].renderSkeleton()}
+                  {renderers[contentType].renderCardSkeleton()}
                 </Fragment>
               ))}
         </div>

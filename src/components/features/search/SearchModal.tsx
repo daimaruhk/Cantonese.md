@@ -19,7 +19,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToggleGroup';
 import { Typography } from '@/components/ui/Typography';
 import { useSearch, type SearchScope } from '@/hooks/useSearch';
 import { contentRegistry } from '@/configurations/registry';
-import { searchCardRenderers } from '@/configurations/renderers';
+import { renderers } from '@/configurations/renderers';
 import type { SearchEntry } from '@/configurations/types';
 
 type SearchModalProps = {
@@ -137,7 +137,9 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
                       handleSelect(searchEntry);
                     }}
                   >
-                    {searchCardRenderers[searchEntry.contentType](searchEntry)}
+                    {renderers[searchEntry.contentType].renderSearchCard(
+                      searchEntry,
+                    )}
                   </CommandItem>
                 ))}
               </CommandGroup>

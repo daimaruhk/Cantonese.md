@@ -173,7 +173,7 @@ All content schemas must extend `BaseFrontmatterSchema` (which provides `id`).
 2. Create page routes in `src/pages/slangs/`:
    - `index.tsx` — List page (follow `src/pages/idioms/index.tsx` pattern).
    - `[fileName].tsx` — Detail page (follow `src/pages/idioms/[fileName].tsx` pattern).
-3. Wire the renderers in **`src/configurations/renderers.tsx`** by adding the card and search card for `slangs` to `searchCardRenderers` and `contentCardRenderers`.
+3. Wire the renderers in **`src/configurations/renderers.tsx`** by adding the card and search card for `slangs` to `renderers`.
 
 ### Step 4: Create the Content Directory
 
