@@ -1,11 +1,8 @@
-import { useDeferredValue, useMemo, useState } from 'react';
+import { useDeferredValue, useState } from 'react';
 import type { ContentType } from '@/configurations/registry';
-import {
-  searchProviders,
-  type SearchEntry,
-} from '@/configurations/searchProviders';
+import { type SearchEntry } from '@/configurations/searchProviders';
 import { normalize } from '@/lib/utils';
-import { useContentMetadataQuery } from './useContentMetadataQuery';
+import { useSearchEntriesQuery } from './useSearchEntriesQuery';
 
 export type SearchScope = ContentType | 'all';
 
@@ -14,23 +11,18 @@ type UseSearchOptions = {
 };
 
 export const useSearch = ({ enabled }: UseSearchOptions) => {
-  const { status, data: idiomSearchEntries } = useContentMetadataQuery(
-    'idioms',
-    {
-      enabled,
-      select: (metadataList) =>
-        metadataList.map(searchProviders.idioms.toSearchEntry),
-    },
-  );
+  const queryResults = useSearchEntriesQuery({ enabled });
   const [scope, setScope] = useState<SearchScope>('all');
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query);
-  const results = useMemo(() => {
-    if (!idiomSearchEntries) {
-      return [];
-    }
-    return filterSearchEntries(idiomSearchEntries, deferredQuery, scope);
-  }, [idiomSearchEntries, deferredQuery, scope]);
+
+  const isLoading = queryResults.some((result) => result.isLoading);
+  const isError = queryResults.some((result) => result.isError);
+  const searchEntries =
+    isLoading || isError
+      ? []
+      : queryResults.flatMap((result) => result.data ?? []);
+  const results = filterSearchEntries(searchEntries, deferredQuery, scope);
 
   const reset = () => {
     setQuery('');
@@ -44,20 +36,19 @@ export const useSearch = ({ enabled }: UseSearchOptions) => {
     setScope,
     results,
     reset,
-    isLoading: status === 'pending',
-    isError: status === 'error',
+    isLoading,
+    isError,
   };
 };
 
 const filterSearchEntries = <T extends ContentType>(
-  entries: SearchEntry<T>[],
+  searchEntries: SearchEntry<T>[],
   query: string,
   scope: SearchScope,
   limit = 10,
 ) => {
   const normalizedQuery = normalize(query);
-
-  return entries
+  return searchEntries
     .filter((entry) => {
       if (scope !== 'all' && entry.contentType !== scope) {
         return false;

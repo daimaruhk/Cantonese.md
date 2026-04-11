@@ -22,7 +22,7 @@ src/
 │   └── schemas/     # Zod validation schemas (base + per content type)
 ├── contents/        # Primary data storage (Markdown files with frontmatter)
 ├── hooks/           # Custom React hooks (e.g., useSearch, useContentMetadataQuery)
-├── lib/             # Shared utilities (cn, URL helpers)
+├── lib/             # Shared utilities (cn, URL helpers, api fetchers)
 ├── pages/           # Next.js routes using the Page Router (SSG)
 ├── scripts/         # Developer tooling (e.g., idiom generator, API generator)
 ├── styles/          # Global CSS and Tailwind 4 configuration

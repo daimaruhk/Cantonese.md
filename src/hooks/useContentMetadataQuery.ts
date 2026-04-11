@@ -1,29 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
-import type { ContentMetadata } from '@/configurations/types';
-import type { ContentType } from '@/configurations/registry';
+import { type ContentType } from '@/configurations/registry';
+import { fetchContentMetadata } from '@/lib/api';
 
-type UseContentMetadataQueryOptions<
-  TType extends ContentType,
-  TOutput = unknown,
-> = {
+type UseContentMetadataQueryOptions = {
   enabled?: boolean;
-  select?: (metadata: ContentMetadata<TType>[]) => TOutput;
 };
 
-// This hook is designed for fetching content metadata (frontmatter + filePath + contentType) for all kinds of content
-export const useContentMetadataQuery = <
-  TType extends ContentType,
-  TOutput = ContentMetadata<TType>[],
->(
-  contentType: TType,
-  options: UseContentMetadataQueryOptions<TType, TOutput> = {},
+export const useContentMetadataQuery = <T extends ContentType>(
+  contentType: T,
+  options: UseContentMetadataQueryOptions = {},
 ) => {
-  return useQuery<ContentMetadata<TType>[], Error, TOutput>({
+  return useQuery({
     queryKey: [contentType],
-    queryFn: () =>
-      fetch(`/api/${contentType}.json`).then(
-        (res) => res.json() as Promise<ContentMetadata<TType>[]>,
-      ),
+    queryFn: () => fetchContentMetadata(contentType),
     staleTime: 'static',
     ...options,
   });

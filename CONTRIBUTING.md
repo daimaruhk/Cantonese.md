@@ -72,7 +72,7 @@ src/
 │   └── schemas/     # Zod validation schemas for each content type
 ├── contents/        # Primary data storage (Markdown files with frontmatter)
 ├── hooks/           # Custom React hooks (e.g., useSearch, useQuery wrappers)
-├── lib/             # Shared utilities (cn, URL helpers)
+├── lib/             # Shared utilities (cn, URL helpers, api fetchers)
 ├── pages/           # Next.js routes using the Page Router (SSG)
 ├── scripts/         # Developer tooling (e.g., idiom generator, API generator)
 ├── styles/          # Global CSS and Tailwind 4 configuration
@@ -167,13 +167,14 @@ All content schemas must extend `BaseFrontmatterSchema` (which provides `id`).
    } as const satisfies { [K in ContentType]: ContentRegistryConfig<K> };
    ```
 
-### Step 3: Create UI Components and Renderers
+### Step 3: Create UI Components and Wire Up Content-Specific Configurations
 
 1. Create a card component in `src/components/features/content/` (e.g., `SlangCard.tsx`).
 2. Create page routes in `src/pages/slangs/`:
    - `index.tsx` — List page (follow `src/pages/idioms/index.tsx` pattern).
    - `[fileName].tsx` — Detail page (follow `src/pages/idioms/[fileName].tsx` pattern).
 3. Wire the renderers in **`src/configurations/renderers.tsx`** by adding the card and search card for `slangs` to `renderers`.
+4. Configure search providers in **`src/configurations/searchProviders.ts`** by adding the search provider for `slangs` to `searchProviders`.
 
 ### Step 4: Create the Content Directory
 
