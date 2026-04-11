@@ -1,5 +1,5 @@
 import type { GetStaticPaths, GetStaticProps } from 'next';
-import type { ContentType } from './registry';
+import { contentRegistry, type ContentType } from './registry';
 import type { ContentData } from './types';
 import { dataProviders } from './dataProviders';
 
@@ -9,10 +9,21 @@ export type ContentPageProps<T extends ContentType> = {
   contentData: ContentData<T>;
 };
 
-const createRouteHandler = <T extends ContentType>(contentType: T) => {
+type RouterHandler<T extends ContentType> = {
+  getStaticPaths: GetStaticPaths<PathParams>;
+  getStaticProps: GetStaticProps<ContentPageProps<T>, PathParams>;
+};
+
+type RouteHandlers = {
+  [K in ContentType]: RouterHandler<K>;
+};
+
+const createRouteHandler = <T extends ContentType>(
+  contentType: T,
+): RouterHandler<T> => {
   const dataProvider = dataProviders[contentType];
 
-  const getStaticPaths: GetStaticPaths<PathParams> = () => {
+  const getStaticPaths = () => {
     const metadataList = dataProvider.getAllMetadata();
     return {
       paths: metadataList.map((metadata) => ({
@@ -43,11 +54,10 @@ const createRouteHandler = <T extends ContentType>(contentType: T) => {
   return { getStaticPaths, getStaticProps };
 };
 
-export const routeHandlers: {
-  [K in ContentType]: {
-    getStaticPaths: GetStaticPaths<PathParams>;
-    getStaticProps: GetStaticProps<ContentPageProps<K>, PathParams>;
-  };
-} = {
-  idioms: createRouteHandler('idioms'),
-};
+export const routeHandlers = Object.values(contentRegistry).reduce(
+  (handlers, config) => {
+    handlers[config.contentType] = createRouteHandler(config.contentType);
+    return handlers;
+  },
+  {} as RouteHandlers,
+);

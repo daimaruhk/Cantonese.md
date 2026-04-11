@@ -14,6 +14,7 @@ The following is a set of guidelines for contributing to Cantonese.md. These are
   - [Requesting Features](#requesting-features)
 - [Project Structure](#project-structure)
 - [Local Development Setup](#local-development-setup)
+- [Adding a New Content Type](#adding-a-new-content-type)
 - [Pull Request Process](#pull-request-process)
 - [Code Style Guidelines](#code-style-guidelines)
   - [Commit Messages](#commit-messages)
@@ -166,34 +167,27 @@ All content schemas must extend `BaseFrontmatterSchema` (which provides `id`).
    } as const satisfies { [K in ContentType]: ContentRegistryConfig<K> };
    ```
 
-### Step 3: Wire Data Providers, Route Handlers, and Renderers
-
-Add entries for `slangs` in each of the following files — follow the existing `idioms` pattern:
-
-- **`src/configurations/dataProviders.ts`** — Add `slangs: createApiForType('slangs')` to the `dataProviders` object.
-- **`src/configurations/routeHandlers.ts`** — Add `slangs: createRouteHandler('slangs')` to the `routeHandlers` object.
-- **`src/configurations/renderers.tsx`** — Add card and search card renderers for `slangs` in both `searchCardRenderers` and `contentCardRenderers`.
-
-### Step 4: Create the Content Directory
-
-Create `src/contents/slangs/` and add `.md` files with the matching frontmatter structure.
-
-### Step 5: Create UI Components
+### Step 3: Create UI Components and Renderers
 
 1. Create a card component in `src/components/features/content/` (e.g., `SlangCard.tsx`).
 2. Create page routes in `src/pages/slangs/`:
    - `index.tsx` — List page (follow `src/pages/idioms/index.tsx` pattern).
    - `[fileName].tsx` — Detail page (follow `src/pages/idioms/[fileName].tsx` pattern).
+3. Wire the renderers in **`src/configurations/renderers.tsx`** by adding the card and search card for `slangs` to `searchCardRenderers` and `contentCardRenderers`.
 
-### Step 6: Add Content Validation Tests
+### Step 4: Create the Content Directory
+
+Create `src/contents/slangs/` and add `.md` files with the matching frontmatter structure.
+
+### Step 5: Add Content Validation Tests
 
 Create `src/tests/contents/slangs.test.ts` following the pattern in `src/tests/contents/idioms.test.ts`. This ensures all markdown files in the new content directory conform to your schema.
 
-### Step 7: (Optional) Create a Generator Script
+### Step 6: (Optional) Create a Generator Script
 
 Add `src/scripts/generate-slang.ts` following the `generate-idiom.ts` pattern, and register a `gen:slang` script in `package.json`.
 
-### Step 8: Validate
+### Step 7: Validate
 
 Run the full validation suite:
 

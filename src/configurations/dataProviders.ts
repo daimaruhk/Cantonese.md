@@ -10,25 +10,37 @@ import {
   getContentFilePath,
 } from './utils';
 
+type DataProvider<T extends ContentType> = {
+  getAllMetadata: () => ContentMetadata<T>[];
+  getContentData: (fileName: string) => ContentData<T>;
+};
+
+type DataProviders = {
+  [K in ContentType]: DataProvider<K>;
+};
+
 const cache: { [K in ContentType]: ContentMetadata<K>[] | null } = {
   idioms: null,
 };
 
-const createApiForType = <T extends ContentType>(contentType: T) => {
-  const getAllMetadata = (): ContentMetadata<T>[] => {
-    if (!cache[contentType]) {
-      const fileNames = getContentFileNames(contentType);
-      const metadataList = fileNames.map((fileName) => {
-        const { frontmatter } = readContentFile(contentType, fileName);
-        return buildContentMetadata(contentType, frontmatter, fileName);
-      });
-      cache[contentType] = metadataList;
+const createApiForType = <T extends ContentType>(
+  contentType: T,
+): DataProvider<T> => {
+  const getAllMetadata = () => {
+    if (cache[contentType]) {
+      return cache[contentType];
     }
 
-    return cache[contentType];
+    const fileNames = getContentFileNames(contentType);
+    const metadataList = fileNames.map((fileName) => {
+      const { frontmatter } = readContentFile(contentType, fileName);
+      return buildContentMetadata(contentType, frontmatter, fileName);
+    });
+    cache[contentType] = metadataList;
+    return metadataList;
   };
 
-  const getContentData = (fileName: string): ContentData<T> => {
+  const getContentData = (fileName: string) => {
     const { frontmatter, content } = readContentFile(contentType, fileName);
     const contentMetadata = buildContentMetadata(
       contentType,
@@ -47,14 +59,13 @@ const createApiForType = <T extends ContentType>(contentType: T) => {
   return { getAllMetadata, getContentData };
 };
 
-export const dataProviders: {
-  [K in ContentType]: {
-    getAllMetadata: () => ContentMetadata<K>[];
-    getContentData: (fileName: string) => ContentData<K>;
-  };
-} = {
-  idioms: createApiForType('idioms'),
-};
+export const dataProviders = Object.values(contentRegistry).reduce(
+  (providers, config) => {
+    providers[config.contentType] = createApiForType(config.contentType);
+    return providers;
+  },
+  {} as DataProviders,
+);
 
 const buildContentMetadata = <T extends ContentType>(
   contentType: T,
