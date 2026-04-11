@@ -85,3 +85,4 @@ pnpm build    # Ensure the static build succeeds without errors
 ## Boundaries
 
 - **Never:** Edit `node_modules/`
+- **Always:** prioritize human readability and reviewability

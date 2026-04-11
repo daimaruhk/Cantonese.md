@@ -12,5 +12,5 @@ export const isMobile = () => {
 
 export const getGithubHomepageUrl = () => homepage;
 
-export const getGithubMarkdownUrl = (name: string) =>
-  `${homepage}/blob/main/src/contents/idioms/${encodeURIComponent(name)}.md`;
+export const getGithubMarkdownUrl = (fileName: string) =>
+  `${homepage}/blob/main/src/contents/idioms/${encodeURIComponent(fileName)}.md`;

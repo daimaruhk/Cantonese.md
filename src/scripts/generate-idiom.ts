@@ -2,7 +2,11 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { IdiomFrontmatterSchema, type IdiomFrontmatter } from '@/schema/idioms';
+import {
+  IdiomFrontmatterSchema,
+  type IdiomFrontmatter,
+} from '@/configurations/schemas/idioms';
+import { getContentFilePath } from '@/configurations/utils';
 
 const ID_ALPHABET =
   'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -17,20 +21,22 @@ const createRandomId = () => {
 };
 
 const createIdiomFrontmatter = (term: string): IdiomFrontmatter => {
-  const frontmatter = {
+  const frontmatter: IdiomFrontmatter = {
     id: createRandomId(),
     term,
     termJyutping: '',
     answer: '',
     answerJyutping: '',
-    type: '歇後語' as const,
   };
 
-  IdiomFrontmatterSchema.pick({
+  const result = IdiomFrontmatterSchema.pick({
     id: true,
     term: true,
-    type: true,
   }).safeParse(frontmatter);
+
+  if (!result.success) {
+    throw new Error('Failed to create idiom frontmatter');
+  }
 
   return frontmatter;
 };
@@ -48,22 +54,19 @@ const createIdiomTemplate = (term: string) => {
   return template;
 };
 
-const getIdiomFilePath = (term: string, cwd: string) =>
-  path.join(cwd, 'src', 'contents', 'idioms', `${term}.md`);
-
 const generateIdiomFile = (term: string) => {
-  const cwd = process.cwd();
-  const filePath = getIdiomFilePath(term, cwd);
+  const fileFullPath = getContentFilePath('idioms', term);
+  const fileRelativePath = path.relative(process.cwd(), fileFullPath);
 
-  if (fs.existsSync(filePath)) {
+  if (fs.existsSync(fileFullPath)) {
     return { destination: null };
   }
 
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, createIdiomTemplate(term), 'utf8');
+  fs.mkdirSync(path.dirname(fileFullPath), { recursive: true });
+  fs.writeFileSync(fileFullPath, createIdiomTemplate(term), 'utf8');
 
   return {
-    destination: path.relative(cwd, filePath),
+    destination: fileRelativePath,
   };
 };
 
@@ -81,7 +84,7 @@ export const main = (term: string | undefined) => {
     return 1;
   }
 
-  console.log(`✅ Generated newly formatted idiom at: ${destination}`);
+  console.log(`✅ Idiom "${term}" generated at: ${destination}`);
   return 0;
 };
 

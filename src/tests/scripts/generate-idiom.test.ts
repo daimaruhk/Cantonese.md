@@ -41,7 +41,6 @@ term: ${term}
 termJyutping:
 answer:
 answerJyutping:
-type: 歇後語
 ---
 
 `;
@@ -55,7 +54,7 @@ type: 歇後語
       'utf8',
     );
     expect(console.log).toHaveBeenCalledWith(
-      `✅ Generated newly formatted idiom at: ${relativePath}`,
+      `✅ Idiom "${term}" generated at: ${relativePath}`,
     );
   });
 

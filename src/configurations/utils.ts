@@ -1,39 +1,45 @@
+// Server only
+
 import { execFileSync } from 'node:child_process';
-import path from 'node:path';
+import path, { basename } from 'node:path';
 import fs from 'node:fs';
 import matter from 'gray-matter';
+import type { GitMetadata } from './types';
+import type { ContentType } from './registry';
 
-export type Frontmatter = Record<string, unknown>;
+const getContentTypeDirectory = (contentType: ContentType) =>
+  path.join(process.cwd(), 'src', 'contents', contentType);
 
-export type GitMetadata = {
-  contributors: string[];
-  createdAt: string;
-  updatedAt: string;
-};
+export const getContentFilePath = (
+  contentType: ContentType,
+  fileName: string,
+) => path.join(getContentTypeDirectory(contentType), `${fileName}.md`);
 
-const getContentDirectory = (type: string) =>
-  path.join(process.cwd(), 'src/contents', type);
-
-export const getMarkdownFilePaths = (type: string) => {
-  const directory = getContentDirectory(type);
+export const getContentFileNames = (contentType: ContentType) => {
+  const directory = getContentTypeDirectory(contentType);
 
   if (!fs.existsSync(directory)) {
     throw new Error(
-      `Content directory for type "${type}" not found at "${directory}"`,
+      `Content directory for type "${contentType}" not found at "${directory}"`,
     );
   }
 
   return fs
     .readdirSync(directory)
     .filter((name) => name.endsWith('.md'))
-    .map((name) => path.join(directory, name));
+    .map((name) => basename(name, '.md'));
 };
 
-export const getMarkdownFilePath = (type: string, fileName: string) =>
-  path.join(getContentDirectory(type), `${fileName}.md`);
+export const readContentFile = (contentType: ContentType, fileName: string) => {
+  const path = getContentFilePath(contentType, fileName);
 
-export const readContentFile = (filePath: string) => {
-  const fileContents = fs.readFileSync(filePath, 'utf8');
+  if (!fs.existsSync(path)) {
+    throw new Error(
+      `Content file not found for type "${contentType}" and file name "${fileName}" at "${path}"`,
+    );
+  }
+
+  const fileContents = fs.readFileSync(path, 'utf8');
   const { data: frontmatter, content } = matter(fileContents);
 
   return {
@@ -42,7 +48,12 @@ export const readContentFile = (filePath: string) => {
   };
 };
 
-export const getGitMetadata = (filePath: string): GitMetadata => {
+export const getGitMetadata = (
+  contentType: ContentType,
+  fileName: string,
+): GitMetadata => {
+  const filePath = getContentFilePath(contentType, fileName);
+
   const runGitLog = (format: string) => {
     try {
       return execFileSync(
@@ -55,7 +66,7 @@ export const getGitMetadata = (filePath: string): GitMetadata => {
       );
     } catch (error) {
       throw new Error(`Unable to retrieve git metadata for "${filePath}"`, {
-        cause: error instanceof Error ? error : undefined,
+        cause: error,
       });
     }
   };

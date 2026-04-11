@@ -7,7 +7,6 @@ import {
   IconShare,
   IconUsers,
 } from '@tabler/icons-react';
-
 import {
   Avatar,
   AvatarFallback,
@@ -22,33 +21,38 @@ import { Container } from '@/components/Container';
 import { MarkdownRenderer } from '@/components/MarkdownRenderer';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
-import { IdiomSuggestionSection } from '@/components/features/idioms/IdiomSuggestionSection';
-import type { Idiom, IdiomFrontmatter } from '@/schema/idioms';
-import { idiomRegistry, type ContentPageProps } from '@/lib/registry';
-import { getGithubMarkdownUrl } from '@/lib/utils';
 
-export default function IdiomPage({
-  entry: idiom,
-}: ContentPageProps<IdiomFrontmatter>) {
+import { getGithubMarkdownUrl } from '@/lib/utils';
+import {
+  routeHandlers,
+  type ContentPageProps,
+} from '@/configurations/routeHandlers';
+import { ContentGrid } from '@/components/features/content/ContentGrid';
+
+export default function IdiomPage({ contentData }: ContentPageProps<'idioms'>) {
   return (
     <Layout
-      title={`${idiom.term} | Cantonese.md`}
-      description={`${idiom.term} ── ${idiom.answer}。粵拼：${idiom.termJyutping} ── ${idiom.answerJyutping}。`}
+      title={`${contentData.term} | Cantonese.md`}
+      description={`${contentData.term} ── ${contentData.answer}。粵拼：${contentData.termJyutping} ── ${contentData.answerJyutping}。`}
     >
-      <HeroSection idiom={idiom} />
+      <HeroSection contentData={contentData} />
       <Container>
-        <MarkdownRenderer content={idiom.content} />
+        <MarkdownRenderer content={contentData.content} />
       </Container>
-      <IdiomSuggestionSection excludedIdiomId={idiom.id} />
+      <ContentGrid contentType="idioms" excludedId={contentData.id} />
     </Layout>
   );
 }
 
-export const getStaticPaths = idiomRegistry.getStaticPaths;
+export const getStaticPaths = routeHandlers.idioms.getStaticPaths;
 
-export const getStaticProps = idiomRegistry.getStaticProps;
+export const getStaticProps = routeHandlers.idioms.getStaticProps;
 
-const HeroSection = ({ idiom }: { idiom: Idiom }) => {
+const HeroSection = ({
+  contentData,
+}: {
+  contentData: ContentPageProps<'idioms'>['contentData'];
+}) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleShare = async () => {
@@ -57,7 +61,7 @@ const HeroSection = ({ idiom }: { idiom: Idiom }) => {
     }
 
     // don't need to encode URI otherwise it becomes unreadable
-    const url = `${window.location.origin}/idioms/${idiom.term}`;
+    const url = `${window.location.origin}/${contentData.contentType}/${contentData.fileName}`;
     await navigator.clipboard.writeText(url);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
@@ -67,10 +71,10 @@ const HeroSection = ({ idiom }: { idiom: Idiom }) => {
     <Section className="flex flex-col items-center gap-6 text-center">
       <Backdrop />
       <Typography variant="h1">
-        {idiom.term} ── {idiom.answer}
+        {contentData.term} ── {contentData.answer}
       </Typography>
       <Typography variant="code" as="span" className="text-base">
-        {idiom.termJyutping} ── {idiom.answerJyutping}
+        {contentData.termJyutping} ── {contentData.answerJyutping}
       </Typography>
       <div className="mt-2 flex items-center gap-3">
         <Button
@@ -90,7 +94,7 @@ const HeroSection = ({ idiom }: { idiom: Idiom }) => {
         </Button>
         <Button
           variant="outline"
-          render={<Link href={getGithubMarkdownUrl(idiom.term)} />}
+          render={<Link href={getGithubMarkdownUrl(contentData.fileName)} />}
           nativeButton={false}
         >
           <IconBrandGithub />
@@ -104,7 +108,7 @@ const HeroSection = ({ idiom }: { idiom: Idiom }) => {
             <Typography variant="muted">貢獻者</Typography>
           </div>
           <AvatarGroup>
-            {idiom.contributors.map((username) => (
+            {contentData.contributors.map((username) => (
               <Link
                 href={`https://github.com/${username}`}
                 hideExternalIcon
@@ -128,14 +132,14 @@ const HeroSection = ({ idiom }: { idiom: Idiom }) => {
             <IconCalendar size={16} />
             <Typography variant="muted">創建日期</Typography>
           </div>
-          <Typography className="text-sm">{idiom.createdAt}</Typography>
+          <Typography className="text-sm">{contentData.createdAt}</Typography>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <IconGitCommit size={16} />
             <Typography variant="muted">最後更新</Typography>
           </div>
-          <Typography className="text-sm">{idiom.updatedAt}</Typography>
+          <Typography className="text-sm">{contentData.updatedAt}</Typography>
         </div>
       </div>
     </Section>

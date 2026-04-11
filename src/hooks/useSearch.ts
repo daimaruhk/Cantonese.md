@@ -1,48 +1,39 @@
 import { useDeferredValue, useMemo, useState } from 'react';
-import { useIdiomsQuery } from './useIdiomsQuery';
-import type { ContentType } from '@/lib/registry';
-import type { IdiomFrontmatter } from '@/schema/idioms';
-
-export type SearchEntry = {
-  id: string;
-  searchText: string;
-  searchJyutping: string;
-  path: string;
-} & {
-  contentType: 'idioms';
-  entry: IdiomFrontmatter;
-};
+import type { SearchEntry } from '@/configurations/types';
+import type { ContentType } from '@/configurations/registry';
+import { useContentMetadataQuery } from './useContentMetadataQuery';
 
 export type SearchScope = ContentType | 'all';
-
-const idiomToSearchEntry = (idiom: IdiomFrontmatter): SearchEntry => ({
-  id: idiom.id,
-  contentType: 'idioms',
-  searchText: `${idiom.term}${idiom.answer}`,
-  searchJyutping: `${idiom.termJyutping} ${idiom.answerJyutping}`,
-  path: `/idioms/${encodeURIComponent(idiom.term)}`,
-  entry: idiom,
-});
 
 type UseSearchOptions = {
   enabled: boolean;
 };
 
 export const useSearch = ({ enabled }: UseSearchOptions) => {
-  const { status, data: idioms } = useIdiomsQuery({
-    enabled,
-    select: (idioms) => idioms.map(idiomToSearchEntry),
-  });
-  const [query, setQuery] = useState('');
+  const { status, data: idiomSearchEntries } = useContentMetadataQuery(
+    'idioms',
+    {
+      enabled,
+      select: (metadataList) =>
+        metadataList.map((metadata) => ({
+          id: metadata.id,
+          contentType: metadata.contentType,
+          searchText: `${metadata.term}${metadata.answer}`,
+          searchJyutping: `${metadata.termJyutping} ${metadata.answerJyutping}`,
+          path: `/${metadata.contentType}/${metadata.fileName}`,
+          entry: metadata,
+        })),
+    },
+  );
   const [scope, setScope] = useState<SearchScope>('all');
-
+  const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query);
   const results = useMemo(() => {
-    if (!idioms) {
+    if (!idiomSearchEntries) {
       return [];
     }
-    return filterSearchEntries(idioms, deferredQuery, scope);
-  }, [idioms, deferredQuery, scope]);
+    return filterSearchEntries(idiomSearchEntries, deferredQuery, scope);
+  }, [idiomSearchEntries, deferredQuery, scope]);
 
   const reset = () => {
     setQuery('');

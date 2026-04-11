@@ -19,7 +19,9 @@ export const Section = ({
 }: SectionProps) => {
   const isHeaderVisible = title || subtitle || actionButton;
   return (
-    <Container className={cn('py-16 md:py-20 lg:py-24', className)}>
+    <Container
+      className={cn('py-16 first:pt-0 last:pb-0 md:py-20 lg:py-24', className)}
+    >
       {isHeaderVisible && (
         <div className="relative mb-8 flex flex-col items-center gap-3">
           {title && <Typography variant="h2">{title}</Typography>}

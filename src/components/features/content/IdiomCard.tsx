@@ -1,26 +1,18 @@
 import { useState } from 'react';
 import { IconArrowRight, IconRefresh } from '@tabler/icons-react';
-
 import { Button, buttonVariants } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Link } from '@/components/ui/Link';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Typography } from '@/components/ui/Typography';
 import { cn, isMobile } from '@/lib/utils';
-import type { IdiomFrontmatter } from '@/schema/idioms';
+import type { ContentMetadata } from '@/configurations/types';
 
 type IdiomCardProps = {
-  idiom: IdiomFrontmatter;
-  className?: string;
+  metadata: ContentMetadata<'idioms'>;
 };
 
-const cardClassNames =
-  "absolute inset-0 backface-hidden grid place-items-center text-center bg-[url('/card_bg.webp')] bg-cover bg-center bg-no-repeat";
-
-const cardButtonClassNames =
-  'absolute bottom-3 md:bottom-6 inset-x-0 text-muted-foreground';
-
-export const IdiomCard = ({ idiom, className }: IdiomCardProps) => {
+export const IdiomCard = ({ metadata }: IdiomCardProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const onMouseLeave = () => isMobile() && setIsFlipped(false); // when user clicks anywhere outside the card, flip it back
@@ -30,10 +22,7 @@ export const IdiomCard = ({ idiom, className }: IdiomCardProps) => {
   const onUnflip = () => isMobile() && setIsFlipped(false);
 
   return (
-    <div
-      className={cn('group perspective-distant', className)}
-      onMouseLeave={onMouseLeave}
-    >
+    <div className="group perspective-distant" onMouseLeave={onMouseLeave}>
       <div
         className={cn(
           'relative aspect-5/7 transition-transform duration-700 transform-3d md:group-hover:rotate-y-180',
@@ -43,9 +32,9 @@ export const IdiomCard = ({ idiom, className }: IdiomCardProps) => {
         <Card className={cardClassNames} onClick={onFlip}>
           <Watermark />
           <CardContent className="relative z-10">
-            <Typography variant="h3">{idiom.term}</Typography>
+            <Typography variant="h3">{metadata.term}</Typography>
             <Typography variant="code" as="span" className="mt-1">
-              {idiom.termJyutping}
+              {metadata.termJyutping}
             </Typography>
           </CardContent>
           <span
@@ -61,16 +50,16 @@ export const IdiomCard = ({ idiom, className }: IdiomCardProps) => {
         <Card className={cn(cardClassNames, 'rotate-y-180')} onClick={onUnflip}>
           <Watermark />
           <CardContent className="relative z-10">
-            <Typography variant="h3">{idiom.answer}</Typography>
+            <Typography variant="h3">{metadata.answer}</Typography>
             <Typography variant="code" as="span" className="mt-1">
-              {idiom.answerJyutping}
+              {metadata.answerJyutping}
             </Typography>
           </CardContent>
           <Button
             variant="link"
             render={
               <Link
-                href={`/idioms/${encodeURIComponent(idiom.term)}`}
+                href={`/idioms/${encodeURIComponent(metadata.term)}`}
                 onClick={(e) => e.stopPropagation()} // Prevent the card from flipping back when clicking the link
               />
             }
@@ -86,6 +75,14 @@ export const IdiomCard = ({ idiom, className }: IdiomCardProps) => {
   );
 };
 
+export const IdiomCardSkeleton = () => <Skeleton className="aspect-5/7" />;
+
+const cardClassNames =
+  "absolute inset-0 backface-hidden grid place-items-center text-center bg-[url('/card_bg.webp')] bg-cover bg-center bg-no-repeat";
+
+const cardButtonClassNames =
+  'absolute bottom-3 md:bottom-6 inset-x-0 text-muted-foreground';
+
 const Watermark = () => {
   return (
     <>
@@ -98,5 +95,3 @@ const Watermark = () => {
     </>
   );
 };
-
-export const IdiomCardSkeleton = () => <Skeleton className="aspect-5/7" />;

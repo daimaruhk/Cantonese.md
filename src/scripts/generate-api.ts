@@ -1,17 +1,22 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { idiomRegistry } from '@/lib/registry';
+import { dataProviders } from '@/configurations/dataProviders';
+import { contentRegistry } from '@/configurations/registry';
 
 export const main = () => {
   const directory = path.join(process.cwd(), 'public', 'api');
-  const filePath = path.join(directory, 'idioms.json');
-  const frontmatterList = idiomRegistry.getAllFrontmatter();
-
   fs.mkdirSync(directory, { recursive: true });
-  fs.writeFileSync(filePath, JSON.stringify(frontmatterList), 'utf8');
 
-  console.log('✅ Generated idiom API at public/api/idioms.json');
+  Object.values(contentRegistry).forEach((config) => {
+    const filePath = path.join(directory, `${config.contentType}.json`);
+    const metadataList = dataProviders[config.contentType].getAllMetadata();
+    fs.writeFileSync(filePath, JSON.stringify(metadataList), 'utf8');
+    console.log(
+      `✅ Generated ${config.contentType} API at public/api/${config.contentType}.json`,
+    );
+  });
+
   return 0;
 };
 

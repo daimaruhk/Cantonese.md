@@ -1,6 +1,4 @@
 import { useRouter } from 'next/router';
-
-import { Badge } from '@/components/ui/badge';
 import {
   Command,
   CommandEmpty,
@@ -19,11 +17,10 @@ import {
 import { Separator } from '@/components/ui/Separator';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToggleGroup';
 import { Typography } from '@/components/ui/Typography';
-import {
-  useSearch,
-  type SearchScope,
-  type SearchEntry,
-} from '@/hooks/useSearch';
+import { useSearch, type SearchScope } from '@/hooks/useSearch';
+import { contentRegistry } from '@/configurations/registry';
+import { searchCardRenderers } from '@/configurations/renderers';
+import type { SearchEntry } from '@/configurations/types';
 
 type SearchModalProps = {
   open: boolean;
@@ -32,7 +29,10 @@ type SearchModalProps = {
 
 const scopeOptions: { label: string; value: SearchScope }[] = [
   { label: '全部', value: 'all' },
-  { label: '歇後語', value: 'idioms' },
+  ...Object.values(contentRegistry).map((content) => ({
+    label: content.label,
+    value: content.contentType,
+  })),
 ];
 
 export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
@@ -53,9 +53,9 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
     onOpenChange(false);
   };
 
-  const handleSelect = async (entry: SearchEntry) => {
+  const handleSelect = async (searchEntry: SearchEntry) => {
     closeModal();
-    await router.push(entry.path);
+    await router.push(searchEntry.path);
   };
 
   return (
@@ -129,15 +129,15 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
               <CommandEmpty>揾唔到任何嘢</CommandEmpty>
             ) : (
               <CommandGroup heading="搜尋結果">
-                {results.map((entry) => (
+                {results.map((searchEntry) => (
                   <CommandItem
-                    key={entry.id}
-                    value={`${entry.searchText} ${entry.searchJyutping}`}
+                    key={searchEntry.id}
+                    value={`${searchEntry.searchText} ${searchEntry.searchJyutping}`}
                     onSelect={() => {
-                      handleSelect(entry);
+                      handleSelect(searchEntry);
                     }}
                   >
-                    {renderSearchCard(entry)}
+                    {searchCardRenderers[searchEntry.contentType](searchEntry)}
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -147,23 +147,4 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
       </DialogContent>
     </Dialog>
   );
-};
-
-const renderSearchCard = (searchEntry: SearchEntry) => {
-  if (searchEntry.contentType === 'idioms') {
-    return (
-      <>
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <span className="truncate font-semibold tracking-tight">
-            {searchEntry.entry.term}
-          </span>
-          <span className="text-muted-foreground truncate text-sm">
-            {searchEntry.entry.answer}
-          </span>
-        </div>
-        <Badge variant="secondary">歇後語</Badge>
-      </>
-    );
-  }
-  return null;
 };

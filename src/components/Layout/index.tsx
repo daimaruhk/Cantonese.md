@@ -16,7 +16,7 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
         <meta name="description" content={description} />
       </Head>
       <Header />
-      <main>{children}</main>
+      <main className="py-16 md:py-20 lg:py-24">{children}</main>
       <Footer />
     </div>
   );

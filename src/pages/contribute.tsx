@@ -66,7 +66,7 @@ export default function ContributePage() {
           return (
             <>
               {index !== 0 && <Separator />}
-              <div className="flex flex-col items-center gap-6 md:flex-row md:items-center md:items-start md:gap-10">
+              <div className="flex flex-col items-center gap-6 md:flex-row md:items-start md:gap-10">
                 <div className="flex flex-col items-center gap-2 md:w-1/4 md:items-start">
                   <Icon>{icon}</Icon>
                   <Typography variant="h3" className="hidden md:block">

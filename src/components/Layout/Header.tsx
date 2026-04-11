@@ -1,6 +1,5 @@
 import { useEffect, useEffectEvent, useState } from 'react';
 import { IconMenu2, IconSearch } from '@tabler/icons-react';
-
 import { Button } from '@/components/ui/Button';
 import { Link } from '@/components/ui/Link';
 import {

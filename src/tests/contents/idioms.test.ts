@@ -1,8 +1,9 @@
-import path from 'node:path';
 import { beforeEach, expect, it } from 'vitest';
-
-import { type IdiomFrontmatter, IdiomFrontmatterSchema } from '@/schema/idioms';
-import { getMarkdownFilePaths, readContentFile } from '@/lib/content';
+import { getContentFileNames, readContentFile } from '@/configurations/utils';
+import {
+  IdiomFrontmatterSchema,
+  type IdiomFrontmatter,
+} from '@/configurations/schemas/idioms';
 
 type MarkdownFile = {
   frontmatter: IdiomFrontmatter;
@@ -13,11 +14,8 @@ type MarkdownFile = {
 let markdownFiles: MarkdownFile[];
 
 beforeEach(() => {
-  const filePaths = getMarkdownFilePaths('idioms');
-
-  markdownFiles = filePaths.map((filePath) => {
-    const { frontmatter, content } = readContentFile(filePath);
-    const fileName = path.basename(filePath, '.md');
+  markdownFiles = getContentFileNames('idioms').map((fileName) => {
+    const { frontmatter, content } = readContentFile('idioms', fileName);
     return { frontmatter, content, fileName } as MarkdownFile;
   });
 });

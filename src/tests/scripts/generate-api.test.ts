@@ -1,17 +1,17 @@
 import fs from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { main } from '@/scripts/generate-api';
-import type { IdiomFrontmatter } from '@/schema/idioms';
-import { idiomRegistry } from '@/lib/registry';
+import type { ContentMetadata } from '@/configurations/types';
+import { dataProviders } from '@/configurations/dataProviders';
 
-const mockFrontmatter: IdiomFrontmatter = {
+const mockContentMetadata: ContentMetadata<'idioms'> = {
   id: 'aaaaaaaaaaaa',
   term: '賣魚佬沖涼',
   termJyutping: 'maai6 jyu4 lou2 cung1 loeng4',
   answer: '冇晒聲氣',
   answerJyutping: 'mou5 saai3 seng1 hei3',
-  type: '歇後語',
+  contentType: 'idioms',
+  fileName: '賣魚佬沖涼',
 };
 
 vi.mock('node:fs', () => ({
@@ -21,15 +21,17 @@ vi.mock('node:fs', () => ({
   },
 }));
 
-vi.mock('@/lib/registry', () => ({
-  idiomRegistry: {
-    getAllFrontmatter: vi.fn().mockImplementation(() => {
-      return [mockFrontmatter];
-    }),
+vi.mock('@/configurations/dataProviders', () => ({
+  dataProviders: {
+    idioms: {
+      getAllMetadata: vi.fn().mockImplementation(() => {
+        return [mockContentMetadata];
+      }),
+    },
   },
 }));
 
-const getAllFrontmatterMock = vi.mocked(idiomRegistry.getAllFrontmatter);
+const getAllMetadataMock = vi.mocked(dataProviders.idioms.getAllMetadata);
 const writeFileSyncMock = vi.mocked(fs.writeFileSync);
 
 describe('main', () => {
@@ -46,14 +48,14 @@ describe('main', () => {
   it('writes a minified idiom API file', async () => {
     main();
 
-    expect(getAllFrontmatterMock).toHaveBeenCalledTimes(1);
+    expect(getAllMetadataMock).toHaveBeenCalledTimes(1);
     expect(writeFileSyncMock).toHaveBeenCalledWith(
       '/mock-cwd/public/api/idioms.json',
-      JSON.stringify([mockFrontmatter]),
+      JSON.stringify([mockContentMetadata]),
       'utf8',
     );
     expect(console.log).toHaveBeenCalledWith(
-      '✅ Generated idiom API at public/api/idioms.json',
+      '✅ Generated idioms API at public/api/idioms.json',
     );
   });
 });

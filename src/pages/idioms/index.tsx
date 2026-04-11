@@ -1,16 +1,14 @@
+import { Fragment } from 'react';
 import { Typography } from '@/components/ui/Typography';
 import { Backdrop } from '@/components/Backdrop';
-import { Container } from '@/components/Container';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
-import {
-  IdiomCard,
-  IdiomCardSkeleton,
-} from '@/components/features/idioms/IdiomCard';
-import { useIdiomsQuery } from '@/hooks/useIdiomsQuery';
+import { useContentMetadataQuery } from '@/hooks/useContentMetadataQuery';
+import { contentCardRenderers } from '@/configurations/renderers';
+import { Container } from '@/components/Container';
 
 export default function IdiomsPage() {
-  const { status, data: idioms } = useIdiomsQuery();
+  const { status, data: idioms } = useContentMetadataQuery('idioms');
   return (
     <Layout
       title="歇後語 | Cantonese.md"
@@ -33,9 +31,15 @@ export default function IdiomsPage() {
       <Container>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
           {status === 'success'
-            ? idioms.map((idiom) => <IdiomCard key={idiom.id} idiom={idiom} />)
+            ? idioms.map((idiom) => (
+                <Fragment key={idiom.id}>
+                  {contentCardRenderers.idioms.renderCard(idiom)}
+                </Fragment>
+              ))
             : Array.from({ length: 4 }).map((_, i) => (
-                <IdiomCardSkeleton key={i} />
+                <Fragment key={i}>
+                  {contentCardRenderers.idioms.renderSkeleton()}
+                </Fragment>
               ))}
         </div>
       </Container>

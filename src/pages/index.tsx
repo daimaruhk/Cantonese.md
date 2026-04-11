@@ -1,5 +1,4 @@
 import { IconArchive, IconBook, IconRobot } from '@tabler/icons-react';
-
 import { Button } from '@/components/ui/Button';
 import {
   Card,
@@ -13,7 +12,7 @@ import { Link } from '@/components/ui/Link';
 import { Typography } from '@/components/ui/Typography';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
-import { IdiomSuggestionSection } from '@/components/features/idioms/IdiomSuggestionSection';
+import { ContentGrid } from '@/components/features/content/ContentGrid';
 
 export default function Home() {
   return (
@@ -23,7 +22,7 @@ export default function Home() {
     >
       <HeroSection />
       <IntroductionSection />
-      <IdiomSuggestionSection />
+      <ContentGrid contentType="idioms" />
     </Layout>
   );
 }
