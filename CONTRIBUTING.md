@@ -64,17 +64,18 @@ Before creating a feature request, check the existing issues first. If you do ne
 
 ```text
 src/
-├── components/   # UI components
-│   ├── features/ # Feature-specific components (e.g., IdiomCard)
-│   └── ui/       # Core UI primitives (mostly from Shadcn)
-├── contents/     # Primary data storage (Markdown files with frontmatter)
-├── hooks/        # Custom React hooks (e.g., useSearch, useQuery wrappers)
-├── lib/          # Shared utilities, hooks, and data-fetching logic
-├── pages/        # Next.js routes using the Page Router (SSG)
-├── schema/       # Zod data validation schemas (ensures data integrity)
-├── scripts/      # Developer tooling (e.g., idiom generator)
-├── styles/       # Global CSS and Tailwind 4 configuration
-└── tests/        # Comprehensive testing suite (Vitest)
+├── components/      # UI components
+│   ├── features/    # Feature-specific components (e.g., IdiomCard)
+│   └── ui/          # Core UI primitives (mostly from Shadcn)
+├── configurations/  # Content type registry, schemas, data providers, renderers, and route handlers
+│   └── schemas/     # Zod validation schemas for each content type
+├── contents/        # Primary data storage (Markdown files with frontmatter)
+├── hooks/           # Custom React hooks (e.g., useSearch, useQuery wrappers)
+├── lib/             # Shared utilities (cn, URL helpers)
+├── pages/           # Next.js routes using the Page Router (SSG)
+├── scripts/         # Developer tooling (e.g., idiom generator, API generator)
+├── styles/          # Global CSS and Tailwind 4 configuration
+└── tests/           # Comprehensive testing suite (Vitest)
 ```
 
 ### Dependencies
@@ -114,7 +115,93 @@ src/
 | `pnpm format`            | Run Prettier to format the codebase         |
 | `pnpm test`              | Run the test suite using Vitest             |
 | `pnpm gen:<type> <term>` | Create a new entry template                 |
-| `pnpm gen:api`           | Generate API files to `src/lib/api/`        |
+| `pnpm gen:api`           | Generate API files to `public/api/`         |
+
+## Adding a New Content Type
+
+This project uses an extensible content registry pattern. All configuration lives in `src/configurations/`. Follow these steps to add a new content type (e.g., `slangs`):
+
+### Step 1: Define the Schema
+
+Create `src/configurations/schemas/slangs.ts`:
+
+```ts
+import { z } from 'zod';
+import { BaseFrontmatterSchema, JyutpingSchema } from './baseSchema';
+
+export const SlangFrontmatterSchema = BaseFrontmatterSchema.extend({
+  term: z.string().min(1),
+  termJyutping: JyutpingSchema,
+  meaning: z.string().min(1),
+});
+
+export type SlangFrontmatter = z.infer<typeof SlangFrontmatterSchema>;
+```
+
+All content schemas must extend `BaseFrontmatterSchema` (which provides `id`).
+
+### Step 2: Register the Content Type
+
+1. **Update `ContentTypeSchema`** in `src/configurations/schemas/contentTypeSchema.ts`:
+
+   ```ts
+   export const ContentTypeSchema = z.enum(['idioms', 'slangs']);
+   ```
+
+2. **Add to `contentRegistry`** in `src/configurations/registry.ts`:
+
+   ```ts
+   import { SlangFrontmatterSchema } from './schemas/slangs';
+
+   export const contentRegistry = {
+     idioms: {
+       /* existing */
+     },
+     slangs: {
+       contentType: 'slangs',
+       schema: SlangFrontmatterSchema,
+       label: '俗語',
+       subtitle: '探索地道粵語俗語。',
+     },
+   } as const satisfies { [K in ContentType]: ContentRegistryConfig<K> };
+   ```
+
+### Step 3: Wire Data Providers, Route Handlers, and Renderers
+
+Add entries for `slangs` in each of the following files — follow the existing `idioms` pattern:
+
+- **`src/configurations/dataProviders.ts`** — Add `slangs: createApiForType('slangs')` to the `dataProviders` object.
+- **`src/configurations/routeHandlers.ts`** — Add `slangs: createRouteHandler('slangs')` to the `routeHandlers` object.
+- **`src/configurations/renderers.tsx`** — Add card and search card renderers for `slangs` in both `searchCardRenderers` and `contentCardRenderers`.
+
+### Step 4: Create the Content Directory
+
+Create `src/contents/slangs/` and add `.md` files with the matching frontmatter structure.
+
+### Step 5: Create UI Components
+
+1. Create a card component in `src/components/features/content/` (e.g., `SlangCard.tsx`).
+2. Create page routes in `src/pages/slangs/`:
+   - `index.tsx` — List page (follow `src/pages/idioms/index.tsx` pattern).
+   - `[fileName].tsx` — Detail page (follow `src/pages/idioms/[fileName].tsx` pattern).
+
+### Step 6: Add Content Validation Tests
+
+Create `src/tests/contents/slangs.test.ts` following the pattern in `src/tests/contents/idioms.test.ts`. This ensures all markdown files in the new content directory conform to your schema.
+
+### Step 7: (Optional) Create a Generator Script
+
+Add `src/scripts/generate-slang.ts` following the `generate-idiom.ts` pattern, and register a `gen:slang` script in `package.json`.
+
+### Step 8: Validate
+
+Run the full validation suite:
+
+```bash
+pnpm test     # Content validation + unit tests
+pnpm lint     # Code quality
+pnpm build    # Static build succeeds
+```
 
 ## Pull Request Process
 

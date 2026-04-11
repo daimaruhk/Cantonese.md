@@ -15,24 +15,29 @@
 
 ```text
 src/
-├── components/   # UI components
-│   ├── features/ # Feature-specific components (e.g., IdiomCard)
-│   └── ui/       # Core UI primitives (mostly from Shadcn)
-├── contents/     # Primary data storage (Markdown files with frontmatter)
-├── hooks/        # Custom React hooks (e.g., useSearch, useQuery wrappers)
-├── lib/          # Shared utilities, hooks, and data-fetching logic
-├── pages/        # Next.js routes using the Page Router (SSG)
-├── schema/       # Zod data validation schemas (ensures data integrity)
-├── scripts/      # Developer tooling (e.g., idiom generator)
-├── styles/       # Global CSS and Tailwind 4 configuration
-└── tests/        # Comprehensive testing suite (Vitest)
+├── components/      # UI components
+│   ├── features/    # Feature-specific components (e.g., IdiomCard, ContentGrid)
+│   └── ui/          # Core UI primitives (mostly from Shadcn)
+├── configurations/  # Content type registry, data providers, route handlers, renderers
+│   └── schemas/     # Zod validation schemas (base + per content type)
+├── contents/        # Primary data storage (Markdown files with frontmatter)
+├── hooks/           # Custom React hooks (e.g., useSearch, useContentMetadataQuery)
+├── lib/             # Shared utilities (cn, URL helpers)
+├── pages/           # Next.js routes using the Page Router (SSG)
+├── scripts/         # Developer tooling (e.g., idiom generator, API generator)
+├── styles/          # Global CSS and Tailwind 4 configuration
+└── tests/           # Comprehensive testing suite (Vitest)
 ```
 
 ## Data & Content
 
 The project's primary data resides in `src/contents/<type>`. Each entry is stored as a `.md` file with structured frontmatter.
 
-- **Schema**: All content types must follow the schema defined in `src/schema/<type>.ts`.
+- **Registry**: All content types are registered in `src/configurations/registry.ts`, which maps each type to its Zod schema, display label, and subtitle.
+- **Schema**: Schemas are defined in `src/configurations/schemas/<type>.ts` and must extend `BaseFrontmatterSchema` from `src/configurations/schemas/baseSchema.ts`.
+- **Data Providers**: `src/configurations/dataProviders.ts` provides `getAllMetadata()` and `getContentData()` for each registered type.
+- **Route Handlers**: `src/configurations/routeHandlers.ts` provides `getStaticPaths` and `getStaticProps` for each type's dynamic pages.
+- **Renderers**: `src/configurations/renderers.tsx` provides card and search card renderers for each type.
 - **Validation**: Build-time tests in `src/tests/contents/<type>.test.ts` ensure all content files are valid, unique, and well-formed.
 - **Management**: Use `pnpm gen:<type> <term>` to create new entries using the standard template.
 
@@ -46,7 +51,7 @@ Perform these actions using `pnpm`:
 - `pnpm format`: Format code with Prettier
 - `pnpm test`: Execute Vitest suites (includes content validation)
 - `pnpm gen:<type> <term>`: Create a new entry template
-- `pnpm gen:api`: Generate API files to `src/lib/api/`
+- `pnpm gen:api`: Generate API files to `public/api/`
 
 ## Code Style Guidelines
 

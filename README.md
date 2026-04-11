@@ -43,7 +43,6 @@ term: 阿茂整餅
 termJyutping: aa3 mau6 zing2 beng2
 answer: 冇嗰樣整嗰樣
 answerJyutping: mou5 go2 joeng6 zing2 go2 joeng6
-type: 歇後語
 ---
 
 # 阿茂整餅──冇嗰樣整嗰樣
