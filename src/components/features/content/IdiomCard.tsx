@@ -59,7 +59,7 @@ export const IdiomCard = ({ metadata }: IdiomCardProps) => {
             variant="link"
             render={
               <Link
-                href={`/idioms/${encodeURIComponent(metadata.term)}`}
+                href={`/idioms/${encodeURIComponent(metadata.fileName)}`}
                 onClick={(e) => e.stopPropagation()} // Prevent the card from flipping back when clicking the link
               />
             }

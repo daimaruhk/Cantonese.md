@@ -8,6 +8,6 @@ export const JyutpingSchema = z
 
 const IdSchema = z.string().regex(/^[a-zA-Z0-9]{12}$/, 'Invalid ID format');
 
-export const BaseFrontmattrerSchema = z.object({
+export const BaseFrontmatterSchema = z.object({
   id: IdSchema,
 });

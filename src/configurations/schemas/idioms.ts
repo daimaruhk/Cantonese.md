@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { BaseFrontmattrerSchema, JyutpingSchema } from './baseSchema';
+import { BaseFrontmatterSchema, JyutpingSchema } from './baseSchema';
 
-export const IdiomFrontmatterSchema = BaseFrontmattrerSchema.extend({
+export const IdiomFrontmatterSchema = BaseFrontmatterSchema.extend({
   term: z.string().min(1),
   termJyutping: JyutpingSchema,
   answer: z.string().min(1),

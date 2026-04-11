@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Noto_Sans_TC, JetBrains_Mono } from 'next/font/google';
@@ -17,9 +18,8 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 });
 
-const queryClient = new QueryClient();
-
 export default function App({ Component, pageProps }: AppProps) {
+  const [queryClient] = useState(() => new QueryClient());
   return (
     <>
       <Head>

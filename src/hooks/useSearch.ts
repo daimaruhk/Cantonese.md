@@ -74,12 +74,14 @@ const filterSearchEntries = (
         return true;
       }
 
-      // Support prefix matching for Jyutping fields
-      if (
-        entry.searchJyutping
-          .split('\s+')
-          .some((field) => normalize(field).startsWith(normalizedQuery))
-      ) {
+      // Support prefix matching for individual Jyutping syllables/words.
+      // By prepending a space to both strings, we ensure we only match the start of a syllable.
+      // Example: Target "nei5 hou2" -> " nei5 hou2" (note the leading space)
+      // Query "hou" -> " hou" (Matches!)
+      // Query "ou" -> " ou" (Does NOT match, preventing an unwanted infix match on 'h(ou)2')
+      const formattedSearchJyutping = ` ${normalize(entry.searchJyutping)}`;
+      const formattedQueryForJyutping = ` ${normalizedQuery.replace(/\s+/g, ' ')}`;
+      if (formattedSearchJyutping.includes(formattedQueryForJyutping)) {
         return true;
       }
 
