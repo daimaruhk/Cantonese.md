@@ -1,6 +1,10 @@
 import { useDeferredValue, useMemo, useState } from 'react';
-import type { SearchEntry } from '@/configurations/types';
 import type { ContentType } from '@/configurations/registry';
+import {
+  searchProviders,
+  type SearchEntry,
+} from '@/configurations/searchProviders';
+import { normalize } from '@/lib/utils';
 import { useContentMetadataQuery } from './useContentMetadataQuery';
 
 export type SearchScope = ContentType | 'all';
@@ -15,14 +19,7 @@ export const useSearch = ({ enabled }: UseSearchOptions) => {
     {
       enabled,
       select: (metadataList) =>
-        metadataList.map((metadata) => ({
-          id: metadata.id,
-          contentType: metadata.contentType,
-          searchText: `${metadata.term}${metadata.answer}`,
-          searchJyutping: `${metadata.termJyutping} ${metadata.answerJyutping}`,
-          path: `/${metadata.contentType}/${metadata.fileName}`,
-          entry: metadata,
-        })),
+        metadataList.map(searchProviders.idioms.toSearchEntry),
     },
   );
   const [scope, setScope] = useState<SearchScope>('all');
@@ -52,8 +49,8 @@ export const useSearch = ({ enabled }: UseSearchOptions) => {
   };
 };
 
-const filterSearchEntries = (
-  entries: SearchEntry[],
+const filterSearchEntries = <T extends ContentType>(
+  entries: SearchEntry<T>[],
   query: string,
   scope: SearchScope,
   limit = 10,
@@ -89,5 +86,3 @@ const filterSearchEntries = (
     })
     .slice(0, limit);
 };
-
-const normalize = (text: string) => text.trim().toLowerCase();

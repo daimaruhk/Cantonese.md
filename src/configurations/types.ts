@@ -18,13 +18,3 @@ export type GitMetadata = {
   createdAt: string;
   updatedAt: string;
 };
-
-export type SearchEntry = {
-  id: string;
-  searchText: string;
-  searchJyutping: string;
-  path: string;
-} & {
-  contentType: 'idioms';
-  entry: ContentMetadata<'idioms'>;
-};

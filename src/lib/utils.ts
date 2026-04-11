@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { homepage } from '../../package.json';
 import type { ContentType } from '@/configurations/registry';
+import { homepage } from '../../package.json';
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -20,3 +20,5 @@ export const getGithubMarkdownUrl = (
   `${homepage}/blob/main/src/contents/${contentType}/${encodeURIComponent(
     fileName,
   )}.md`;
+
+export const normalize = (text: string) => text.trim().toLowerCase();

@@ -5,15 +5,14 @@ import {
   IdiomCardSkeleton,
 } from '@/components/features/content/IdiomCard';
 import type { ContentType } from './registry';
-import type { ContentMetadata, SearchEntry } from './types';
+import type { ContentMetadata } from './types';
+import type { SearchEntry } from './searchProviders';
 
 export const renderers: {
   [K in ContentType]: {
     renderCard: (metadata: ContentMetadata<K>) => React.ReactNode;
     renderCardSkeleton: () => React.ReactNode;
-    renderSearchCard: (
-      searchEntry: SearchEntry & { contentType: K },
-    ) => React.ReactNode;
+    renderSearchCard: (searchEntry: SearchEntry<K>) => React.ReactNode;
   };
 } = {
   idioms: {

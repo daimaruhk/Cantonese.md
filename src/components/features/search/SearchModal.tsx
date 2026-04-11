@@ -20,7 +20,7 @@ import { Typography } from '@/components/ui/Typography';
 import { useSearch, type SearchScope } from '@/hooks/useSearch';
 import { contentRegistry } from '@/configurations/registry';
 import { renderers } from '@/configurations/renderers';
-import type { SearchEntry } from '@/configurations/types';
+import type { SearchEntry } from '@/configurations/searchProviders';
 
 type SearchModalProps = {
   open: boolean;
@@ -53,7 +53,7 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
     onOpenChange(false);
   };
 
-  const handleSelect = async (searchEntry: SearchEntry) => {
+  const handleSelect = async (searchEntry: SearchEntry<'idioms'>) => {
     closeModal();
     await router.push(searchEntry.path);
   };
