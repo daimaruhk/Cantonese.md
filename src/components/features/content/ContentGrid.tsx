@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useEffectEvent, useState } from 'react';
+import { useEffect, useEffectEvent, useState } from 'react';
 import { IconArrowRight, IconRefresh } from '@tabler/icons-react';
 import { Button } from '@/components/ui/Button';
 import { Link } from '@/components/ui/Link';
@@ -7,6 +7,7 @@ import { useContentMetadataQuery } from '@/hooks/useContentMetadataQuery';
 import type { ContentMetadata } from '@/configurations/types';
 import { contentRegistry, type ContentType } from '@/configurations/registry';
 import { renderers } from '@/configurations/renderers';
+import { CardGrid } from './CardGrid';
 
 type ContentGridProps<T extends ContentType> = {
   contentType: T;
@@ -66,15 +67,7 @@ export const ContentGrid = <T extends ContentType>({
       }
     >
       <div className="flex flex-col items-center gap-8">
-        <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
-          {currentEntries.length > 0
-            ? currentEntries.map((entry) => (
-                <Fragment key={entry.id}>{renderer.renderCard(entry)}</Fragment>
-              ))
-            : Array.from({ length: 4 }).map((_, i) => (
-                <Fragment key={i}>{renderer.renderCardSkeleton()}</Fragment>
-              ))}
-        </div>
+        <CardGrid contentType={contentType} entries={currentEntries} />
         <Button
           variant="link"
           render={<Link href={`/${contentType}`} />}
