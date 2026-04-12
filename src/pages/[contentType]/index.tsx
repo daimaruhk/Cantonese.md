@@ -17,6 +17,7 @@ export default function ListPage<T extends ContentType>({
   contentType,
 }: ListPageProps<T>) {
   const config = contentRegistry[contentType];
+  const renderer = renderers[contentType];
   const seoProvider = seoProviders[contentType].listPage;
   const { status, data: entries } = useContentMetadataQuery(contentType);
 
@@ -32,21 +33,17 @@ export default function ListPage<T extends ContentType>({
           variant="lead"
           className="text-center sm:max-w-xl md:max-w-3xl"
         >
-          {config.listPageSubtitle}
+          {renderer.renderListPageSubtitle()}
         </Typography>
       </Section>
       <Container>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
           {status === 'success'
             ? entries.map((entry) => (
-                <Fragment key={entry.id}>
-                  {renderers[contentType].renderCard(entry)}
-                </Fragment>
+                <Fragment key={entry.id}>{renderer.renderCard(entry)}</Fragment>
               ))
             : Array.from({ length: 4 }).map((_, i) => (
-                <Fragment key={i}>
-                  {renderers[contentType].renderCardSkeleton()}
-                </Fragment>
+                <Fragment key={i}>{renderer.renderCardSkeleton()}</Fragment>
               ))}
         </div>
       </Container>

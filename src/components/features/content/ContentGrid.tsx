@@ -36,10 +36,12 @@ export const ContentGrid = <T extends ContentType>({
     refreshEntriesEvent();
   }, [entries]);
 
+  const renderer = renderers[contentType];
+
   return (
     <Section
       title={contentRegistry[contentType].label}
-      subtitle={contentRegistry[contentType].contentGridSubtitle}
+      subtitle={renderer.renderContentGridSubtitle()}
       actionButton={
         <>
           <Button
@@ -67,21 +69,15 @@ export const ContentGrid = <T extends ContentType>({
         <div className="grid w-full grid-cols-2 gap-4 md:grid-cols-4 md:gap-8">
           {currentEntries.length > 0
             ? currentEntries.map((entry) => (
-                <Fragment key={entry.id}>
-                  {renderers[contentType].renderCard(entry)}
-                </Fragment>
+                <Fragment key={entry.id}>{renderer.renderCard(entry)}</Fragment>
               ))
             : Array.from({ length: 4 }).map((_, i) => (
-                <Fragment key={i}>
-                  {renderers[contentType].renderCardSkeleton()}
-                </Fragment>
+                <Fragment key={i}>{renderer.renderCardSkeleton()}</Fragment>
               ))}
         </div>
         <Button
           variant="link"
-          render={
-            <Link href={`/${contentRegistry[contentType].contentType}`} />
-          }
+          render={<Link href={`/${contentType}`} />}
           nativeButton={false}
         >
           查看更多

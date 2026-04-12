@@ -38,7 +38,6 @@ vi.mock('@/configurations/dataProviders', () => {
   };
 });
 
-const getAllMetadataMock = vi.mocked(dataProviders.idioms.getAllMetadata);
 const writeFileSyncMock = vi.mocked(fs.writeFileSync);
 
 describe('main', () => {
@@ -55,8 +54,11 @@ describe('main', () => {
   it('should write a minified API file for each content type', async () => {
     main();
 
-    expect(getAllMetadataMock).toHaveBeenCalledTimes(contentTypes.length); // collect data for each content type
     contentTypes.forEach((contentType) => {
+      const getAllMetadataMock = vi.mocked(
+        dataProviders[contentType].getAllMetadata,
+      );
+      expect(getAllMetadataMock).toHaveBeenCalled();
       expect(writeFileSyncMock).toHaveBeenCalledWith(
         `/mock-cwd/public/api/${contentType}.json`,
         JSON.stringify(dataProviders[contentType].getAllMetadata()),
