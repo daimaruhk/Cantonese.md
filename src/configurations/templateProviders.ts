@@ -2,6 +2,7 @@
 
 import crypto from 'node:crypto';
 import { contentTypes, type ContentType } from './registry';
+import type { Frontmatter } from './types';
 
 type TemplateProviders = {
   [K in ContentType]: {
@@ -15,7 +16,7 @@ type TemplateObject = {
 };
 
 const templateObjectByContentType: {
-  [K in ContentType]: TemplateObject;
+  [K in ContentType]: Frontmatter<K>;
 } = {
   idioms: {
     id: '',

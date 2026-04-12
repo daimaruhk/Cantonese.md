@@ -4,8 +4,9 @@ import {
   IdiomCard,
   IdiomCardSkeleton,
 } from '@/components/features/content/IdiomCard';
+import { Typography } from '@/components/ui/Typography';
 import type { ContentType } from './registry';
-import type { ContentMetadata } from './types';
+import type { ContentMetadata, ContentData } from './types';
 import type { SearchEntry } from './searchProviders';
 
 type Renderer = {
@@ -13,6 +14,7 @@ type Renderer = {
     renderCard: (metadata: ContentMetadata<K>) => React.ReactNode;
     renderCardSkeleton: () => React.ReactNode;
     renderSearchCard: (searchEntry: SearchEntry<K>) => React.ReactNode;
+    renderDetailPageHero: (contentData: ContentData<K>) => React.ReactNode;
   };
 };
 
@@ -31,6 +33,16 @@ export const renderers: Renderer = {
           </span>
         </div>
         <Badge variant="secondary">歇後語</Badge>
+      </>
+    ),
+    renderDetailPageHero: (contentData) => (
+      <>
+        <Typography variant="h1">
+          {contentData.term} ── {contentData.answer}
+        </Typography>
+        <Typography variant="code" as="span" className="text-base">
+          {contentData.termJyutping} ── {contentData.answerJyutping}
+        </Typography>
       </>
     ),
   },

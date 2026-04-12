@@ -39,7 +39,7 @@ export const ContentGrid = <T extends ContentType>({
   return (
     <Section
       title={contentRegistry[contentType].label}
-      subtitle={contentRegistry[contentType].subtitle}
+      subtitle={contentRegistry[contentType].contentGridSubtitle}
       actionButton={
         <>
           <Button

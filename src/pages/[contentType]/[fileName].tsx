@@ -21,46 +21,47 @@ import { Container } from '@/components/Container';
 import { MarkdownRenderer } from '@/components/MarkdownRenderer';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
-
 import { getGithubMarkdownUrl } from '@/lib/utils';
+import { renderers } from '@/configurations/renderers';
 import {
   routeHandlers,
-  type ContentPageProps,
+  type DetailPageProps,
 } from '@/configurations/routeHandlers';
 import { ContentGrid } from '@/components/features/content/ContentGrid';
+import type { ContentData } from '@/configurations/types';
+import { seoProviders } from '@/configurations/seoProviders';
 
-export default function IdiomPage({ contentData }: ContentPageProps<'idioms'>) {
+export default function DetailPage({ contentData }: DetailPageProps) {
+  const { contentType } = contentData;
+  const seoProvider = seoProviders[contentType].detailPage;
+
   return (
     <Layout
-      title={`${contentData.term} | Cantonese.md`}
-      description={`${contentData.term} ── ${contentData.answer}。粵拼：${contentData.termJyutping} ── ${contentData.answerJyutping}。`}
+      title={seoProvider.title(contentData)}
+      description={seoProvider.description(contentData)}
     >
       <HeroSection contentData={contentData} />
       <Container>
         <MarkdownRenderer content={contentData.content} />
       </Container>
-      <ContentGrid contentType="idioms" excludedId={contentData.id} />
+      <ContentGrid contentType={contentType} excludedId={contentData.id} />
     </Layout>
   );
 }
 
-export const getStaticPaths = routeHandlers.idioms.getStaticPaths;
+export const getStaticPaths = routeHandlers.getDetailPageStaticPaths;
 
-export const getStaticProps = routeHandlers.idioms.getStaticProps;
+export const getStaticProps = routeHandlers.getDetailPageStaticProps;
 
-const HeroSection = ({
-  contentData,
-}: {
-  contentData: ContentPageProps<'idioms'>['contentData'];
-}) => {
+const HeroSection = ({ contentData }: { contentData: ContentData }) => {
   const [isCopied, setIsCopied] = useState(false);
+  const { contentType } = contentData;
 
   const handleShare = async () => {
     if (typeof navigator === 'undefined') {
       return;
     }
 
-    // don't need to encode URI otherwise it becomes unreadable
     const url = `${window.location.origin}/${contentData.contentType}/${contentData.fileName}`;
     await navigator.clipboard.writeText(url);
     setIsCopied(true);
@@ -70,12 +71,7 @@ const HeroSection = ({
   return (
     <Section className="flex flex-col items-center gap-6 text-center">
       <Backdrop />
-      <Typography variant="h1">
-        {contentData.term} ── {contentData.answer}
-      </Typography>
-      <Typography variant="code" as="span" className="text-base">
-        {contentData.termJyutping} ── {contentData.answerJyutping}
-      </Typography>
+      {renderers[contentType].renderDetailPageHero(contentData)}
       <div className="mt-2 flex items-center gap-3">
         <Button
           onClick={handleShare}

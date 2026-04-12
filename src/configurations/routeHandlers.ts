@@ -1,49 +1,75 @@
 // Server only
 
 import type { GetStaticPaths, GetStaticProps } from 'next';
-import { contentRegistry, type ContentType } from './registry';
+import { contentTypes, type ContentType } from './registry';
 import type { ContentData } from './types';
 import { dataProviders } from './dataProviders';
 
-type PathParams = { fileName: string };
+type DetailPagePathParams = { contentType: ContentType; fileName: string };
 
-export type ContentPageProps<T extends ContentType> = {
-  contentData: ContentData<T>;
+type ListPagePathParams = { contentType: ContentType };
+
+export type DetailPageProps = {
+  contentData: ContentData;
 };
 
-type RouterHandler<T extends ContentType> = {
-  getStaticPaths: GetStaticPaths<PathParams>;
-  getStaticProps: GetStaticProps<ContentPageProps<T>, PathParams>;
+export type ListPageProps = {
+  contentType: ContentType;
 };
 
-type RouteHandlers = {
-  [K in ContentType]: RouterHandler<K>;
+type RouterHandlers = {
+  getListPageStaticPaths: GetStaticPaths<ListPagePathParams>;
+  getListPageStaticProps: GetStaticProps<ListPageProps, ListPagePathParams>;
+  getDetailPageStaticPaths: GetStaticPaths<DetailPagePathParams>;
+  getDetailPageStaticProps: GetStaticProps<
+    DetailPageProps,
+    DetailPagePathParams
+  >;
 };
 
-const createRouteHandler = <T extends ContentType>(
-  contentType: T,
-): RouterHandler<T> => {
-  const dataProvider = dataProviders[contentType];
-
-  const getStaticPaths = () => {
-    const metadataList = dataProvider.getAllMetadata();
+export const routeHandlers: RouterHandlers = {
+  getListPageStaticPaths: () => {
     return {
-      paths: metadataList.map((metadata) => ({
-        params: { fileName: metadata.fileName },
+      paths: contentTypes.map((contentType) => ({
+        params: { contentType },
       })),
       fallback: false,
     };
-  };
+  },
+  getListPageStaticProps: ({ params }) => {
+    const contentType = params?.contentType;
 
-  const getStaticProps: GetStaticProps<ContentPageProps<T>, PathParams> = ({
-    params,
-  }) => {
-    const fileName = params?.fileName;
-
-    if (!fileName) {
+    if (!contentType) {
       return { notFound: true };
     }
 
+    return {
+      props: {
+        contentType,
+      },
+    };
+  },
+  getDetailPageStaticPaths: () => {
+    return {
+      paths: contentTypes.flatMap((contentType) => {
+        const dataProvider = dataProviders[contentType];
+        const metadataList = dataProvider.getAllMetadata();
+        return metadataList.map((metadata) => ({
+          params: { contentType, fileName: metadata.fileName },
+        }));
+      }),
+      fallback: false,
+    };
+  },
+  getDetailPageStaticProps: ({ params }) => {
+    const contentType = params?.contentType;
+    const fileName = params?.fileName;
+
+    if (!contentType || !fileName) {
+      return { notFound: true };
+    }
+
+    const dataProvider = dataProviders[contentType];
     const contentData = dataProvider.getContentData(fileName);
 
     return {
@@ -51,14 +77,5 @@ const createRouteHandler = <T extends ContentType>(
         contentData,
       },
     };
-  };
-
-  return { getStaticPaths, getStaticProps };
+  },
 };
-
-export const routeHandlers = Object.fromEntries(
-  Object.values(contentRegistry).map((config) => [
-    config.contentType,
-    createRouteHandler(config.contentType),
-  ]),
-) as RouteHandlers;

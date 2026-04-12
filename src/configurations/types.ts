@@ -10,7 +10,7 @@ export type ContentMetadata<T extends ContentType> = Frontmatter<T> & {
   contentType: T;
 };
 
-export type ContentData<T extends ContentType> = GitMetadata &
+export type ContentData<T extends ContentType = ContentType> = GitMetadata &
   ContentMetadata<T> & {
     content: string;
   };
