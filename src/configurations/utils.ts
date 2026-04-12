@@ -7,7 +7,7 @@ import matter from 'gray-matter';
 import type { GitMetadata } from './types';
 import type { ContentType } from './registry';
 
-const getContentTypeDirectory = (contentType: ContentType) =>
+export const getContentTypeDirectory = (contentType: ContentType) =>
   path.join(process.cwd(), 'src', 'contents', contentType);
 
 export const getContentFilePath = (
