@@ -23,3 +23,7 @@ export const contentRegistry = {
     subtitle: '細味歇後語，領略粵語嘅智慧同幽默。',
   },
 } as const satisfies { [K in ContentType]: ContentRegistryConfig<K> };
+
+export const contentTypes = Object.values(contentRegistry).map(
+  (config) => config.contentType,
+);

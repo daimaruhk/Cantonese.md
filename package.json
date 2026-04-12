@@ -13,7 +13,7 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "gen:api": "tsx ./src/scripts/generate-api.ts",
-    "gen:idiom": "tsx ./src/scripts/generate-idiom.ts"
+    "gen:content": "tsx ./src/scripts/generate-content.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",

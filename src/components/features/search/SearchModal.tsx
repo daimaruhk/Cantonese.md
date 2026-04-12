@@ -29,9 +29,9 @@ type SearchModalProps = {
 
 const scopeOptions: { label: string; value: SearchScope }[] = [
   { label: '全部', value: 'all' },
-  ...Object.values(contentRegistry).map((content) => ({
-    label: content.label,
-    value: content.contentType,
+  ...Object.values(contentRegistry).map((config) => ({
+    label: config.label,
+    value: config.contentType,
   })),
 ];
 

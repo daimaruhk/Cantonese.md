@@ -1,5 +1,5 @@
 import { useQueries } from '@tanstack/react-query';
-import { contentRegistry, type ContentType } from '@/configurations/registry';
+import { contentTypes, type ContentType } from '@/configurations/registry';
 import { searchProviders } from '@/configurations/searchProviders';
 import type { ContentMetadata } from '@/configurations/types';
 import { fetchContentMetadata } from '@/lib/api';
@@ -24,7 +24,7 @@ export const useSearchEntriesQuery = ({
   enabled,
 }: UseSearchEntriesQueryOptions) => {
   return useQueries({
-    queries: Object.values(contentRegistry).map(({ contentType }) =>
+    queries: contentTypes.map((contentType) =>
       createSearchQuery(contentType, enabled),
     ),
   });

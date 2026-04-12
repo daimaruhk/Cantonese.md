@@ -5,31 +5,30 @@ import {
   getContentTypeDirectory,
   readContentFile,
 } from '@/configurations/utils';
-import { contentRegistry } from '@/configurations/registry';
+import { contentRegistry, contentTypes } from '@/configurations/registry';
 
 describe('Content types', () => {
-  it('should ensure all content types have their own directory', () => {
-    Object.values(contentRegistry).forEach((config) => {
-      expect(fs.existsSync(getContentTypeDirectory(config.contentType))).toBe(
-        true,
-      );
-    });
-  });
+  it.each(contentTypes)(
+    'should ensure content type "%s" has its own directory',
+    (contentType) => {
+      expect(fs.existsSync(getContentTypeDirectory(contentType))).toBe(true);
+    },
+  );
 
-  it('should ensure all content types have at least one markdown file', () => {
-    Object.values(contentRegistry).forEach((config) => {
-      expect(getContentFileNames(config.contentType).length).toBeGreaterThan(0);
-    });
-  });
+  it.each(contentTypes)(
+    'should ensure content type "%s" has at least one markdown file',
+    (contentType) => {
+      expect(getContentFileNames(contentType).length).toBeGreaterThan(0);
+    },
+  );
 
-  it('should ensure all markdown files satisfy the schema', () => {
-    Object.values(contentRegistry).forEach((config) => {
-      getContentFileNames(config.contentType).forEach((fileName) => {
-        const { frontmatter, content } = readContentFile(
-          config.contentType,
-          fileName,
-        );
-        const result = config.schema.safeParse(frontmatter);
+  it.each(contentTypes)(
+    'should ensure all markdown files in content type "%s" satisfy the schema',
+    (contentType) => {
+      getContentFileNames(contentType).forEach((fileName) => {
+        const { frontmatter, content } = readContentFile(contentType, fileName);
+        const result =
+          contentRegistry[contentType].schema.safeParse(frontmatter);
         expect(
           result.success,
           `File "${fileName}.md" does not satisfy the schema`,
@@ -39,8 +38,8 @@ describe('Content types', () => {
           `File "${fileName}.md" has empty markdown body`,
         ).toBeGreaterThan(0);
       });
-    });
-  });
+    },
+  );
 
   it('should ensure all markdown files have unique ids', () => {
     const ids = new Set<string>();

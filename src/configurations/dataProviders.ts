@@ -1,7 +1,7 @@
 // Server only
 
 import { z } from 'zod';
-import { contentRegistry, type ContentType } from './registry';
+import { contentRegistry, contentTypes, type ContentType } from './registry';
 import type { ContentMetadata, ContentData, Frontmatter } from './types';
 import {
   getContentFileNames,
@@ -15,7 +15,7 @@ type DataProvider<T extends ContentType> = {
   getContentData: (fileName: string) => ContentData<T>;
 };
 
-type DataProviders = {
+export type DataProviders = {
   [K in ContentType]: DataProvider<K>;
 };
 
@@ -51,9 +51,9 @@ const createApiForType = <T extends ContentType>(
 };
 
 export const dataProviders = Object.fromEntries(
-  Object.values(contentRegistry).map((config) => [
-    config.contentType,
-    createApiForType(config.contentType),
+  contentTypes.map((contentType) => [
+    contentType,
+    createApiForType(contentType),
   ]),
 ) as DataProviders;
 
