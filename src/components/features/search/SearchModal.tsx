@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { Badge } from '@/components/ui/badge';
 import {
   Command,
   CommandEmpty,
@@ -18,7 +19,7 @@ import { Separator } from '@/components/ui/Separator';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToggleGroup';
 import { Typography } from '@/components/ui/Typography';
 import { useSearch, type SearchScope } from '@/hooks/useSearch';
-import { contentRegistry } from '@/configurations/registry';
+import { contentRegistry, type ContentType } from '@/configurations/registry';
 import { renderers } from '@/configurations/renderers';
 import type { SearchEntry } from '@/configurations/searchProviders';
 
@@ -137,18 +138,10 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
                       handleSelect(searchEntry);
                     }}
                   >
-                    {
-                      /* 
-                        Casting is necessary due to the 'Correlated Union' problem: TypeScript 
-                        cannot guarantee that the renderer for a specific contentType matches 
-                        the union member of the current searchEntry during iteration.
-                      */
-                      (
-                        renderers[searchEntry.contentType].renderSearchCard as (
-                          entry: SearchEntry,
-                        ) => React.ReactNode
-                      )(searchEntry)
-                    }
+                    {renderSearchResult(searchEntry)}
+                    <Badge variant="secondary">
+                      {contentRegistry[searchEntry.contentType].label}
+                    </Badge>
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -159,3 +152,12 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
     </Dialog>
   );
 };
+
+/* 
+  Introduce a type-safe dispatch helper to render search results based on their content type,
+  to avoid 'Correlated Union' problem: TypeScript 
+  cannot guarantee that the renderer for a specific contentType matches 
+  the union member of the current searchEntry during iteration.
+*/
+const renderSearchResult = <T extends ContentType>(entry: SearchEntry<T>) =>
+  renderers[entry.contentType].renderSearchCard(entry);

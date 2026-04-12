@@ -25,17 +25,14 @@ export const renderers: Renderer = {
     renderCard: (metadata) => <IdiomCard metadata={metadata} />,
     renderCardSkeleton: () => <IdiomCardSkeleton />,
     renderSearchCard: (searchEntry) => (
-      <>
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <span className="truncate font-semibold tracking-tight">
-            {searchEntry.entry.term}
-          </span>
-          <span className="text-muted-foreground truncate text-sm">
-            {searchEntry.entry.answer}
-          </span>
-        </div>
-        <Badge variant="secondary">{contentRegistry.idioms.label}</Badge>
-      </>
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <span className="truncate font-semibold tracking-tight">
+          {searchEntry.entry.term}
+        </span>
+        <span className="text-muted-foreground truncate text-sm">
+          {searchEntry.entry.answer}
+        </span>
+      </div>
     ),
     renderContentGridSubtitle: () => '細味歇後語，領略粵語嘅智慧同幽默。',
     renderListPageSubtitle: () =>
