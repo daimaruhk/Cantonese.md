@@ -21,4 +21,13 @@ export const getGithubMarkdownUrl = (
     fileName,
   )}.md`;
 
+export const getShareUrl = (contentType: ContentType, fileName: string) =>
+  `${window.location.origin}/${contentType}/${fileName}`;
+
+export const getGithubProfileUrl = (username: string) =>
+  `https://github.com/${username}`;
+
+export const getGithubProfilePicUrl = (username: string) =>
+  `https://github.com/${username}.png?size=32`;
+
 export const normalize = (text: string) => text.trim().toLowerCase();
