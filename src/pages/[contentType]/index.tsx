@@ -5,7 +5,7 @@ import { Container } from '@/components/Container';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
 import { useContentMetadataQuery } from '@/hooks/useContentMetadataQuery';
-import { contentRegistry } from '@/configurations/registry';
+import { contentRegistry, type ContentType } from '@/configurations/registry';
 import { renderers } from '@/configurations/renderers';
 import {
   routeHandlers,
@@ -13,7 +13,9 @@ import {
 } from '@/configurations/routeHandlers';
 import { seoProviders } from '@/configurations/seoProviders';
 
-export default function ListPage({ contentType }: ListPageProps) {
+export default function ListPage<T extends ContentType>({
+  contentType,
+}: ListPageProps<T>) {
   const config = contentRegistry[contentType];
   const seoProvider = seoProviders[contentType].listPage;
   const { status, data: entries } = useContentMetadataQuery(contentType);

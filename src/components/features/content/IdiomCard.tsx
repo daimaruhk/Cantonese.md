@@ -40,7 +40,7 @@ export const IdiomCard = ({ metadata }: IdiomCardProps) => {
           <span
             className={buttonVariants({
               variant: 'ghost',
-              className: cn(cardButtonClassNames, 'md:pointer-events-none'),
+              className: cn(cardButtonClassNames, 'pointer-events-none'),
             })}
           >
             <IconRefresh />

@@ -30,8 +30,11 @@ import {
 import { ContentGrid } from '@/components/features/content/ContentGrid';
 import type { ContentData } from '@/configurations/types';
 import { seoProviders } from '@/configurations/seoProviders';
+import type { ContentType } from '@/configurations/registry';
 
-export default function DetailPage({ contentData }: DetailPageProps) {
+export default function DetailPage<T extends ContentType>({
+  contentData,
+}: DetailPageProps<T>) {
   const { contentType } = contentData;
   const seoProvider = seoProviders[contentType].detailPage;
 
@@ -53,7 +56,11 @@ export const getStaticPaths = routeHandlers.getDetailPageStaticPaths;
 
 export const getStaticProps = routeHandlers.getDetailPageStaticProps;
 
-const HeroSection = ({ contentData }: { contentData: ContentData }) => {
+const HeroSection = <T extends ContentType>({
+  contentData,
+}: {
+  contentData: ContentData<T>;
+}) => {
   const [isCopied, setIsCopied] = useState(false);
   const { contentType } = contentData;
 

@@ -9,12 +9,12 @@ type DetailPagePathParams = { contentType: ContentType; fileName: string };
 
 type ListPagePathParams = { contentType: ContentType };
 
-export type DetailPageProps = {
-  contentData: ContentData;
+export type DetailPageProps<T extends ContentType = ContentType> = {
+  contentData: ContentData<T>;
 };
 
-export type ListPageProps = {
-  contentType: ContentType;
+export type ListPageProps<T extends ContentType = ContentType> = {
+  contentType: T;
 };
 
 type RouterHandlers = {
