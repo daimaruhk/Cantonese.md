@@ -24,22 +24,22 @@ src/
 ├── hooks/           # Custom React hooks (e.g., useSearch, useContentMetadataQuery)
 ├── lib/             # Shared utilities (cn, URL helpers, api fetchers)
 ├── pages/           # Next.js routes using the Page Router (SSG)
-├── scripts/         # Developer tooling (e.g., idiom generator, API generator)
+├── scripts/         # Developer tooling (e.g., content generator, API generator)
 ├── styles/          # Global CSS and Tailwind 4 configuration
 └── tests/           # Comprehensive testing suite (Vitest)
 ```
 
-## Data & Content
+## Data & Content Architecture
 
-The project's primary data resides in `src/contents/<type>`. Each entry is stored as a `.md` file with structured frontmatter.
+The project leverages an extensible registry pattern for content management. Primary data is organized into directories at `src/contents/<type>`, where each entry is stored as a markdown (`.md`) file containing strictly typed frontmatter.
 
-- **Registry**: All content types are registered in `src/configurations/registry.ts`, which maps each type to its Zod schema, display label, and subtitle.
-- **Schema**: Schemas are defined in `src/configurations/schemas/<type>.ts` and must extend `BaseFrontmatterSchema` from `src/configurations/schemas/baseSchema.ts`.
-- **Data Providers**: `src/configurations/dataProviders.ts` provides `getAllMetadata()` and `getContentData()` for each registered type.
-- **Route Handlers**: `src/configurations/routeHandlers.ts` provides `getStaticPaths` and `getStaticProps` for each type's dynamic pages.
-- **Renderers**: `src/configurations/renderers.tsx` provides card and search card renderers for each type.
-- **Validation**: Build-time tests in `src/tests/contents/<type>.test.ts` ensure all content files are valid, unique, and well-formed.
-- **Management**: Use `pnpm gen:<type> <term>` to create new entries using the standard template.
+- **Registry (`src/configurations/registry.ts`)**: The central configuration hub that maps each registered content type to its respective Zod schema, rendering labels, and configuration metadata.
+- **Schemas (`src/configurations/schemas/`)**: Defines the strict frontmatter shape for each content type. All schemas **must** extend `BaseFrontmatterSchema` to ensure core fields like `id` are consistently present.
+- **Data Providers (`src/configurations/dataProviders.ts`)**: Centralizes the data-fetching architecture by exposing type-safe `getAllMetadata()` and `getContentData()` utilities.
+- **Route Handlers (`src/configurations/routeHandlers.ts`)**: Manages Next.js SSG requirements by providing modular `getStaticPaths` and `getStaticProps` generators for dynamic content routes.
+- **Renderers (`src/configurations/renderers.tsx`)**: Injects content-specific UI components (e.g., standard cards, search result items) for both aggregate and detailed views.
+- **Validation (`src/tests/contents.test.ts`)**: A comprehensive build-time test suite that guarantees all markdown files are well-formed, strictly adhere to their assigned schemas, and are free of ID collisions.
+- **Management**: A developer CLI tool (`pnpm gen:content <type> <term>`) that automates the generation of compliant `.md` files using predefined template providers.
 
 ## Build and Test Commands
 
@@ -50,7 +50,7 @@ Perform these actions using `pnpm`:
 - `pnpm lint`: Run ESLint checks
 - `pnpm format`: Format code with Prettier
 - `pnpm test`: Execute Vitest suites (includes content validation)
-- `pnpm gen:<type> <term>`: Create a new entry template
+- `pnpm gen:content <type> <term>`: Create a new entry template
 - `pnpm gen:api`: Generate API files to `public/api/`
 
 ## Code Style Guidelines

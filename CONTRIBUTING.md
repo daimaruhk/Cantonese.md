@@ -74,7 +74,7 @@ src/
 ├── hooks/           # Custom React hooks (e.g., useSearch, useQuery wrappers)
 ├── lib/             # Shared utilities (cn, URL helpers, api fetchers)
 ├── pages/           # Next.js routes using the Page Router (SSG)
-├── scripts/         # Developer tooling (e.g., idiom generator, API generator)
+├── scripts/         # Developer tooling (e.g., content generator, API generator)
 ├── styles/          # Global CSS and Tailwind 4 configuration
 └── tests/           # Comprehensive testing suite (Vitest)
 ```
@@ -109,22 +109,24 @@ src/
 
 ### Other Commands
 
-| Command                  | Description                                 |
-| :----------------------- | :------------------------------------------ |
-| `pnpm build`             | Build the static export into `out/`         |
-| `pnpm lint`              | Run ESLint to check for code quality issues |
-| `pnpm format`            | Run Prettier to format the codebase         |
-| `pnpm test`              | Run the test suite using Vitest             |
-| `pnpm gen:<type> <term>` | Create a new entry template                 |
-| `pnpm gen:api`           | Generate API files to `public/api/`         |
+| Command                              | Description                                 |
+| :----------------------------------- | :------------------------------------------ |
+| `pnpm build`                         | Build the static export into `out/`         |
+| `pnpm lint`                          | Run ESLint to check for code quality issues |
+| `pnpm format`                        | Run Prettier to format the codebase         |
+| `pnpm test`                          | Run the test suite using Vitest             |
+| `pnpm gen:content <type> <fileName>` | Create a new entry template                 |
+| `pnpm gen:api`                       | Generate API files to `public/api/`         |
 
 ## Adding a New Content Type
 
-This project uses an extensible content registry pattern. All configuration lives in `src/configurations/`. Follow these steps to add a new content type (e.g., `slangs`):
+This project leverages an extensible registry pattern for managing content. All centralized configurations for different content types reside in the `src/configurations/` directory.
 
-### Step 1: Define the Schema
+Follow these steps to incorporate a new content type (using `slangs` as an example):
 
-Create `src/configurations/schemas/slangs.ts`:
+### Step 1: Define the Zod Schema
+
+Create a schema file at `src/configurations/schemas/slangs.ts`:
 
 ```ts
 import { z } from 'zod';
@@ -139,17 +141,17 @@ export const SlangFrontmatterSchema = BaseFrontmatterSchema.extend({
 export type SlangFrontmatter = z.infer<typeof SlangFrontmatterSchema>;
 ```
 
-All content schemas must extend `BaseFrontmatterSchema` (which provides `id`).
+It is mandatory for all content schemas to extend `BaseFrontmatterSchema`, which automatically provides the `id` field.
 
 ### Step 2: Register the Content Type
 
-1. **Update `ContentTypeSchema`** in `src/configurations/schemas/contentTypeSchema.ts`:
+1. **Update `ContentTypeSchema`:** Append the new type to the enum in `src/configurations/schemas/contentTypeSchema.ts`:
 
    ```ts
    export const ContentTypeSchema = z.enum(['idioms', 'slangs']);
    ```
 
-2. **Add to `contentRegistry`** in `src/configurations/registry.ts`:
+2. **Add to `contentRegistry`:** Define the standard label and assign the corresponding schema inside `src/configurations/registry.ts`:
 
    ```ts
    import { SlangFrontmatterSchema } from './schemas/slangs';
@@ -162,40 +164,35 @@ All content schemas must extend `BaseFrontmatterSchema` (which provides `id`).
        contentType: 'slangs',
        schema: SlangFrontmatterSchema,
        label: '俗語',
-       subtitle: '探索地道粵語俗語。',
      },
    } as const satisfies { [K in ContentType]: ContentRegistryConfig<K> };
    ```
 
-### Step 3: Create UI Components and Wire Up Content-Specific Configurations
+### Step 3: Implement Providers and Renderers
 
-1. Create a card component in `src/components/features/content/` (e.g., `SlangCard.tsx`).
-2. Create page routes in `src/pages/slangs/`:
-   - `index.tsx` — List page (follow `src/pages/idioms/index.tsx` pattern).
-   - `[fileName].tsx` — Detail page (follow `src/pages/idioms/[fileName].tsx` pattern).
-3. Wire the renderers in **`src/configurations/renderers.tsx`** by adding the card and search card for `slangs` to `renderers`.
-4. Configure search providers in **`src/configurations/searchProviders.ts`** by adding the search provider for `slangs` to `searchProviders`.
+Integrate the new content type systematically across the application by updating the corresponding configuration files:
 
-### Step 4: Create the Content Directory
+1. **`src/configurations/renderers.tsx`**: Add dedicated rendering logic for both content lists (e.g., displaying cards) and individual detail views.
+2. **`src/configurations/searchProviders.ts`**: Configure how this content type should be indexed, mapped, and queried through the global search functionality.
+3. **`src/configurations/seoProviders.ts`**: Declare specific SEO and metadata logic (e.g., Open Graph attributes) for the new content type routes.
+4. **`src/configurations/templateProviders.ts`**: Define the default Markdown template structure, establishing a boilerplate for the content generation script.
 
-Create `src/contents/slangs/` and add `.md` files with the matching frontmatter structure.
+### Step 4: Create Data Entries
 
-### Step 5: Add Content Validation Tests
-
-Create `src/tests/contents/slangs.test.ts` following the pattern in `src/tests/contents/idioms.test.ts`. This ensures all markdown files in the new content directory conform to your schema.
-
-### Step 6: (Optional) Create a Generator Script
-
-Add `src/scripts/generate-slang.ts` following the `generate-idiom.ts` pattern, and register a `gen:slang` script in `package.json`.
-
-### Step 7: Validate
-
-Run the full validation suite:
+Utilize the provided CLI tool to create your first piece of content (e.g., `揸流攤`). This will automatically create the `src/contents/slangs` directory if it doesn't already exist and prepopulate the `揸流攤.md` frontmatter from the template provider:
 
 ```bash
-pnpm test     # Content validation + unit tests
-pnpm lint     # Code quality
-pnpm build    # Static build succeeds
+pnpm gen:content slangs "揸流攤"
+```
+
+### Step 5: Validate and Build
+
+Ensure your newly added content and configuration schemas are fully compliant by running the required validation suite:
+
+```bash
+pnpm test     # Executes dataset shape validation and unit testing
+pnpm lint     # Verifies code quality and styling guidelines
+pnpm build    # Validates that the static Next.js production build succeeds
 ```
 
 ## Pull Request Process
