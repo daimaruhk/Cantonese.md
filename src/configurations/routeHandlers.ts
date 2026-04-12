@@ -39,7 +39,7 @@ export const routeHandlers: RouterHandlers = {
   getListPageStaticProps: ({ params }) => {
     const contentType = params?.contentType;
 
-    if (!contentType) {
+    if (!contentType || !contentTypes.includes(contentType)) {
       return { notFound: true };
     }
 
@@ -65,7 +65,7 @@ export const routeHandlers: RouterHandlers = {
     const contentType = params?.contentType;
     const fileName = params?.fileName;
 
-    if (!contentType || !fileName) {
+    if (!contentType || !fileName || !contentTypes.includes(contentType)) {
       return { notFound: true };
     }
 

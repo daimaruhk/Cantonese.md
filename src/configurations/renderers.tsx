@@ -1,11 +1,10 @@
 import type React from 'react';
-import { Badge } from '@/components/ui/badge';
 import {
   IdiomCard,
   IdiomCardSkeleton,
 } from '@/components/features/content/IdiomCard';
 import { Typography } from '@/components/ui/Typography';
-import { contentRegistry, type ContentType } from './registry';
+import { type ContentType } from './registry';
 import type { ContentMetadata, ContentData } from './types';
 import type { SearchEntry } from './searchProviders';
 

@@ -85,7 +85,7 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
           <div className="p-4">
             <CommandInput
               autoFocus
-              placeholder="搜尋歇後語..."
+              placeholder="搜尋文字或粵拼..."
               value={query}
               onValueChange={setQuery}
             />

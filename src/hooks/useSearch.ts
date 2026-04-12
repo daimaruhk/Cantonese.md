@@ -2,7 +2,7 @@ import { useDeferredValue, useState } from 'react';
 import type { ContentType } from '@/configurations/registry';
 import { type SearchEntry } from '@/configurations/searchProviders';
 import { normalize } from '@/lib/utils';
-import { useSearchEntriesQuery } from './useSearchEntriesQuery';
+import { useSearchEntriesQuery } from './useQuery';
 
 export type SearchScope = ContentType | 'all';
 

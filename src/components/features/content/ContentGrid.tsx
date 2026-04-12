@@ -3,7 +3,7 @@ import { IconArrowRight, IconRefresh } from '@tabler/icons-react';
 import { Button } from '@/components/ui/Button';
 import { Link } from '@/components/ui/Link';
 import { Section } from '@/components/Section';
-import { useContentMetadataQuery } from '@/hooks/useContentMetadataQuery';
+import { useContentMetadataQuery } from '@/hooks/useQuery';
 import type { ContentMetadata } from '@/configurations/types';
 import { contentRegistry, type ContentType } from '@/configurations/registry';
 import { renderers } from '@/configurations/renderers';
@@ -18,7 +18,7 @@ export const ContentGrid = <T extends ContentType>({
   contentType,
   excludedId,
 }: ContentGridProps<T>) => {
-  const { status, data: entries } = useContentMetadataQuery(contentType);
+  const { status, data: entries } = useContentMetadataQuery({ contentType });
   const [currentEntries, setCurrentEntries] = useState<ContentMetadata<T>[]>(
     [],
   );

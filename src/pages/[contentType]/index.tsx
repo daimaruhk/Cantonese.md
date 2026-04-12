@@ -4,7 +4,7 @@ import { Container } from '@/components/Container';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
 import { CardGrid } from '@/components/features/content/CardGrid';
-import { useContentMetadataQuery } from '@/hooks/useContentMetadataQuery';
+import { useContentMetadataQuery } from '@/hooks/useQuery';
 import { contentRegistry, type ContentType } from '@/configurations/registry';
 import { renderers } from '@/configurations/renderers';
 import {
@@ -19,7 +19,7 @@ export default function ListPage<T extends ContentType>({
   const config = contentRegistry[contentType];
   const renderer = renderers[contentType];
   const seoProvider = seoProviders[contentType].listPage;
-  const { data: entries } = useContentMetadataQuery(contentType);
+  const { data: entries } = useContentMetadataQuery({ contentType });
 
   return (
     <Layout
