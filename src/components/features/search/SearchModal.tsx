@@ -53,7 +53,7 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
     onOpenChange(false);
   };
 
-  const handleSelect = async (searchEntry: SearchEntry<'idioms'>) => {
+  const handleSelect = async (searchEntry: SearchEntry) => {
     closeModal();
     await router.push(searchEntry.path);
   };
@@ -137,9 +137,18 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
                       handleSelect(searchEntry);
                     }}
                   >
-                    {renderers[searchEntry.contentType].renderSearchCard(
-                      searchEntry,
-                    )}
+                    {
+                      /* 
+                        Casting is necessary due to the 'Correlated Union' problem: TypeScript 
+                        cannot guarantee that the renderer for a specific contentType matches 
+                        the union member of the current searchEntry during iteration.
+                      */
+                      (
+                        renderers[searchEntry.contentType].renderSearchCard as (
+                          entry: SearchEntry,
+                        ) => React.ReactNode
+                      )(searchEntry)
+                    }
                   </CommandItem>
                 ))}
               </CommandGroup>

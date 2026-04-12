@@ -1,7 +1,7 @@
 import type { ContentType } from './registry';
 import type { ContentMetadata } from './types';
 
-export type SearchEntry<T extends ContentType> = {
+export type SearchEntry<T extends ContentType = ContentType> = {
   id: string;
   searchText: string;
   searchJyutping: string;

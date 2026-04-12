@@ -56,10 +56,9 @@ const createRouteHandler = <T extends ContentType>(
   return { getStaticPaths, getStaticProps };
 };
 
-export const routeHandlers = Object.values(contentRegistry).reduce(
-  (handlers, config) => {
-    handlers[config.contentType] = createRouteHandler(config.contentType);
-    return handlers;
-  },
-  {} as RouteHandlers,
-);
+export const routeHandlers = Object.fromEntries(
+  Object.values(contentRegistry).map((config) => [
+    config.contentType,
+    createRouteHandler(config.contentType),
+  ]),
+) as RouteHandlers;

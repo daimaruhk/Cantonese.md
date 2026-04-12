@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { contentRegistry, type ContentType } from './registry';
-import type { ContentMetadata, ContentData } from './types';
+import type { ContentMetadata, ContentData, Frontmatter } from './types';
 import {
   getContentFileNames,
   readContentFile,
@@ -19,24 +19,15 @@ type DataProviders = {
   [K in ContentType]: DataProvider<K>;
 };
 
-const cache: { [K in ContentType]: ContentMetadata<K>[] | null } = {
-  idioms: null,
-};
-
 const createApiForType = <T extends ContentType>(
   contentType: T,
 ): DataProvider<T> => {
   const getAllMetadata = () => {
-    if (cache[contentType]) {
-      return cache[contentType];
-    }
-
     const fileNames = getContentFileNames(contentType);
     const metadataList = fileNames.map((fileName) => {
       const { frontmatter } = readContentFile(contentType, fileName);
       return buildContentMetadata(contentType, frontmatter, fileName);
     });
-    cache[contentType] = metadataList;
     return metadataList;
   };
 
@@ -59,13 +50,12 @@ const createApiForType = <T extends ContentType>(
   return { getAllMetadata, getContentData };
 };
 
-export const dataProviders = Object.values(contentRegistry).reduce(
-  (providers, config) => {
-    providers[config.contentType] = createApiForType(config.contentType);
-    return providers;
-  },
-  {} as DataProviders,
-);
+export const dataProviders = Object.fromEntries(
+  Object.values(contentRegistry).map((config) => [
+    config.contentType,
+    createApiForType(config.contentType),
+  ]),
+) as DataProviders;
 
 const buildContentMetadata = <T extends ContentType>(
   contentType: T,
@@ -84,8 +74,8 @@ const buildContentMetadata = <T extends ContentType>(
 
   // Cast since we know we are returning ContentMetadata<T> which intersects with ContentType / fileName
   return {
-    ...validationResult.data,
+    ...(validationResult.data as Frontmatter<T>),
     contentType: contentType,
     fileName,
-  } as ContentMetadata<T>;
+  };
 };

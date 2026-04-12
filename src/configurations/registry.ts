@@ -4,6 +4,8 @@ import { ContentTypeSchema } from './schemas/contentTypeSchema';
 
 export type ContentType = z.infer<typeof ContentTypeSchema>;
 
+// `typeof contentRegistry` gives us a strongly typed object that maps each ContentType to its configuration.
+// The `satisfies` keyword ensures that the `contentRegistry` object has the correct shape.
 export type ContentRegistry = typeof contentRegistry;
 
 type ContentRegistryConfig<T extends ContentType> = {

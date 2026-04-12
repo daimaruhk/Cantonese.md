@@ -8,13 +8,15 @@ import type { ContentType } from './registry';
 import type { ContentMetadata } from './types';
 import type { SearchEntry } from './searchProviders';
 
-export const renderers: {
+type Renderer = {
   [K in ContentType]: {
     renderCard: (metadata: ContentMetadata<K>) => React.ReactNode;
     renderCardSkeleton: () => React.ReactNode;
     renderSearchCard: (searchEntry: SearchEntry<K>) => React.ReactNode;
   };
-} = {
+};
+
+export const renderers: Renderer = {
   idioms: {
     renderCard: (metadata) => <IdiomCard metadata={metadata} />,
     renderCardSkeleton: () => <IdiomCardSkeleton />,
