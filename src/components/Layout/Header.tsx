@@ -179,7 +179,7 @@ const DesktopHeader = ({ onOpenSearch }: ResponsiveHeaderProps) => {
                 <NavigationMenuTrigger>粵語文化</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="w-48">
-                    {[...cultureItems, ...cultureItems].map((item) => (
+                    {cultureItems.map((item) => (
                       <li key={item.href}>
                         <NavigationMenuLink
                           render={<Link href={item.href}>{item.label}</Link>}
