@@ -43,7 +43,7 @@ const features = [
     icon: <IconBook />,
     title: '開源 — 每個人都可以貢獻',
     description:
-      '所有內容完全開源，任何人都可以透過 GitHub 貢獻新內容，一齊擴建依個資料庫。',
+      '所有內容完全開源，任何人都可以透過 GitHub 貢獻，一齊擴建依個資料庫。',
   },
   {
     icon: <IconRobot />,
@@ -66,7 +66,7 @@ const HeroSection = () => {
           存檔計畫
         </Typography>
         <Typography variant="lead" className="text-center md:text-left">
-          我們致力於紀錄、整理與傳承粵語的精髓。從民間智慧到當代語境，為下一代保留最道地的廣東話印記。
+          我們致力於紀錄、整理與傳承粵語的精髓。從民間智慧到當代語境，為下一代保留最道地的粵語印記。
         </Typography>
         <div className="flex flex-wrap items-center gap-4">
           <Button
