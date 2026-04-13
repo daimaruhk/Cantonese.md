@@ -5,7 +5,7 @@ import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
 import { CardGrid } from '@/components/features/content/CardGrid';
 import { useContentMetadataQuery } from '@/hooks/useQuery';
-import { type ContentType } from '@/configurations/registry';
+import { contentRegistry, type ContentType } from '@/configurations/registry';
 import { renderers } from '@/configurations/renderers';
 import {
   routeHandlers,
@@ -24,7 +24,9 @@ export default function ListPage<T extends ContentType>({
     <Layout seo={seo}>
       <Section className="flex max-w-4xl flex-col items-center gap-8">
         <Backdrop />
-        <Typography variant="h1">{seo.title}</Typography>
+        <Typography variant="h1">
+          {contentRegistry[contentType].label}
+        </Typography>
         <Typography
           variant="lead"
           className="text-center sm:max-w-xl md:max-w-3xl"
