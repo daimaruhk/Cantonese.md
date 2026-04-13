@@ -12,7 +12,7 @@ export const Layout = ({ children, title, description }: LayoutProps) => {
   return (
     <div className="flex min-h-screen flex-col">
       <Head>
-        <title>{title}</title>
+        <title>{`${title} | Cantonese.md`}</title>
         <meta name="description" content={description} />
       </Head>
       <Header />

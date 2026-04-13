@@ -22,10 +22,7 @@ export default function ListPage<T extends ContentType>({
   const { data: entries } = useContentMetadataQuery({ contentType });
 
   return (
-    <Layout
-      title={`${config.label} | Cantonese.md`}
-      description={seoProvider.description}
-    >
+    <Layout title={config.label} description={seoProvider.description}>
       <Section className="flex max-w-4xl flex-col items-center gap-8">
         <Backdrop />
         <Typography variant="h1">{config.label}</Typography>

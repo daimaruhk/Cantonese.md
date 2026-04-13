@@ -34,7 +34,7 @@ const mission = [
 export default function AboutUsPage() {
   return (
     <Layout
-      title="關於我哋 | Cantonese.md"
+      title="關於我哋"
       description="暸解 Cantonese.md 嘅理念。我哋致力於保育粵語文化，並建立高質素嘅開源 AI 訓練語料庫。"
     >
       <Section className="flex max-w-2xl flex-col items-center gap-6 text-center">

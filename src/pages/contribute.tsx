@@ -42,7 +42,7 @@ const contributions = [
 export default function ContributePage() {
   return (
     <Layout
-      title="點樣貢獻 | Cantonese.md"
+      title="點樣貢獻"
       description="暸解點樣為 Cantonese.md 貢獻你的力量。我哋歡迎任何人一齊參與開源保育粵語文化。"
     >
       <Section className="flex max-w-full flex-col items-center gap-6 text-center md:max-w-lg">
