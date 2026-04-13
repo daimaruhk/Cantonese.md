@@ -13,12 +13,18 @@ import { Typography } from '@/components/ui/Typography';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
 import { ContentGrid } from '@/components/features/content/ContentGrid';
+import { normalizeUrl } from '@/lib/utils';
 
 export default function Home() {
   return (
     <Layout
-      title="開源粵語知識庫"
-      description="一個開源嘅粵語知識庫，記錄歇後語、俗語、文化。所有內容以 Markdown 格式保存，為粵語保育同 AI 訓練提供高質素數據。"
+      seo={{
+        title: '開源粵語知識庫',
+        description:
+          '一個開源嘅粵語知識庫，記錄歇後語、俗語、文化。所有內容以 Markdown 格式保存，為粵語保育同 AI 訓練提供高質素數據。',
+        canonicalUrl: normalizeUrl(),
+        ogType: 'website',
+      }}
     >
       <HeroSection />
       <IntroductionSection />

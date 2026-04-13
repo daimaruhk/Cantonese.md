@@ -6,6 +6,7 @@ import { Typography } from '@/components/ui/Typography';
 import { Backdrop } from '@/components/Backdrop';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
+import { normalizeUrl } from '@/lib/utils';
 
 const mission = [
   {
@@ -34,8 +35,13 @@ const mission = [
 export default function AboutUsPage() {
   return (
     <Layout
-      title="關於我哋"
-      description="暸解 Cantonese.md 嘅理念。我哋致力於保育粵語文化，並建立高質素嘅開源 AI 訓練語料庫。"
+      seo={{
+        title: '關於我哋',
+        description:
+          '暸解 Cantonese.md 嘅理念。我哋致力於保育粵語文化，並建立高質素嘅開源 AI 訓練語料庫。',
+        canonicalUrl: normalizeUrl('about-us'),
+        ogType: 'website',
+      }}
     >
       <Section className="flex max-w-2xl flex-col items-center gap-6 text-center">
         <Backdrop />

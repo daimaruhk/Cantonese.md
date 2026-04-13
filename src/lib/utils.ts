@@ -31,3 +31,16 @@ export const getGithubProfilePicUrl = (username: string) =>
   `https://github.com/${username}.png?size=32`;
 
 export const normalize = (text: string) => text.trim().toLowerCase();
+
+export const normalizeUrl = (path?: string) => {
+  let url = `https://cantonese.md/`;
+
+  if (!path || path === '/') {
+    return url;
+  }
+
+  path = path.startsWith('/') ? path.slice(1) : path; // remove leading slash
+  path = path.endsWith('/') ? path.slice(0, -1) : path; // remove trailing slash
+
+  return `${url}${path}/`;
+};

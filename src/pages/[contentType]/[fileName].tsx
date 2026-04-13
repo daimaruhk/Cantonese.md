@@ -14,13 +14,10 @@ export default function DetailPage<T extends ContentType>({
   contentData,
 }: DetailPageProps<T>) {
   const { contentType } = contentData;
-  const seoProvider = seoProviders[contentType].detailPage;
+  const seo = seoProviders[contentType].detailPage(contentData);
 
   return (
-    <Layout
-      title={seoProvider.title(contentData)}
-      description={seoProvider.description(contentData)}
-    >
+    <Layout seo={seo}>
       <HeroSection contentData={contentData} />
       <Container>
         <MarkdownRenderer content={contentData.content} />
