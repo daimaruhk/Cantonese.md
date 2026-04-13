@@ -1,10 +1,10 @@
+import { Fragment } from 'react';
 import {
   IconBook,
   IconPalette,
   IconSparkles,
   IconBrandGithub,
 } from '@tabler/icons-react';
-
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Link } from '@/components/ui/Link';
@@ -69,7 +69,7 @@ export default function ContributePage() {
       <Section className="flex max-w-3xl flex-col gap-16">
         {contributions.map(({ icon, title, subtitle, description }, index) => {
           return (
-            <>
+            <Fragment key={index}>
               {index !== 0 && <Separator />}
               <div className="flex flex-col items-center gap-6 md:flex-row md:items-start md:gap-10">
                 <div className="flex flex-col items-center gap-2 md:w-1/4 md:items-start">
@@ -87,7 +87,7 @@ export default function ContributePage() {
                   </Typography>
                 </div>
               </div>
-            </>
+            </Fragment>
           );
         })}
       </Section>
