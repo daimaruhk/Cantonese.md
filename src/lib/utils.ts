@@ -33,7 +33,7 @@ export const getGithubProfilePicUrl = (username: string) =>
 export const normalize = (text: string) => text.trim().toLowerCase();
 
 export const normalizeUrl = (path?: string) => {
-  let url = `https://cantonese.md/`;
+  const url = `https://cantonese.md/`;
 
   if (!path || path === '/') {
     return url;
