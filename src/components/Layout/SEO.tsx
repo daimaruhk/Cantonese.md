@@ -2,6 +2,7 @@ import Head from 'next/head';
 import {
   imageUrl,
   siteName,
+  toTitle,
   type SeoMeta,
 } from '@/configurations/seoProviders';
 
@@ -14,6 +15,8 @@ export const SEO = ({
   jsonLd,
   ...rest
 }: SeoMeta) => {
+  title = title === toTitle(title) ? title : toTitle(title);
+
   return (
     <Head>
       <title>{title}</title>
