@@ -15,13 +15,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/Select';
 import { Separator } from '@/components/ui/Separator';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToggleGroup';
 import { Typography } from '@/components/ui/Typography';
 import { useSearch, type SearchScope } from '@/hooks/useSearch';
 import { contentRegistry, type ContentType } from '@/configurations/registry';
 import { renderers } from '@/configurations/renderers';
 import type { SearchEntry } from '@/configurations/searchProviders';
+import { normalize } from '@/lib/utils';
 
 type SearchModalProps = {
   open: boolean;
@@ -91,20 +99,24 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
             />
 
             <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <ToggleGroup
-                aria-label="搜尋範圍"
-                spacing={2}
-                value={[scope]}
-                onValueChange={([selected]) => {
-                  setScope((selected ?? 'all') as SearchScope);
-                }}
+              <Select
+                items={scopeOptions}
+                value={scope}
+                onValueChange={(value) => setScope(value ?? 'all')}
               >
-                {scopeOptions.map((option) => (
-                  <ToggleGroupItem key={option.value} value={option.value}>
-                    {option.label}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
+                <SelectTrigger aria-label="搜尋範圍" className="w-24">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {scopeOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
 
               <Typography variant="muted" className="hidden sm:block">
                 撳上下箭咀選擇，撳 Enter 前往，撳 Esc 退出
@@ -115,17 +127,14 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
           <Separator />
 
           <CommandList aria-busy={isLoading} className="max-h-[26rem] p-2">
-            {isLoading ? (
-              <Typography variant="muted" className="px-4 py-8">
-                搜尋中...
-              </Typography>
+            {normalize(query).length === 0 ? (
+              <CommandEmpty>輸入文字或粵拼開始搜尋</CommandEmpty>
+            ) : isLoading ? (
+              <CommandEmpty>搜尋中...</CommandEmpty>
             ) : isError ? (
-              <Typography
-                variant="muted"
-                className="text-destructive px-4 py-8"
-              >
+              <CommandEmpty className="text-destructive">
                 搜尋失敗，請稍後再試。
-              </Typography>
+              </CommandEmpty>
             ) : results.length === 0 ? (
               <CommandEmpty>揾唔到任何嘢</CommandEmpty>
             ) : (

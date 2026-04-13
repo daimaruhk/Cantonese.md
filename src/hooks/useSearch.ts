@@ -48,14 +48,15 @@ const filterSearchEntries = <T extends ContentType>(
   limit = 10,
 ) => {
   const normalizedQuery = normalize(query);
+
+  if (normalizedQuery.length === 0) {
+    return [];
+  }
+
   return searchEntries
     .filter((entry) => {
       if (scope !== 'all' && entry.contentType !== scope) {
         return false;
-      }
-
-      if (normalizedQuery.length === 0) {
-        return true;
       }
 
       if (normalize(entry.searchText).includes(normalizedQuery)) {
