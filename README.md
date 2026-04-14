@@ -64,25 +64,7 @@ We use Markdown as our primary storage format because:
 
 ## 🚀 Local Setup
 
-### Requirements
-
-- **Node.js:** `24.x`
-- **pnpm:** `10.x`
-
-### Development
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/daimaruhk/Cantonese.md.git
-
-# 2. Install dependencies
-pnpm install
-
-# 3. Start the development server
-pnpm dev
-```
-
-Visit `http://localhost:3000` to view the website locally.
+See the [Development Guide](./docs/development.md) for requirements, installation steps, and the full CLI command reference.
 
 ## 🤝 How to Contribute
 
