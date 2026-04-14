@@ -4,12 +4,12 @@
 
 ## Documentation Map
 
-| Document                                              | What it covers                                                   |
-| :---------------------------------------------------- | :--------------------------------------------------------------- |
-| [Technical Architecture](./docs/architecture.md)      | Tech stack, folder structure, registry pattern, data model       |
-| [Development Guide](./docs/development.md)            | Local setup, build/test/CLI commands, validation checklist       |
-| [Code Style Guide](./docs/style-guide.md)             | Naming, arrow functions, Tailwind, import order, commit messages |
-| [Adding a Content Type](./docs/content-management.md) | Step-by-step tutorial for extending the registry                 |
+| Document                                              | What it covers                                             |
+| :---------------------------------------------------- | :--------------------------------------------------------- |
+| [Technical Architecture](./docs/architecture.md)      | Tech stack, folder structure, registry pattern, data model |
+| [Development Guide](./docs/development.md)            | Local setup, build/test/CLI commands, validation checklist |
+| [Code Style Guide](./docs/style-guide.md)             | Coding conventions, naming rules, import order             |
+| [Adding a Content Type](./docs/content-management.md) | Step-by-step tutorial for extending the registry           |
 
 ## Boundaries
 
