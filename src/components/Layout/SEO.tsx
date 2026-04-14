@@ -22,6 +22,10 @@ export const SEO = ({
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={canonicalUrl} />
+      <meta
+        name="google-site-verification"
+        content="EvGfXOVfKeuKk-4OazosNydW6ItTJRMhZrSAsdTowww"
+      />
 
       {/* Open Graph */}
       <meta property="og:title" content={title} />
