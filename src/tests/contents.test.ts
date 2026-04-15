@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   getContentFileNames,
@@ -6,6 +7,10 @@ import {
   readContentFile,
 } from '@/configurations/utils';
 import { contentRegistry, contentTypes } from '@/configurations/registry';
+import { ContentTypeSchema } from '@/configurations/schemas/contentTypeSchema';
+import { renderers } from '@/configurations/renderers';
+import { searchProviders } from '@/configurations/searchProviders';
+import { seoProviders } from '@/configurations/seoProviders';
 
 describe('Content types', () => {
   it.each(contentTypes)(
@@ -78,4 +83,62 @@ describe('Idioms', () => {
       expect(fileName).toBe(term);
     });
   });
+});
+
+describe('Content type registration completeness', () => {
+  const contentDirectory = path.join(process.cwd(), 'src', 'contents');
+  const contentTypeDirectories = fs
+    .readdirSync(contentDirectory, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
+
+  it.each(contentTypeDirectories)(
+    'should ensure directory "%s" has a corresponding entry in ContentTypeSchema',
+    (directory) => {
+      expect(
+        ContentTypeSchema.safeParse(directory).success,
+        `Content type "${directory}" has a directory but is missing from ContentTypeSchema`,
+      ).toBe(true);
+    },
+  );
+
+  it.each(contentTypeDirectories)(
+    'should ensure content type "%s" is registered in contentRegistry',
+    (directory) => {
+      expect(
+        directory in contentRegistry,
+        `Content type "${directory}" is missing from contentRegistry`,
+      ).toBe(true);
+    },
+  );
+
+  it.each(contentTypeDirectories)(
+    'should ensure content type "%s" is registered in renderers',
+    (contentType) => {
+      expect(
+        contentType in renderers,
+        `Content type "${contentType}" is missing from renderers`,
+      ).toBe(true);
+    },
+  );
+
+  it.each(contentTypeDirectories)(
+    'should ensure content type "%s" is registered in searchProviders',
+    (contentType) => {
+      expect(
+        contentType in searchProviders,
+        `Content type "${contentType}" is missing from searchProviders`,
+      ).toBe(true);
+    },
+  );
+
+  it.each(contentTypeDirectories)(
+    'should ensure content type "%s" is registered in seoProviders',
+    (contentType) => {
+      expect(
+        contentType in seoProviders,
+        `Content type "${contentType}" is missing from seoProviders`,
+      ).toBe(true);
+    },
+  );
 });
