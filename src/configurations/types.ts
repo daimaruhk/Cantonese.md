@@ -5,18 +5,19 @@ export type Frontmatter<T extends ContentType> = z.infer<
   ContentRegistry[T]['schema']
 >;
 
-export type ContentMetadata<T extends ContentType> = Frontmatter<T> & {
-  fileName: string;
-  contentType: T;
-};
-
-export type ContentData<T extends ContentType = ContentType> = GitMetadata &
-  ContentMetadata<T> & {
-    content: string;
-  };
-
 export type GitMetadata = {
   contributors: string[];
   createdAt: string;
   updatedAt: string;
 };
+
+export type ContentMetadata<T extends ContentType> = Frontmatter<T> &
+  GitMetadata & {
+    fileName: string;
+    contentType: T;
+  };
+
+export type ContentData<T extends ContentType = ContentType> =
+  ContentMetadata<T> & {
+    content: string;
+  };

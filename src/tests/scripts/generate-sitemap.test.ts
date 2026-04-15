@@ -1,7 +1,6 @@
 import fs from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { main } from '@/scripts/generate-sitemap';
-import { type DataProviders } from '@/configurations/dataProviders';
 import type { ContentMetadata } from '@/configurations/types';
 
 vi.mock('node:fs', () => ({
@@ -10,7 +9,8 @@ vi.mock('node:fs', () => ({
   },
 }));
 
-vi.mock('@/configurations/dataProviders', () => {
+vi.mock(import('@/configurations/utils'), async (importOriginal) => {
+  const actual = await importOriginal();
   const mockIdioms: ContentMetadata<'idioms'>[] = [
     {
       id: 'aaaaaaaaaaaa',
@@ -20,6 +20,9 @@ vi.mock('@/configurations/dataProviders', () => {
       answerJyutping: 'mou5 saai3 seng1 hei3',
       contentType: 'idioms',
       fileName: '賣魚佬沖涼',
+      contributors: ['Test Author'],
+      createdAt: '2026-04-01',
+      updatedAt: '2026-04-15',
     },
     {
       id: 'bbbbbbbbbbbb',
@@ -29,15 +32,15 @@ vi.mock('@/configurations/dataProviders', () => {
       answerJyutping: 'kaau3 ci1',
       contentType: 'idioms',
       fileName: '菠蘿雞',
+      contributors: ['Test Author'],
+      createdAt: '2026-04-02',
+      updatedAt: '2026-04-10',
     },
   ];
-  const mockDataProviders: DataProviders = {
-    idioms: {
-      getAllMetadata: vi.fn().mockImplementation(() => mockIdioms),
-      getContentData: vi.fn(),
-    },
+  return {
+    ...actual,
+    getAllMetadata: vi.fn().mockReturnValue(mockIdioms),
   };
-  return { dataProviders: mockDataProviders };
 });
 
 const writeFileSyncMock = vi.mocked(fs.writeFileSync);

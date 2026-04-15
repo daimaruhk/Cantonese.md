@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { normalizeUrl } from '@/lib/utils';
-import { dataProviders } from '@/configurations/dataProviders';
 import { contentRegistry } from '@/configurations/registry';
+import { getAllMetadata } from '@/configurations/utils';
 
 type SitemapEntry = {
   loc: string;
@@ -38,7 +38,7 @@ export const main = () => {
     });
 
     // Detail pages
-    const metadataList = dataProviders[contentType].getAllMetadata();
+    const metadataList = getAllMetadata(contentType);
 
     metadataList.forEach(({ fileName }) => {
       urls.push({

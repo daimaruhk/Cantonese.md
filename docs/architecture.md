@@ -19,6 +19,8 @@
 ## Folder Structure
 
 ```text
+public/
+├── api/             # Static JSON files generated at build-time that serve as API response
 src/
 ├── components/      # UI components
 │   ├── features/    # Feature-specific components (e.g., IdiomCard, ContentGrid, SearchModal)
@@ -40,7 +42,6 @@ The project leverages an extensible registry pattern for content management. Pri
 
 - **Registry (`src/configurations/registry.ts`)**: The central configuration hub that maps each registered content type to its respective Zod schema, rendering labels, and configuration metadata.
 - **Schemas (`src/configurations/schemas/`)**: Defines the strict frontmatter shape for each content type. All schemas **must** extend `BaseFrontmatterSchema` to ensure core fields like `id` are consistently present.
-- **Data Providers (`src/configurations/dataProviders.ts`)**: Centralizes the data-fetching architecture by exposing type-safe `getAllMetadata()` and `getContentData()` utilities.
 - **Route Handlers (`src/configurations/routeHandlers.ts`)**: Manages Next.js SSG requirements by providing modular `getStaticPaths` and `getStaticProps` generators for dynamic content routes.
 - **Renderers (`src/configurations/renderers.tsx`)**: Injects content-specific UI components (e.g., standard cards, search result items) for both aggregate and detailed views.
 - **Search Providers (`src/configurations/searchProviders.ts`)**: Transforms content metadata into `SearchEntry` objects for the global search, mapping each entry's text and Jyutping into searchable fields.

@@ -1,19 +1,15 @@
 // Server only
 
-import { execFileSync } from 'node:child_process';
 import path, { basename } from 'node:path';
 import fs from 'node:fs';
 import matter from 'gray-matter';
-import type { GitMetadata } from './types';
 import type { ContentType } from './registry';
+import type { ContentMetadata } from './types';
+
+// ========== Markdown File Handling ==========
 
 export const getContentTypeDirectory = (contentType: ContentType) =>
   path.join(process.cwd(), 'src', 'contents', contentType);
-
-export const getContentFilePath = (
-  contentType: ContentType,
-  fileName: string,
-) => path.join(getContentTypeDirectory(contentType), `${fileName}.md`);
 
 export const getContentFileNames = (contentType: ContentType) => {
   const directory = getContentTypeDirectory(contentType);
@@ -29,6 +25,11 @@ export const getContentFileNames = (contentType: ContentType) => {
     .filter((name) => name.endsWith('.md'))
     .map((name) => basename(name, '.md'));
 };
+
+export const getContentFilePath = (
+  contentType: ContentType,
+  fileName: string,
+) => path.join(getContentTypeDirectory(contentType), `${fileName}.md`);
 
 export const readContentFile = (contentType: ContentType, fileName: string) => {
   const path = getContentFilePath(contentType, fileName);
@@ -48,47 +49,38 @@ export const readContentFile = (contentType: ContentType, fileName: string) => {
   };
 };
 
-export const getGitMetadata = (
-  contentType: ContentType,
-  fileName: string,
-): GitMetadata => {
-  const filePath = getContentFilePath(contentType, fileName);
+// ========== API File Handling ==========
 
-  const runGitLog = (format: string) => {
-    try {
-      return execFileSync(
-        'git',
-        ['log', `--format=${format}`, '--', filePath],
-        {
-          cwd: process.cwd(),
-          encoding: 'utf8',
-        },
-      );
-    } catch (error) {
-      throw new Error(`Unable to retrieve git metadata for "${filePath}"`, {
-        cause: error,
-      });
-    }
-  };
+export const getContentMetadataDirectory = () =>
+  path.join(process.cwd(), 'public', 'api');
 
-  const contributors = Array.from(
-    new Set(runGitLog('%aN').split('\n').filter(Boolean)),
+export const getContentMetadataFilePath = (contentType: ContentType) =>
+  path.join(getContentMetadataDirectory(), `${contentType}.json`);
+
+export const getAllMetadata = <T extends ContentType>(contentType: T) => {
+  const filePath = getContentMetadataFilePath(contentType);
+  const contentMetadataList = fs.readFileSync(filePath, 'utf8');
+  return JSON.parse(contentMetadataList) as ContentMetadata<T>[];
+};
+
+// ========== Full Content Aggregation ==========
+
+export const getContentData = (contentType: ContentType, fileName: string) => {
+  const metadataList = getAllMetadata(contentType);
+  const metadata = metadataList.find(
+    (metadata) => metadata.fileName === fileName,
   );
-  const dates = runGitLog('%as').split('\n').filter(Boolean);
 
-  if (contributors.length === 0 || dates.length === 0) {
-    // When the file is not committed yet, use a fallback metadata.
-    const today = new Date().toISOString().slice(0, 10);
-    return {
-      contributors: ['Development'],
-      createdAt: today,
-      updatedAt: today,
-    };
+  if (!metadata) {
+    throw new Error(
+      `Metadata entry for "${fileName}" not found in generated API file for "${contentType}"`,
+    );
   }
 
+  const { content } = readContentFile(contentType, fileName);
+
   return {
-    contributors,
-    createdAt: dates[dates.length - 1] ?? '',
-    updatedAt: dates[0] ?? '',
+    ...metadata,
+    content,
   };
 };

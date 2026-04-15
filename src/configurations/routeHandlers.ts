@@ -3,7 +3,7 @@
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { contentTypes, type ContentType } from './registry';
 import type { ContentData } from './types';
-import { dataProviders } from './dataProviders';
+import { getAllMetadata, getContentData } from './utils';
 
 type DetailPagePathParams = { contentType: ContentType; fileName: string };
 
@@ -52,8 +52,7 @@ export const routeHandlers: RouterHandlers = {
   getDetailPageStaticPaths: () => {
     return {
       paths: contentTypes.flatMap((contentType) => {
-        const dataProvider = dataProviders[contentType];
-        const metadataList = dataProvider.getAllMetadata();
+        const metadataList = getAllMetadata(contentType);
         return metadataList.map((metadata) => ({
           params: { contentType, fileName: metadata.fileName },
         }));
@@ -69,8 +68,7 @@ export const routeHandlers: RouterHandlers = {
       return { notFound: true };
     }
 
-    const dataProvider = dataProviders[contentType];
-    const contentData = dataProvider.getContentData(fileName);
+    const contentData = getContentData(contentType, fileName);
 
     return {
       props: {

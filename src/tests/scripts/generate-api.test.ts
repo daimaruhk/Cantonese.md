@@ -1,12 +1,8 @@
 import fs from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { main } from '@/scripts/generate-api';
-import {
-  dataProviders,
-  type DataProviders,
-} from '@/configurations/dataProviders';
 import { contentTypes } from '@/configurations/registry';
-import type { ContentMetadata } from '@/configurations/types';
+import type { Frontmatter } from '@/configurations/types';
 
 vi.mock('node:fs', () => ({
   default: {
@@ -15,26 +11,39 @@ vi.mock('node:fs', () => ({
   },
 }));
 
-vi.mock('@/configurations/dataProviders', () => {
-  const mockIdiom: ContentMetadata<'idioms'> = {
+vi.mock('node:child_process', () => ({
+  execFileSync: vi.fn().mockImplementation(() => {
+    return `COMMIT_START|Alice|2026-04-15
+
+src/contents/idioms/賣魚佬沖涼.md
+COMMIT_START|Bob|2026-04-01
+
+src/contents/idioms/賣魚佬沖涼.md
+`;
+  }),
+}));
+
+vi.mock(import('@/configurations/utils'), async (importOriginal) => {
+  const actual = await importOriginal();
+  const mockFrontmatter: Frontmatter<'idioms'> = {
     id: 'aaaaaaaaaaaa',
     term: '賣魚佬沖涼',
     termJyutping: 'maai6 jyu4 lou2 cung1 loeng4',
     answer: '冇晒聲氣',
     answerJyutping: 'mou5 saai3 seng1 hei3',
-    contentType: 'idioms',
-    fileName: '賣魚佬沖涼',
   };
-  const mockDataProviders: DataProviders = {
-    idioms: {
-      getAllMetadata: vi.fn().mockImplementation(() => {
-        return [mockIdiom];
-      }),
-      getContentData: vi.fn(),
-    },
-  };
+  const mockGetContentFileNames: typeof actual.getContentFileNames = () => [
+    '賣魚佬沖涼',
+  ];
+  const mockReadContentFile: typeof actual.readContentFile = () => ({
+    frontmatter: mockFrontmatter,
+    content: '# Test content',
+  });
+
   return {
-    dataProviders: mockDataProviders,
+    ...actual,
+    getContentFileNames: vi.fn().mockImplementation(mockGetContentFileNames),
+    readContentFile: vi.fn().mockImplementation(mockReadContentFile),
   };
 });
 
@@ -51,17 +60,26 @@ describe('main', () => {
     vi.restoreAllMocks();
   });
 
-  it('should write a minified API file for each content type', async () => {
+  it('should write an API file with git metadata for each content type', () => {
     main();
 
     contentTypes.forEach((contentType) => {
-      const getAllMetadataMock = vi.mocked(
-        dataProviders[contentType].getAllMetadata,
-      );
-      expect(getAllMetadataMock).toHaveBeenCalled();
       expect(writeFileSyncMock).toHaveBeenCalledWith(
         `/mock-cwd/public/api/${contentType}.json`,
-        JSON.stringify(dataProviders[contentType].getAllMetadata()),
+        JSON.stringify([
+          {
+            id: 'aaaaaaaaaaaa',
+            term: '賣魚佬沖涼',
+            termJyutping: 'maai6 jyu4 lou2 cung1 loeng4',
+            answer: '冇晒聲氣',
+            answerJyutping: 'mou5 saai3 seng1 hei3',
+            contentType,
+            fileName: '賣魚佬沖涼',
+            contributors: ['Alice', 'Bob'],
+            createdAt: '2026-04-01',
+            updatedAt: '2026-04-15',
+          },
+        ]),
         'utf8',
       );
       expect(console.log).toHaveBeenCalledWith(

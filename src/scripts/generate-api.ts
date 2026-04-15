@@ -1,17 +1,128 @@
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { dataProviders } from '@/configurations/dataProviders';
+import { z } from 'zod';
 import { contentRegistry } from '@/configurations/registry';
+import type { Frontmatter, GitMetadata } from '@/configurations/types';
+import {
+  getContentFileNames,
+  readContentFile,
+  getContentFilePath,
+  getContentMetadataDirectory,
+  getContentMetadataFilePath,
+} from '@/configurations/utils';
+
+const fallbackGitMetadata = (): GitMetadata => {
+  const today = new Date().toISOString().slice(0, 10);
+  return {
+    contributors: ['Development'],
+    createdAt: today,
+    updatedAt: today,
+  };
+};
+
+const getBatchedGitMetadata = (): Map<string, GitMetadata> => {
+  const result = new Map<string, GitMetadata>();
+
+  try {
+    const output = execFileSync(
+      'git',
+      [
+        '-c',
+        'core.quotePath=false',
+        'log',
+        '--format=COMMIT_START|%aN|%as',
+        '--name-only',
+        '--',
+        'src/contents/',
+      ],
+      { cwd: process.cwd(), encoding: 'utf8' },
+    );
+
+    /**
+     * Sample output format:
+     *
+     * COMMIT_START|Alice|2024-01-02
+     *
+     * src/contents/test1.md
+     * src/contents/test2.md
+     * COMMIT_START|Bob|2024-01-01
+     *
+     * src/contents/test1.md
+     */
+
+    let currentAuthor = '';
+    let currentDate = '';
+
+    // Commits arrive newest-first: first seen date = updatedAt, last = createdAt
+    const lines = output.split('\n').map((line) => line.trim());
+    for (const line of lines) {
+      if (line.startsWith('COMMIT_START|')) {
+        const parts = line.split('|');
+        currentAuthor = parts[1] ?? '';
+        currentDate = parts[2] ?? '';
+      } else if (!!line && !!currentAuthor && !!currentDate) {
+        const existing = result.get(line);
+        if (existing) {
+          existing.createdAt = currentDate;
+          if (!existing.contributors.includes(currentAuthor)) {
+            existing.contributors.push(currentAuthor);
+          }
+        } else {
+          result.set(line, {
+            contributors: [currentAuthor],
+            createdAt: currentDate,
+            updatedAt: currentDate,
+          });
+        }
+      }
+    }
+  } catch (error) {
+    throw new Error('Unable to retrieve batched git metadata', {
+      cause: error,
+    });
+  }
+
+  return result;
+};
 
 export const main = () => {
-  const directory = path.join(process.cwd(), 'public', 'api');
+  const directory = getContentMetadataDirectory();
   fs.mkdirSync(directory, { recursive: true });
 
+  const gitMetadataMap = getBatchedGitMetadata();
+
   Object.values(contentRegistry).forEach((config) => {
-    const filePath = path.join(directory, `${config.contentType}.json`);
-    const metadataList = dataProviders[config.contentType].getAllMetadata();
-    fs.writeFileSync(filePath, JSON.stringify(metadataList), 'utf8');
+    const outputPath = getContentMetadataFilePath(config.contentType);
+    const fileNames = getContentFileNames(config.contentType);
+
+    const metadataList = fileNames.map((fileName) => {
+      const { frontmatter } = readContentFile(config.contentType, fileName);
+      const schema = contentRegistry[config.contentType].schema;
+      const validationResult = schema.safeParse(frontmatter);
+
+      const absolutePath = getContentFilePath(config.contentType, fileName);
+      const relativePath = path.relative(process.cwd(), absolutePath);
+
+      if (!validationResult.success) {
+        throw new Error(
+          `Invalid frontmatter in "${relativePath}": ${z.prettifyError(validationResult.error)}`,
+        );
+      }
+
+      const gitMetadata =
+        gitMetadataMap.get(relativePath) ?? fallbackGitMetadata();
+
+      return {
+        ...(validationResult.data as Frontmatter<typeof config.contentType>),
+        contentType: config.contentType,
+        fileName,
+        ...gitMetadata,
+      };
+    });
+
+    fs.writeFileSync(outputPath, JSON.stringify(metadataList), 'utf8');
     console.log(
       `✅ Generated ${config.contentType} API at public/api/${config.contentType}.json`,
     );
