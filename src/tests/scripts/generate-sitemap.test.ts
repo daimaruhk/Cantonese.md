@@ -99,19 +99,22 @@ describe('generate-sitemap', () => {
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://cantonese.md/idioms/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://cantonese.md/idioms/${encodeURIComponent('賣魚佬沖涼')}/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <lastmod>2026-04-15</lastmod>
   </url>
   <url>
     <loc>https://cantonese.md/idioms/${encodeURIComponent('菠蘿雞')}/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <lastmod>2026-04-10</lastmod>
+  </url>
+  <url>
+    <loc>https://cantonese.md/idioms/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-04-15</lastmod>
   </url>
 </urlset>`);
   });

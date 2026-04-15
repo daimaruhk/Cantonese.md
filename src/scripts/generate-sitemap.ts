@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { normalizeUrl } from '@/lib/utils';
+import { getDateString, normalizeUrl } from '@/lib/utils';
 import { contentRegistry } from '@/configurations/registry';
 import { getAllMetadata } from '@/configurations/utils';
 
@@ -9,7 +9,7 @@ type SitemapEntry = {
   loc: string;
   changefreq: string;
   priority: string;
-  // TODO: add lastmod
+  lastmod?: string;
 };
 
 const STATIC_PATHS = ['', 'about-us', 'contribute'];
@@ -21,6 +21,7 @@ export const main = () => {
   const urls: SitemapEntry[] = [];
 
   STATIC_PATHS.forEach((path) => {
+    // There is no accurate way to get the lastmod for static pages
     urls.push({
       loc: normalizeUrl(path),
       changefreq: 'monthly',
@@ -30,22 +31,29 @@ export const main = () => {
 
   // Content list + detail pages
   Object.values(contentRegistry).forEach(({ contentType }) => {
+    // Detail pages
+    const metadataList = getAllMetadata(contentType);
+    const mostRecentUpdatedAtInMilliseconds = Math.max(
+      ...metadataList.map((metadata) => new Date(metadata.updatedAt).getTime()),
+    );
+    const mostRecentUpdatedAt = getDateString(
+      new Date(mostRecentUpdatedAtInMilliseconds),
+    );
+    metadataList.forEach(({ fileName, updatedAt }) => {
+      urls.push({
+        loc: normalizeUrl(`${contentType}/${encodeURIComponent(fileName)}`),
+        changefreq: 'monthly',
+        priority: '0.6',
+        lastmod: updatedAt,
+      });
+    });
+
     // List page
     urls.push({
       loc: normalizeUrl(contentType),
       changefreq: 'weekly',
       priority: '0.8',
-    });
-
-    // Detail pages
-    const metadataList = getAllMetadata(contentType);
-
-    metadataList.forEach(({ fileName }) => {
-      urls.push({
-        loc: normalizeUrl(`${contentType}/${encodeURIComponent(fileName)}`),
-        changefreq: 'monthly',
-        priority: '0.6',
-      });
+      lastmod: mostRecentUpdatedAt,
     });
   });
 
@@ -57,10 +65,13 @@ export const main = () => {
       indent(`<loc>${url.loc}</loc>`, 2),
       indent(`<changefreq>${url.changefreq}</changefreq>`, 2),
       indent(`<priority>${url.priority}</priority>`, 2),
+      url.lastmod && indent(`<lastmod>${url.lastmod}</lastmod>`, 2),
       indent(`</url>`, 1),
     ]),
     '</urlset>',
-  ].join('\n');
+  ]
+    .filter((line) => !!line)
+    .join('\n');
 
   fs.writeFileSync(outputPath, xml, 'utf8');
   console.log(

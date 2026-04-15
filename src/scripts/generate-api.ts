@@ -12,9 +12,10 @@ import {
   getContentMetadataDirectory,
   getContentMetadataFilePath,
 } from '@/configurations/utils';
+import { getDateString } from '@/lib/utils';
 
 const fallbackGitMetadata = (): GitMetadata => {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getDateString(new Date());
   return {
     contributors: ['Development'],
     createdAt: today,

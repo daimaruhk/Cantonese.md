@@ -44,3 +44,5 @@ export const normalizeUrl = (path?: string) => {
 
   return `${url}${path}/`;
 };
+
+export const getDateString = (date: Date) => date.toISOString().slice(0, 10);
