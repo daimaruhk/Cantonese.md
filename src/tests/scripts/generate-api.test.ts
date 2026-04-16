@@ -13,11 +13,15 @@ vi.mock('node:fs', () => ({
 
 vi.mock('node:child_process', () => ({
   execFileSync: vi.fn().mockImplementation(() => {
-    return `COMMIT_START|Alice|2026-04-15
+    return `COMMIT_START|Bob|2026-04-20T12:34:56+00:00
+
+src/contents/idioms/啞仔食黃蓮.md
+COMMIT_START|Alice|2026-04-15T12:34:56+00:00
 
 src/contents/idioms/賣魚佬沖涼.md
-COMMIT_START|Bob|2026-04-01
+COMMIT_START|Bob|2026-04-01T12:34:56+00:00
 
+src/contents/idioms/啞仔食黃蓮.md
 src/contents/idioms/賣魚佬沖涼.md
 `;
   }),
@@ -25,20 +29,31 @@ src/contents/idioms/賣魚佬沖涼.md
 
 vi.mock(import('@/configurations/utils'), async (importOriginal) => {
   const actual = await importOriginal();
-  const mockFrontmatter: Frontmatter<'idioms'> = {
+  const mockFrontmatter1: Frontmatter<'idioms'> = {
     id: 'aaaaaaaaaaaa',
     term: '賣魚佬沖涼',
     termJyutping: 'maai6 jyu4 lou2 cung1 loeng4',
     answer: '冇晒聲氣',
     answerJyutping: 'mou5 saai3 seng1 hei3',
   };
+  const mockFrontmatter2: Frontmatter<'idioms'> = {
+    id: 'bbbbbbbbbbbb',
+    term: '啞仔食黃蓮',
+    termJyutping: 'aa3 zai2 sik6 wong4 lin4',
+    answer: '有苦自己知',
+    answerJyutping: 'jau5 fu2 zi6 gei2 zi1',
+  };
   const mockGetContentFileNames: typeof actual.getContentFileNames = () => [
     '賣魚佬沖涼',
+    '啞仔食黃蓮',
   ];
-  const mockReadContentFile: typeof actual.readContentFile = () => ({
-    frontmatter: mockFrontmatter,
-    content: '# Test content',
-  });
+  const mockReadContentFile: typeof actual.readContentFile = (_, fileName) => {
+    if (fileName === '賣魚佬沖涼') {
+      return { frontmatter: mockFrontmatter1, content: '# Test Content' };
+    } else {
+      return { frontmatter: mockFrontmatter2, content: '# Test Content' };
+    }
+  };
 
   return {
     ...actual,
@@ -68,6 +83,18 @@ describe('main', () => {
         `/mock-cwd/public/api/${contentType}.json`,
         JSON.stringify([
           {
+            id: 'bbbbbbbbbbbb',
+            term: '啞仔食黃蓮',
+            termJyutping: 'aa3 zai2 sik6 wong4 lin4',
+            answer: '有苦自己知',
+            answerJyutping: 'jau5 fu2 zi6 gei2 zi1',
+            contentType,
+            fileName: '啞仔食黃蓮',
+            contributors: ['Bob'],
+            createdAt: '2026-04-01T12:34:56+00:00',
+            updatedAt: '2026-04-20T12:34:56+00:00',
+          },
+          {
             id: 'aaaaaaaaaaaa',
             term: '賣魚佬沖涼',
             termJyutping: 'maai6 jyu4 lou2 cung1 loeng4',
@@ -76,8 +103,8 @@ describe('main', () => {
             contentType,
             fileName: '賣魚佬沖涼',
             contributors: ['Alice', 'Bob'],
-            createdAt: '2026-04-01',
-            updatedAt: '2026-04-15',
+            createdAt: '2026-04-01T12:34:56+00:00',
+            updatedAt: '2026-04-15T12:34:56+00:00',
           },
         ]),
         'utf8',

@@ -12,10 +12,9 @@ import {
   getContentMetadataDirectory,
   getContentMetadataFilePath,
 } from '@/configurations/utils';
-import { getDateString } from '@/lib/utils';
 
 const fallbackGitMetadata = (): GitMetadata => {
-  const today = getDateString(new Date());
+  const today = new Date().toISOString();
   return {
     contributors: ['Development'],
     createdAt: today,
@@ -33,7 +32,7 @@ const getBatchedGitMetadata = (): Map<string, GitMetadata> => {
         '-c',
         'core.quotePath=false',
         'log',
-        '--format=COMMIT_START|%aN|%as',
+        '--format=COMMIT_START|%aN|%aI',
         '--name-only',
         '--',
         'src/contents/',
@@ -44,17 +43,17 @@ const getBatchedGitMetadata = (): Map<string, GitMetadata> => {
     /**
      * Sample output format:
      *
-     * COMMIT_START|Alice|2024-01-02
+     * COMMIT_START|Alice|2024-01-02T12:34:56+00:00
      *
      * src/contents/test1.md
      * src/contents/test2.md
-     * COMMIT_START|Bob|2024-01-01
+     * COMMIT_START|Bob|2024-01-01T12:34:56+00:00
      *
      * src/contents/test1.md
      */
 
     let currentAuthor = '';
-    let currentDate = '';
+    let currentTimestamp = '';
 
     // Commits arrive newest-first: first seen date = updatedAt, last = createdAt
     const lines = output.split('\n').map((line) => line.trim());
@@ -62,19 +61,19 @@ const getBatchedGitMetadata = (): Map<string, GitMetadata> => {
       if (line.startsWith('COMMIT_START|')) {
         const parts = line.split('|');
         currentAuthor = parts[1] ?? '';
-        currentDate = parts[2] ?? '';
-      } else if (!!line && !!currentAuthor && !!currentDate) {
+        currentTimestamp = parts[2] ?? '';
+      } else if (!!line && !!currentAuthor && !!currentTimestamp) {
         const existing = result.get(line);
         if (existing) {
-          existing.createdAt = currentDate;
+          existing.createdAt = currentTimestamp;
           if (!existing.contributors.includes(currentAuthor)) {
             existing.contributors.push(currentAuthor);
           }
         } else {
           result.set(line, {
             contributors: [currentAuthor],
-            createdAt: currentDate,
-            updatedAt: currentDate,
+            createdAt: currentTimestamp,
+            updatedAt: currentTimestamp,
           });
         }
       }
@@ -98,30 +97,35 @@ export const main = () => {
     const outputPath = getContentMetadataFilePath(config.contentType);
     const fileNames = getContentFileNames(config.contentType);
 
-    const metadataList = fileNames.map((fileName) => {
-      const { frontmatter } = readContentFile(config.contentType, fileName);
-      const schema = contentRegistry[config.contentType].schema;
-      const validationResult = schema.safeParse(frontmatter);
+    const metadataList = fileNames
+      .map((fileName) => {
+        const { frontmatter } = readContentFile(config.contentType, fileName);
+        const schema = contentRegistry[config.contentType].schema;
+        const validationResult = schema.safeParse(frontmatter);
 
-      const absolutePath = getContentFilePath(config.contentType, fileName);
-      const relativePath = path.relative(process.cwd(), absolutePath);
+        const absolutePath = getContentFilePath(config.contentType, fileName);
+        const relativePath = path.relative(process.cwd(), absolutePath);
 
-      if (!validationResult.success) {
-        throw new Error(
-          `Invalid frontmatter in "${relativePath}": ${z.prettifyError(validationResult.error)}`,
-        );
-      }
+        if (!validationResult.success) {
+          throw new Error(
+            `Invalid frontmatter in "${relativePath}": ${z.prettifyError(validationResult.error)}`,
+          );
+        }
 
-      const gitMetadata =
-        gitMetadataMap.get(relativePath) ?? fallbackGitMetadata();
+        const gitMetadata =
+          gitMetadataMap.get(relativePath) ?? fallbackGitMetadata();
 
-      return {
-        ...(validationResult.data as Frontmatter<typeof config.contentType>),
-        contentType: config.contentType,
-        fileName,
-        ...gitMetadata,
-      };
-    });
+        return {
+          ...(validationResult.data as Frontmatter<typeof config.contentType>),
+          contentType: config.contentType,
+          fileName,
+          ...gitMetadata,
+        };
+      })
+      .toSorted(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(), // Sort by updatedAt descending
+      );
 
     fs.writeFileSync(outputPath, JSON.stringify(metadataList), 'utf8');
     console.log(

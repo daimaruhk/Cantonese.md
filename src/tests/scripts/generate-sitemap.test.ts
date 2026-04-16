@@ -21,8 +21,8 @@ vi.mock(import('@/configurations/utils'), async (importOriginal) => {
       contentType: 'idioms',
       fileName: '賣魚佬沖涼',
       contributors: ['Test Author'],
-      createdAt: '2026-04-01',
-      updatedAt: '2026-04-15',
+      createdAt: '2026-04-01T00:00:00.000Z',
+      updatedAt: '2026-04-15T00:00:00.000Z',
     },
     {
       id: 'bbbbbbbbbbbb',
@@ -33,8 +33,8 @@ vi.mock(import('@/configurations/utils'), async (importOriginal) => {
       contentType: 'idioms',
       fileName: '菠蘿雞',
       contributors: ['Test Author'],
-      createdAt: '2026-04-02',
-      updatedAt: '2026-04-10',
+      createdAt: '2026-04-02T00:00:00.000Z',
+      updatedAt: '2026-04-10T00:00:00.000Z',
     },
   ];
   return {
@@ -102,19 +102,19 @@ describe('generate-sitemap', () => {
     <loc>https://cantonese.md/idioms/${encodeURIComponent('賣魚佬沖涼')}/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <lastmod>2026-04-15</lastmod>
+    <lastmod>2026-04-15T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://cantonese.md/idioms/${encodeURIComponent('菠蘿雞')}/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <lastmod>2026-04-10</lastmod>
+    <lastmod>2026-04-10T00:00:00.000Z</lastmod>
   </url>
   <url>
     <loc>https://cantonese.md/idioms/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <lastmod>2026-04-15</lastmod>
+    <lastmod>2026-04-15T00:00:00.000Z</lastmod>
   </url>
 </urlset>`);
   });

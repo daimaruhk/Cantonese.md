@@ -19,6 +19,7 @@ import { Typography } from '@/components/ui/Typography';
 import { Backdrop } from '@/components/Backdrop';
 import { Section } from '@/components/Section';
 import {
+  getDateString,
   getGithubMarkdownUrl,
   getGithubProfilePicUrl,
   getGithubProfileUrl,
@@ -116,14 +117,26 @@ export const HeroSection = <T extends ContentType>({
             <IconCalendar size={16} />
             <Typography variant="muted">創建日期</Typography>
           </div>
-          <Typography className="text-sm">{contentData.createdAt}</Typography>
+          <Typography
+            className="text-sm"
+            as="time"
+            dateTime={contentData.createdAt}
+          >
+            {getDateString(new Date(contentData.createdAt))}
+          </Typography>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <IconGitCommit size={16} />
             <Typography variant="muted">最後更新</Typography>
           </div>
-          <Typography className="text-sm">{contentData.updatedAt}</Typography>
+          <Typography
+            className="text-sm"
+            as="time"
+            dateTime={contentData.updatedAt}
+          >
+            {getDateString(new Date(contentData.updatedAt))}
+          </Typography>
         </div>
       </div>
     </Section>

@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { getDateString, normalizeUrl } from '@/lib/utils';
+import { normalizeUrl } from '@/lib/utils';
 import { contentRegistry } from '@/configurations/registry';
 import { getAllMetadata } from '@/configurations/utils';
 
@@ -36,9 +36,9 @@ export const main = () => {
     const mostRecentUpdatedAtInMilliseconds = Math.max(
       ...metadataList.map((metadata) => new Date(metadata.updatedAt).getTime()),
     );
-    const mostRecentUpdatedAt = getDateString(
-      new Date(mostRecentUpdatedAtInMilliseconds),
-    );
+    const mostRecentUpdatedAt = new Date(
+      mostRecentUpdatedAtInMilliseconds,
+    ).toISOString();
     metadataList.forEach(({ fileName, updatedAt }) => {
       urls.push({
         loc: normalizeUrl(`${contentType}/${encodeURIComponent(fileName)}`),
