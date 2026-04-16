@@ -31,10 +31,14 @@ export const ContentGrid = <T extends ContentType>({
     }
   };
 
-  const refreshEntriesEvent = useEffectEvent(refreshEntries);
+  const initializeEntriesEvent = useEffectEvent(() => {
+    if (entries) {
+      setCurrentEntries(entries.slice(0, 4)); // render the most recent 4 entries initially
+    }
+  });
 
   useEffect(() => {
-    refreshEntriesEvent();
+    initializeEntriesEvent();
   }, [entries]);
 
   const renderer = renderers[contentType];
