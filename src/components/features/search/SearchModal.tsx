@@ -62,7 +62,7 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
     onOpenChange(false);
   };
 
-  const handleSelect = async (metadata: ContentMetadata<ContentType>) => {
+  const handleSelect = async (metadata: ContentMetadata) => {
     closeModal();
     await router.push(`/${metadata.contentType}/${metadata.fileName}`);
   };

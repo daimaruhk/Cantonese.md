@@ -16,12 +16,13 @@ export type SearchMetadata = {
   searchJyutping: string;
 };
 
-export type ContentMetadata<T extends ContentType> = Frontmatter<T> &
-  GitMetadata &
-  SearchMetadata & {
-    fileName: string;
-    contentType: T;
-  };
+export type ContentMetadata<T extends ContentType = ContentType> =
+  Frontmatter<T> &
+    GitMetadata &
+    SearchMetadata & {
+      fileName: string;
+      contentType: T;
+    };
 
 export type ContentData<T extends ContentType = ContentType> =
   ContentMetadata<T> & {
