@@ -15,7 +15,7 @@ export const SEO = ({
   jsonLd,
   ...rest
 }: SeoMeta) => {
-  title = title === toTitle(title) ? title : toTitle(title);
+  title = toTitle(title);
 
   return (
     <Head>
