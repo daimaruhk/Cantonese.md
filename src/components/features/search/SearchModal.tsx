@@ -28,7 +28,7 @@ import { Typography } from '@/components/ui/Typography';
 import { useSearch, type SearchScope } from '@/hooks/useSearch';
 import { contentRegistry, type ContentType } from '@/configurations/registry';
 import { renderers } from '@/configurations/renderers';
-import type { SearchEntry } from '@/configurations/searchProviders';
+import type { ContentMetadata } from '@/configurations/types';
 import { normalize } from '@/lib/utils';
 
 type SearchModalProps = {
@@ -62,9 +62,9 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
     onOpenChange(false);
   };
 
-  const handleSelect = async (searchEntry: SearchEntry) => {
+  const handleSelect = async (metadata: ContentMetadata<ContentType>) => {
     closeModal();
-    await router.push(searchEntry.path);
+    await router.push(`/${metadata.contentType}/${metadata.fileName}`);
   };
 
   return (
@@ -139,17 +139,17 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
               <CommandEmpty>揾唔到任何嘢</CommandEmpty>
             ) : (
               <CommandGroup heading="搜尋結果">
-                {results.map((searchEntry) => (
+                {results.map((metadata) => (
                   <CommandItem
-                    key={searchEntry.id}
-                    value={`${searchEntry.searchText} ${searchEntry.searchJyutping}`}
+                    key={metadata.id}
+                    value={`${metadata.searchText} ${metadata.searchJyutping}`}
                     onSelect={() => {
-                      handleSelect(searchEntry);
+                      handleSelect(metadata);
                     }}
                   >
-                    {renderSearchResult(searchEntry)}
+                    {renderSearchResult(metadata)}
                     <Badge variant="secondary">
-                      {contentRegistry[searchEntry.contentType].label}
+                      {contentRegistry[metadata.contentType].label}
                     </Badge>
                   </CommandItem>
                 ))}
@@ -166,7 +166,8 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
   Introduce a type-safe dispatch helper to render search results based on their content type,
   to avoid 'Correlated Union' problem: TypeScript 
   cannot guarantee that the renderer for a specific contentType matches 
-  the union member of the current searchEntry during iteration.
+  the union member of the current metadata during iteration.
 */
-const renderSearchResult = <T extends ContentType>(entry: SearchEntry<T>) =>
-  renderers[entry.contentType].renderSearchCard(entry);
+const renderSearchResult = <T extends ContentType>(
+  metadata: ContentMetadata<T>,
+) => renderers[metadata.contentType].renderSearchCard(metadata);

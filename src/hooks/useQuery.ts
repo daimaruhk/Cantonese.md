@@ -1,7 +1,5 @@
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { contentTypes, type ContentType } from '@/configurations/registry';
-import type { ContentMetadata } from '@/configurations/types';
-import { searchProviders } from '@/configurations/searchProviders';
 import { fetchContentMetadata } from '@/lib/api';
 
 type QueryOptions<T extends ContentType = ContentType> = {
@@ -25,20 +23,12 @@ export const useContentMetadataQuery = <T extends ContentType>(
   return useQuery(getQueryOptions(options));
 };
 
-const createSearchQuery = <T extends ContentType>(
-  options: QueryOptions<T>,
-) => ({
-  ...getQueryOptions(options),
-  select: (metadataList: ContentMetadata<T>[]) =>
-    metadataList.map(searchProviders[options.contentType].toSearchEntry),
-});
-
-export const useSearchEntriesQuery = ({
+export const useContentMetadataQueries = ({
   enabled,
 }: Pick<QueryOptions, 'enabled'>) => {
   return useQueries({
     queries: contentTypes.map((contentType) =>
-      createSearchQuery({ contentType, enabled }),
+      getQueryOptions({ contentType, enabled }),
     ),
   });
 };

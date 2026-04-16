@@ -4,7 +4,11 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { z } from 'zod';
 import { contentRegistry } from '@/configurations/registry';
-import type { Frontmatter, GitMetadata } from '@/configurations/types';
+import type {
+  ContentMetadata,
+  Frontmatter,
+  GitMetadata,
+} from '@/configurations/types';
 import {
   getContentFileNames,
   readContentFile,
@@ -12,6 +16,7 @@ import {
   getContentMetadataDirectory,
   getContentMetadataFilePath,
 } from '@/configurations/utils';
+import { searchProviders } from '@/configurations/searchProviders';
 
 const fallbackGitMetadata = (): GitMetadata => {
   const today = new Date().toISOString();
@@ -114,13 +119,21 @@ export const main = () => {
 
         const gitMetadata =
           gitMetadataMap.get(relativePath) ?? fallbackGitMetadata();
+        const safeFrontmatter = validationResult.data as Frontmatter<
+          typeof config.contentType
+        >;
+        const searchMetadata =
+          searchProviders[config.contentType].toSearchEntry(safeFrontmatter);
 
-        return {
-          ...(validationResult.data as Frontmatter<typeof config.contentType>),
-          contentType: config.contentType,
-          fileName,
+        const contentMetadata: ContentMetadata<typeof config.contentType> = {
+          ...safeFrontmatter,
           ...gitMetadata,
+          ...searchMetadata,
+          fileName,
+          contentType: config.contentType,
         };
+
+        return contentMetadata;
       })
       .toSorted(
         (a, b) =>

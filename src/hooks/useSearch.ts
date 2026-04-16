@@ -1,8 +1,8 @@
 import { useDeferredValue, useState } from 'react';
 import type { ContentType } from '@/configurations/registry';
-import { type SearchEntry } from '@/configurations/searchProviders';
+import type { ContentMetadata } from '@/configurations/types';
 import { normalize } from '@/lib/utils';
-import { useSearchEntriesQuery } from './useQuery';
+import { useContentMetadataQueries } from './useQuery';
 
 export type SearchScope = ContentType | 'all';
 
@@ -11,18 +11,18 @@ type UseSearchOptions = {
 };
 
 export const useSearch = ({ enabled }: UseSearchOptions) => {
-  const queryResults = useSearchEntriesQuery({ enabled });
+  const queryResults = useContentMetadataQueries({ enabled });
   const [scope, setScope] = useState<SearchScope>('all');
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query);
 
   const isLoading = queryResults.some((result) => result.isLoading);
   const isError = queryResults.some((result) => result.isError);
-  const searchEntries =
+  const metadataList =
     isLoading || isError
       ? []
       : queryResults.flatMap((result) => result.data ?? []);
-  const results = filterSearchEntries(searchEntries, deferredQuery, scope);
+  const results = filterMetadataList(metadataList, deferredQuery, scope);
 
   const reset = () => {
     setQuery('');
@@ -41,8 +41,8 @@ export const useSearch = ({ enabled }: UseSearchOptions) => {
   };
 };
 
-const filterSearchEntries = <T extends ContentType>(
-  searchEntries: SearchEntry<T>[],
+const filterMetadataList = <T extends ContentType>(
+  metadataList: ContentMetadata<T>[],
   query: string,
   scope: SearchScope,
   limit = 10,
@@ -53,13 +53,13 @@ const filterSearchEntries = <T extends ContentType>(
     return [];
   }
 
-  return searchEntries
-    .filter((entry) => {
-      if (scope !== 'all' && entry.contentType !== scope) {
+  return metadataList
+    .filter((metadata) => {
+      if (scope !== 'all' && metadata.contentType !== scope) {
         return false;
       }
 
-      if (normalize(entry.searchText).includes(normalizedQuery)) {
+      if (normalize(metadata.searchText).includes(normalizedQuery)) {
         return true;
       }
 
@@ -68,7 +68,7 @@ const filterSearchEntries = <T extends ContentType>(
       // Example: Target "nei5 hou2" -> " nei5 hou2" (note the leading space)
       // Query "hou" -> " hou" (Matches!)
       // Query "ou" -> " ou" (Does NOT match, preventing an unwanted infix match on 'h(ou)2')
-      const formattedSearchJyutping = ` ${normalize(entry.searchJyutping)}`;
+      const formattedSearchJyutping = ` ${normalize(metadata.searchJyutping)}`;
       const formattedQueryForJyutping = ` ${normalizedQuery.replace(/\s+/g, ' ')}`;
       if (formattedSearchJyutping.includes(formattedQueryForJyutping)) {
         return true;

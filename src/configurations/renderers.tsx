@@ -6,13 +6,12 @@ import {
 import { Typography } from '@/components/ui/Typography';
 import { type ContentType } from './registry';
 import type { ContentMetadata, ContentData } from './types';
-import type { SearchEntry } from './searchProviders';
 
 type Renderer = {
   [K in ContentType]: {
     renderCard: (metadata: ContentMetadata<K>) => React.ReactNode;
     renderCardSkeleton: () => React.ReactNode;
-    renderSearchCard: (searchEntry: SearchEntry<K>) => React.ReactNode;
+    renderSearchCard: (metadata: ContentMetadata<K>) => React.ReactNode;
     renderContentGridSubtitle: () => string;
     renderListPageSubtitle: () => string;
     renderDetailPageHero: (contentData: ContentData<K>) => React.ReactNode;
@@ -23,13 +22,13 @@ export const renderers: Renderer = {
   idioms: {
     renderCard: (metadata) => <IdiomCard metadata={metadata} />,
     renderCardSkeleton: () => <IdiomCardSkeleton />,
-    renderSearchCard: (searchEntry) => (
+    renderSearchCard: (metadata) => (
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <span className="truncate font-semibold tracking-tight">
-          {searchEntry.entry.term}
+          {metadata.term}
         </span>
         <span className="text-muted-foreground truncate text-sm">
-          {searchEntry.entry.answer}
+          {metadata.answer}
         </span>
       </div>
     ),

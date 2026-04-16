@@ -11,8 +11,14 @@ export type GitMetadata = {
   updatedAt: string;
 };
 
+export type SearchMetadata = {
+  searchText: string;
+  searchJyutping: string;
+};
+
 export type ContentMetadata<T extends ContentType> = Frontmatter<T> &
-  GitMetadata & {
+  GitMetadata &
+  SearchMetadata & {
     fileName: string;
     contentType: T;
   };
