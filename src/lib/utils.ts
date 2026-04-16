@@ -7,10 +7,6 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
 
-export const isMobile = () => {
-  return typeof window !== 'undefined' && window.innerWidth < 768;
-};
-
 export const getGithubHomepageUrl = () => homepage;
 
 export const getGithubMarkdownUrl = (

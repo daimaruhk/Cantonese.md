@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { IconArrowRight, IconRefresh } from '@tabler/icons-react';
 import { Button, buttonVariants } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Link } from '@/components/ui/Link';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Typography } from '@/components/ui/Typography';
-import { cn, isMobile } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import type { ContentMetadata } from '@/configurations/types';
 
 type IdiomCardProps = {
@@ -14,22 +14,65 @@ type IdiomCardProps = {
 
 export const IdiomCard = ({ metadata }: IdiomCardProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const onMouseLeave = () => isMobile() && setIsFlipped(false); // when user clicks anywhere outside the card, flip it back
+  const onClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Only flip when user clicks on the card itself, not the link
+    if (e.target !== buttonRef.current) {
+      e.preventDefault();
+      setIsFlipped((prev) => !prev);
+    }
+  };
 
-  const onFlip = () => isMobile() && setIsFlipped(true);
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target === e.currentTarget) {
+      // Only flip when user focuses on the card itself, not the link
+      e.preventDefault();
+      setIsFlipped((prev) => !prev);
+    }
+  };
 
-  const onUnflip = () => isMobile() && setIsFlipped(false);
+  const onPointerEnter = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === 'mouse') {
+      setIsFlipped(true);
+    }
+  };
+
+  const onPointerLeave = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === 'mouse') {
+      setIsFlipped(false);
+    }
+  };
+
+  const onBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    if (e.relatedTarget === buttonRef.current) {
+      // User is tabbing to the link, don't flip back
+      return;
+    }
+
+    setIsFlipped(false);
+  };
 
   return (
-    <div className="group perspective-distant" onMouseLeave={onMouseLeave}>
+    <div
+      className="group perspective-distant"
+      tabIndex={0}
+      role="button"
+      onClick={onClick}
+      onKeyDown={onKeyDown}
+      onBlur={onBlur}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
+      aria-expanded={isFlipped}
+      aria-label={`歇後語咭片: ${metadata.term}`}
+    >
       <div
         className={cn(
-          'relative aspect-5/7 transition-transform duration-700 transform-3d md:group-hover:rotate-y-180',
+          'relative aspect-5/7 transition-transform duration-700 transform-3d',
           isFlipped ? 'rotate-y-180' : '',
         )}
       >
-        <Card className={cardClassNames} onClick={onFlip}>
+        <Card className={cardClassNames} aria-hidden={isFlipped}>
           <Watermark />
           <CardContent className="relative z-10">
             <Typography variant="h3">{metadata.term}</Typography>
@@ -47,7 +90,10 @@ export const IdiomCard = ({ metadata }: IdiomCardProps) => {
             翻轉
           </span>
         </Card>
-        <Card className={cn(cardClassNames, 'rotate-y-180')} onClick={onUnflip}>
+        <Card
+          className={cn(cardClassNames, 'rotate-y-180')}
+          aria-hidden={!isFlipped}
+        >
           <Watermark />
           <CardContent className="relative z-10">
             <Typography variant="h3">{metadata.answer}</Typography>
@@ -57,11 +103,10 @@ export const IdiomCard = ({ metadata }: IdiomCardProps) => {
           </CardContent>
           <Button
             variant="link"
+            tabIndex={isFlipped ? 0 : -1} // Only focusable when card is flipped
+            ref={buttonRef}
             render={
-              <Link
-                href={`/idioms/${encodeURIComponent(metadata.fileName)}`}
-                onClick={(e) => e.stopPropagation()} // Prevent the card from flipping back when clicking the link
-              />
+              <Link href={`/idioms/${encodeURIComponent(metadata.fileName)}`} />
             }
             className={cardButtonClassNames}
             nativeButton={false}
