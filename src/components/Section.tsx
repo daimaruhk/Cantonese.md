@@ -20,7 +20,7 @@ export const Section = ({
   const isHeaderVisible = title || subtitle || actionButton;
   return (
     <Container
-      className={cn('py-16 first:pt-0 last:pb-0 md:py-20 lg:py-24', className)}
+      className={cn('py-12 first:pt-0 last:pb-0 md:py-16 lg:py-20', className)}
     >
       {isHeaderVisible && (
         <div className="relative mb-8 flex flex-col items-center gap-3">

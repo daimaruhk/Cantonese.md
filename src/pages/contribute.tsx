@@ -4,6 +4,7 @@ import {
   IconPalette,
   IconSparkles,
   IconBrandGithub,
+  IconMail,
 } from '@tabler/icons-react';
 import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
@@ -54,16 +55,27 @@ export default function ContributePage() {
         <Backdrop />
         <Typography variant="h1">點樣貢獻</Typography>
         <Typography variant="lead">
-          Cantonese.md 係一個開源專案，你可以透過以下方式為社群出一分力
+          Cantonese.md 係一個開源計劃，你可以透過以下方式為社群出一分力
         </Typography>
-        <Button
-          size="xl"
-          render={<Link href={getGithubHomepageUrl()} />}
-          nativeButton={false}
-        >
-          <IconBrandGithub />
-          前往 GitHub 貢獻
-        </Button>
+        <div className="flex flex-col gap-4 md:flex-row">
+          <Button
+            size="xl"
+            render={<Link href={getGithubHomepageUrl()} />}
+            nativeButton={false}
+          >
+            <IconBrandGithub className="mr-2 size-5" />
+            前往 GitHub 貢獻
+          </Button>
+          <Button
+            size="xl"
+            variant="outline"
+            render={<Link href="mailto:daimaruhk@duck.com" />}
+            nativeButton={false}
+          >
+            <IconMail className="mr-2 size-5" />
+            電郵至 daimaruhk@duck.com
+          </Button>
+        </div>
       </Section>
 
       <Section className="flex max-w-3xl flex-col gap-16">
