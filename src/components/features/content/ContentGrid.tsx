@@ -5,7 +5,7 @@ import { Link } from '@/components/ui/Link';
 import { Section } from '@/components/Section';
 import { useContentMetadataQuery } from '@/hooks/useQuery';
 import type { ContentMetadata } from '@/configurations/types';
-import { contentRegistry, type ContentType } from '@/configurations/registry';
+import { type ContentType } from '@/configurations/registry';
 import { renderers } from '@/configurations/renderers';
 import { CardGrid } from './CardGrid';
 
@@ -45,7 +45,7 @@ export const ContentGrid = <T extends ContentType>({
 
   return (
     <Section
-      title={contentRegistry[contentType].label}
+      title={renderer.renderContentGridTitle()}
       subtitle={renderer.renderContentGridSubtitle()}
       actionButton={
         <>
