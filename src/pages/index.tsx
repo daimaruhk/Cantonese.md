@@ -21,7 +21,7 @@ export default function Home() {
       seo={{
         title: '開源粵語知識庫',
         description:
-          '一個開源嘅粵語知識庫，記錄歇後語、俗語、文化。所有內容以 Markdown 格式保存，為粵語保育同 AI 訓練提供高質素數據。',
+          '一個開源嘅粵語知識庫，收錄歇後語、俗語同文化。所有內容用 Markdown 格式保存，為粵語保育同 AI 訓練提供高質素嘅數據。',
         canonicalUrl: normalizeUrl(),
         ogType: 'website',
       }}
@@ -37,19 +37,20 @@ const features = [
   {
     icon: <IconArchive />,
     title: '保育粵語文化',
-    description: '記錄粵語嘅歇後語、俗語、文化，等依啲珍貴嘅語言遺產唔會消失。',
+    description:
+      '記錄粵語嘅歇後語、俗語同文化，唔好等依啲珍貴嘅語言遺產靜靜咁消失。',
   },
   {
     icon: <IconBook />,
     title: '開源 — 每個人都可以貢獻',
     description:
-      '所有內容完全開源，任何人都可以透過 GitHub 貢獻，一齊擴建依個資料庫。',
+      '所有內容完全開源，任何人都可以透過 GitHub 出一分力，一齊充實依個資料庫。',
   },
   {
     icon: <IconRobot />,
     title: '高質素 AI 訓練數據',
     description:
-      '所有內容以結構化嘅 Markdown 格式保存，可以直接用作高質素嘅粵語 AI 訓練數據。',
+      '所有內容用結構化嘅 Markdown 格式保存，可以直接攞嚟做高質素嘅粵語 AI 訓練數據。',
   },
 ];
 
@@ -63,10 +64,10 @@ const HeroSection = () => {
         >
           粵語文化
           <br />
-          存檔計劃
+          傳承計劃
         </Typography>
         <Typography variant="lead" className="text-center md:text-left">
-          我哋致力記錄、整理同傳承粵語嘅精髓。由民間智慧到當代語境，為下一代保留最地道嘅粵語印記。
+          我哋用心記低、整理同傳承粵語最精彩嘅部分。由老一輩嘅民間智慧到而家嘅潮語，為下一代留住最地道嘅粵語印記。
         </Typography>
         <div className="flex flex-wrap items-center gap-4">
           <Button
@@ -98,7 +99,7 @@ const HeroSection = () => {
               <Typography variant="muted">每日一語</Typography>
               <CardTitle variant="h4">阿茂整餅</CardTitle>
               <CardDescription>
-                用嚟形容人多此一舉，結果只係自製麻煩。
+                形容人多此一舉，結果自己攞嚟煩。
               </CardDescription>
             </CardHeader>
           </Card>
@@ -112,7 +113,7 @@ const IntroductionSection = () => {
   return (
     <Section
       title="點解要搞 Cantonese.md？"
-      subtitle="我哋相信，保育文化係每一個人嘅責任。"
+      subtitle="保育粵語文化，人人都有份。"
     >
       <div className="grid gap-3 md:grid-cols-3 md:gap-6">
         {features.map((feature) => (

@@ -22,21 +22,21 @@ const contributions = [
     title: '內容貢獻',
     subtitle: '擴展粵語資料庫',
     description:
-      '你可以透過 GitHub 貢獻新內容（例如未收錄嘅歇後語，長輩成日講嘅俗語，或者最新嘅網絡用語）、豐富現有內容、糾正錯誤等，我哋希望建立最齊全嘅粵語資料庫。',
+      '你可以透過 GitHub 加入新內容，例如未收錄嘅歇後語、老一輩成日講嘅俗語、又或者最新嘅網絡潮語。改正錯漏、豐富現有內容，幫我哋建立最齊全嘅粵語資料庫。',
   },
   {
     icon: <IconPalette />,
     title: '用戶體驗',
-    subtitle: '改善網站設計同用戶體驗',
+    subtitle: '幫手改善網站設計',
     description:
-      '如果你擅長設計或者網頁開發，我哋好歡迎你幫手改善網站嘅介面設計同用戶體驗，令所有人都可以更加舒服、流暢咁瀏覽。',
+      '如果你擅長設計或者網頁開發，歡迎你嚟幫手改善網站嘅介面同使用體驗，令大家用得更加舒服、流暢。',
   },
   {
     icon: <IconSparkles />,
     title: '任何貢獻',
-    subtitle: '任何有價值嘅諗法',
+    subtitle: '你嘅諗法好重要',
     description:
-      '無論係發現網站嘅 Bug、建議新功能、改善文檔、或者純粹幫手宣傳依個計劃，只要你認為對保育粵語有價值嘅嘢，我哋都好歡迎。',
+      '無論係發現 Bug、建議新功能、改善網站內容，定係幫手同身邊嘅人宣傳依個計劃，只要你覺得對保育粵語有幫助嘅嘢，我哋都非常歡迎。',
   },
 ];
 
@@ -46,7 +46,7 @@ export default function ContributePage() {
       seo={{
         title: '點樣貢獻',
         description:
-          '暸解點樣為 Cantonese.md 出一分力。我哋歡迎任何人一齊參與開源保育粵語文化。',
+          '暸解點樣為 Cantonese.md 出一分力。歡迎任何人一齊參與，用開源方式保育粵語文化。',
         canonicalUrl: normalizeUrl('contribute'),
         ogType: 'website',
       }}
@@ -55,7 +55,7 @@ export default function ContributePage() {
         <Backdrop />
         <Typography variant="h1">點樣貢獻</Typography>
         <Typography variant="lead">
-          Cantonese.md 係一個開源計劃，你可以透過以下方式為社群出一分力
+          Cantonese.md 係一個開源計劃，以下幾個方向都歡迎你嚟幫手
         </Typography>
         <div className="flex flex-col gap-4 md:flex-row">
           <Button

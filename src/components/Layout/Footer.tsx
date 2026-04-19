@@ -13,7 +13,7 @@ export const Footer = () => {
       <Container className="text-muted-foreground flex flex-col items-center gap-4 py-10 text-sm md:flex-row md:justify-between">
         <div className="flex flex-col items-center gap-1 md:items-start">
           <Logo />
-          <Typography variant="muted">保育粵語，由每一個人開始。</Typography>
+          <Typography variant="muted">保育粵語，由你我做起。</Typography>
         </div>
 
         <div className="flex items-center gap-6">

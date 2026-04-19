@@ -85,8 +85,8 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
         <DialogHeader className="sr-only">
           <DialogTitle>搜尋 Cantonese.md</DialogTitle>
           <DialogDescription>
-            你可以用中文或者粵拼搜尋。用上下箭咀揀結果，撳 Enter
-            去該頁面，或者撳 Esc 關閉搜尋。
+            你可以用中文或者粵拼嚟搜尋。用上下箭咀揀結果，撳 Enter
+            去到嗰個頁面，或者撳 Esc 閂返搜尋。
           </DialogDescription>
         </DialogHeader>
         <Command loop shouldFilter={false} label="搜尋 Cantonese.md">
@@ -119,7 +119,7 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
               </Select>
 
               <Typography variant="muted" className="hidden sm:block">
-                撳上下箭咀選擇，撳 Enter 前往，撳 Esc 退出
+                撳上下箭咀揀，撳 Enter 去睇，撳 Esc 閂返
               </Typography>
             </div>
           </div>
@@ -128,12 +128,12 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
 
           <CommandList aria-busy={isLoading} className="max-h-[26rem] p-2">
             {normalize(query).length === 0 ? (
-              <CommandEmpty>輸入文字或粵拼開始搜尋</CommandEmpty>
+              <CommandEmpty>輸入文字或者粵拼開始搜尋</CommandEmpty>
             ) : isLoading ? (
               <CommandEmpty>搜尋中...</CommandEmpty>
             ) : isError ? (
               <CommandEmpty className="text-destructive">
-                搜尋失敗，請稍後再試。
+                搜尋失敗，遲啲再試下。
               </CommandEmpty>
             ) : results.length === 0 ? (
               <CommandEmpty>揾唔到任何嘢</CommandEmpty>
