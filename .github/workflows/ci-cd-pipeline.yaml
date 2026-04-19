@@ -68,6 +68,7 @@ jobs:
       pull-requests: write
     environment:
       name: ${{ github.event_name == 'pull_request' && 'Preview' || 'Production' }}
+      url: ${{ steps.deploy.outputs.deployment-url }}
     steps:
       - name: Download Build Artifact
         uses: actions/download-artifact@v8
@@ -76,9 +77,9 @@ jobs:
           path: out/
 
       - name: Deploy
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy ./out --project-name=cantonese-md --branch=${{ github.event_name == 'pull_request' && github.head_ref || 'main' }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
