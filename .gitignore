@@ -43,7 +43,6 @@ next-env.d.ts
 # AI agents: only include `generating-cantonese-content` skill
 !.agents/skills
 .agents/skills/*
-!.agents/skills/generating-cantonese-content
 !.agents/skills/writing-cantonese
 
 skills-lock.json
