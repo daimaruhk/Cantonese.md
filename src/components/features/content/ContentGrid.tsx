@@ -77,7 +77,7 @@ export const ContentGrid = <T extends ContentType>({
           render={<Link href={`/${contentType}`} />}
           nativeButton={false}
         >
-          查看更多
+          睇多啲
           <IconArrowRight />
         </Button>
       </div>

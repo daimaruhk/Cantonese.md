@@ -85,8 +85,8 @@ export const SearchModal = ({ open, onOpenChange }: SearchModalProps) => {
         <DialogHeader className="sr-only">
           <DialogTitle>搜尋 Cantonese.md</DialogTitle>
           <DialogDescription>
-            用戶可以中文或粵拼搜尋。使用上下箭咀選擇結果，撳 Enter
-            前往該頁面，或者撳 Esc 關閉搜尋框。
+            你可以用中文或者粵拼搜尋。用上下箭咀揀結果，撳 Enter
+            去該頁面，或者撳 Esc 關閉搜尋。
           </DialogDescription>
         </DialogHeader>
         <Command loop shouldFilter={false} label="搜尋 Cantonese.md">

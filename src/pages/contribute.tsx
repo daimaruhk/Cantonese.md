@@ -27,16 +27,16 @@ const contributions = [
   {
     icon: <IconPalette />,
     title: '用戶體驗',
-    subtitle: '改善網站設計和用戶體驗',
+    subtitle: '改善網站設計同用戶體驗',
     description:
-      '如果你擅長設計或者網頁開發，我哋非常歡迎你協助改善網站嘅界面設計同使用者體驗，令所有人都可以更舒服、流暢地瀏覽。',
+      '如果你擅長設計或者網頁開發，我哋好歡迎你幫手改善網站嘅介面設計同用戶體驗，令所有人都可以更加舒服、流暢咁瀏覽。',
   },
   {
     icon: <IconSparkles />,
     title: '任何貢獻',
     subtitle: '任何有價值嘅諗法',
     description:
-      '無論係發現網站嘅 Bug、建議新功能、改善文檔、或者純粹幫手宣傳呢個計劃，只要你認為對保育粵語有價值嘅嘢，我哋都非常歡迎。',
+      '無論係發現網站嘅 Bug、建議新功能、改善文檔、或者純粹幫手宣傳呢個計劃，只要你認為對保育粵語有價值嘅嘢，我哋都好歡迎。',
   },
 ];
 
@@ -46,7 +46,7 @@ export default function ContributePage() {
       seo={{
         title: '點樣貢獻',
         description:
-          '暸解點樣為 Cantonese.md 貢獻你的力量。我哋歡迎任何人一齊參與開源保育粵語文化。',
+          '暸解點樣為 Cantonese.md 出一分力。我哋歡迎任何人一齊參與開源保育粵語文化。',
         canonicalUrl: normalizeUrl('contribute'),
         ogType: 'website',
       }}

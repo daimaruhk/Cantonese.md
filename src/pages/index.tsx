@@ -63,10 +63,10 @@ const HeroSection = () => {
         >
           粵語文化
           <br />
-          存檔計畫
+          存檔計劃
         </Typography>
         <Typography variant="lead" className="text-center md:text-left">
-          我們致力於紀錄、整理與傳承粵語的精髓。從民間智慧到當代語境，為下一代保留最道地的粵語印記。
+          我哋致力記錄、整理同傳承粵語嘅精髓。由民間智慧到當代語境，為下一代保留最地道嘅粵語印記。
         </Typography>
         <div className="flex flex-wrap items-center gap-4">
           <Button
@@ -82,7 +82,7 @@ const HeroSection = () => {
             render={<Link href="/about-us" />}
             nativeButton={false}
           >
-            了解更多
+            暸解更多
           </Button>
         </div>
       </div>

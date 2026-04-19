@@ -147,7 +147,7 @@ const MobileHeader = ({ onOpenSearch }: ResponsiveHeaderProps) => {
           size="icon"
           className="text-muted-foreground"
           onClick={onOpenSearch}
-          aria-label="Open search"
+          aria-label="開啟搜尋"
         >
           <IconSearch />
         </Button>

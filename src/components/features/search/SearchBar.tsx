@@ -17,7 +17,7 @@ export const SearchBar = ({ className, onOpen }: SearchBarProps) => {
         'bg-muted text-muted-foreground h-10 w-full justify-between px-3',
         className,
       )}
-      aria-label={`Open search (Command/Control K)`}
+      aria-label="開啟搜尋 (Command/Control K)"
     >
       <span className="flex min-w-0 items-center gap-2">
         <IconSearch data-icon="inline-start" />
