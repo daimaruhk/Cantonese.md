@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://cantonese.md">
-    <img src="./public/brand.webp" width="300" alt="Cantonese.md Logo">
+    <img src="./public/assets/brand.webp" width="300" alt="Cantonese.md Logo">
   </a>
 </p>
 

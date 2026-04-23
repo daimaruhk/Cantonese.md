@@ -4,7 +4,7 @@ import type { ContentData } from './types';
 
 export const siteName = 'Cantonese.md';
 export const siteUrl = normalizeUrl('/');
-export const imageUrl = normalizeUrl('brand_banner.png');
+export const imageUrl = normalizeUrl('assets/brand_banner.png');
 export const toTitle = (title: string) =>
   title.endsWith(`| ${siteName}`) ? title : `${title} | ${siteName}`;
 const toJsonLdId = (id: string) => normalizeUrl(id);
