@@ -7,7 +7,7 @@ export const siteUrl = normalizeUrl('/');
 export const imageUrl = normalizeUrl('assets/brand_banner.png');
 export const toTitle = (title: string) =>
   title.endsWith(`| ${siteName}`) ? title : `${title} | ${siteName}`;
-const toJsonLdId = (id: string) => normalizeUrl(id);
+const toJsonLdId = (id: string) => normalizeUrl(`#${id}`);
 
 export type SeoMeta = {
   title: string;
