@@ -7,13 +7,11 @@
   Cache-Control: public, max-age=86400, s-maxage=86400
   Cloudflare-CDN-Cache-Control: max-age=2592000
 
-# 3. SEO Metadata
-/sitemap.xml
-  Cache-Control: public, max-age=86400
-/robots.txt
-  Cache-Control: public, max-age=86400
+# 3. HTML Pages and API Routes
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=86400
+  Cloudflare-CDN-Cache-Control: max-age=604800
 
-# 4. Catch-all for Static Pages, API Routes
-/*
+/*.json
   Cache-Control: public, max-age=0, must-revalidate, s-maxage=86400
   Cloudflare-CDN-Cache-Control: max-age=604800
