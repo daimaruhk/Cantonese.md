@@ -74,7 +74,7 @@ export const IdiomCard = ({ metadata }: IdiomCardProps) => {
       >
         <Card className={cardClassNames} aria-hidden={isFlipped}>
           <Watermark />
-          <CardContent className="relative z-10">
+          <CardContent>
             <Typography variant="h3">{metadata.term}</Typography>
             <Typography variant="code" as="span" className="mt-1">
               {metadata.termJyutping}
@@ -95,7 +95,7 @@ export const IdiomCard = ({ metadata }: IdiomCardProps) => {
           aria-hidden={!isFlipped}
         >
           <Watermark />
-          <CardContent className="relative z-10">
+          <CardContent>
             <Typography variant="h3">{metadata.answer}</Typography>
             <Typography variant="code" as="span" className="mt-1">
               {metadata.answerJyutping}
