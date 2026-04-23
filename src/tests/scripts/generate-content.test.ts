@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 import fs from 'node:fs';
 import { beforeEach, afterEach, expect, it, vi, describe } from 'vitest';
 import { main } from '@/scripts/generate-content';

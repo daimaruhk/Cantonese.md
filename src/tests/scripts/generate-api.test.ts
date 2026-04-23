@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 import fs from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { main } from '@/scripts/generate-api';

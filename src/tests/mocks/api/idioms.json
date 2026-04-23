@@ -1,0 +1,44 @@
+[
+  {
+    "id": "O3PI7jXgET8j",
+    "term": "啞仔食黃蓮",
+    "termJyutping": "aa2 zai2 sik6 wong4 lin4",
+    "answer": "有苦自己知",
+    "answerJyutping": "jau5 fu2 zi6 gei2 zi1",
+    "contributors": ["daimaruhk"],
+    "createdAt": "2026-04-05T22:59:35-04:00",
+    "updatedAt": "2026-04-19T01:48:43-04:00",
+    "searchText": "啞仔食黃蓮有苦自己知",
+    "searchJyutping": "aa2 zai2 sik6 wong4 lin4 jau5 fu2 zi6 gei2 zi1",
+    "fileName": "啞仔食黃蓮",
+    "contentType": "idioms"
+  },
+  {
+    "id": "iRNL7TmVZbOW",
+    "term": "阿茂整餅",
+    "termJyutping": "aa3 mau6 zing2 beng2",
+    "answer": "冇嗰樣整嗰樣",
+    "answerJyutping": "mou5 go2 joeng6 zing2 go2 joeng6",
+    "contributors": ["daimaruhk"],
+    "createdAt": "2026-04-05T22:59:35-04:00",
+    "updatedAt": "2026-04-19T01:48:43-04:00",
+    "searchText": "阿茂整餅冇嗰樣整嗰樣",
+    "searchJyutping": "aa3 mau6 zing2 beng2 mou5 go2 joeng6 zing2 go2 joeng6",
+    "fileName": "阿茂整餅",
+    "contentType": "idioms"
+  },
+  {
+    "id": "6dL9qPWqEFlB",
+    "term": "賣魚佬沖涼",
+    "termJyutping": "maai6 jyu4 lou2 cung1 loeng4",
+    "answer": "冇聲氣",
+    "answerJyutping": "mou5 seng1 hei3",
+    "contributors": ["daimaruhk"],
+    "createdAt": "2026-04-05T22:59:35-04:00",
+    "updatedAt": "2026-04-11T00:18:15-04:00",
+    "searchText": "賣魚佬沖涼冇聲氣",
+    "searchJyutping": "maai6 jyu4 lou2 cung1 loeng4 mou5 seng1 hei3",
+    "fileName": "賣魚佬沖涼",
+    "contentType": "idioms"
+  }
+]

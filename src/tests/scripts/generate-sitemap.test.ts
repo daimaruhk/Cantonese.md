@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 import fs from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { main } from '@/scripts/generate-sitemap';
@@ -23,6 +25,8 @@ vi.mock(import('@/configurations/utils'), async (importOriginal) => {
       contributors: ['Test Author'],
       createdAt: '2026-04-01T00:00:00.000Z',
       updatedAt: '2026-04-15T00:00:00.000Z',
+      searchText: '賣魚佬沖涼冇晒聲氣',
+      searchJyutping: 'maai6 jyu4 lou2 cung1 loeng4 mou5 saai3 seng1 hei3',
     },
     {
       id: 'bbbbbbbbbbbb',
@@ -35,6 +39,8 @@ vi.mock(import('@/configurations/utils'), async (importOriginal) => {
       contributors: ['Test Author'],
       createdAt: '2026-04-02T00:00:00.000Z',
       updatedAt: '2026-04-10T00:00:00.000Z',
+      searchText: '菠蘿雞靠黐',
+      searchJyutping: 'bo1 lo4 gai1 kaau3 ci1',
     },
   ];
   return {
