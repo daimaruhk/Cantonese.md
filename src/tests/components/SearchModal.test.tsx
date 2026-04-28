@@ -15,10 +15,7 @@ vi.mock('next/router', () => ({
 
 const renderSearchModal = (open = true) => {
   const onOpenChange = vi.fn();
-  const result = render(
-    <SearchModal open={open} onOpenChange={onOpenChange} />,
-  );
-  return { ...result, onOpenChange };
+  render(<SearchModal open={open} onOpenChange={onOpenChange} />);
 };
 
 describe('SearchModal', () => {
@@ -206,9 +203,11 @@ describe('SearchModal', () => {
 
       await user.click(screen.getByRole('combobox', { name: '搜尋範圍' }));
 
-      Object.values(contentRegistry).forEach(({ label }) => {
-        expect(screen.getByRole('option', { name: label })).toBeInTheDocument();
-      });
+      for (const { label } of Object.values(contentRegistry)) {
+        expect(
+          await screen.findByRole('option', { name: label }),
+        ).toBeInTheDocument();
+      }
     });
   });
 
@@ -220,7 +219,7 @@ describe('SearchModal', () => {
         screen.getByPlaceholderText('搜尋文字或粵拼...'),
         '啞仔食黃蓮',
       );
-      await user.click(screen.getByRole('option', { name: /啞仔食黃蓮/ })!);
+      await user.click(screen.getByRole('option', { name: /啞仔食黃蓮/ }));
 
       expect(mockPush).toHaveBeenCalledWith('/idioms/啞仔食黃蓮');
     });
@@ -232,7 +231,7 @@ describe('SearchModal', () => {
         screen.getByPlaceholderText('搜尋文字或粵拼...'),
         '阿茂整餅',
       );
-      await user.click(screen.getByRole('option', { name: /阿茂整餅/ })!);
+      await user.click(screen.getByRole('option', { name: /阿茂整餅/ }));
 
       expect(mockPush).toHaveBeenCalledWith('/idioms/阿茂整餅');
     });
