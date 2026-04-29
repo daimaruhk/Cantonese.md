@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/components/ui/Badge';
 import {
   Command,
   CommandEmpty,
