@@ -1,15 +1,5 @@
 import { IconArrowsSort } from '@tabler/icons-react';
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-  PaginationRange,
-} from '@/components/ui/Pagination';
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -22,6 +12,7 @@ import { Container } from '@/components/Container';
 import { Layout } from '@/components/Layout';
 import { Section } from '@/components/Section';
 import { CardGrid } from '@/components/features/content/CardGrid';
+import { Pagination } from '@/components/features/pagination';
 import { useContentMetadataQuery } from '@/hooks/useQuery';
 import { useList } from '@/hooks/useList';
 import { contentRegistry, type ContentType } from '@/configurations/registry';
@@ -84,49 +75,13 @@ export default function ListPage<T extends ContentType>({
         </div>
         <CardGrid contentType={contentType} entries={paginatedEntries} />
         {totalPages > 1 && (
-          <Pagination className="mt-12">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                  aria-disabled={currentPage <= 1}
-                  className={
-                    currentPage <= 1 ? 'pointer-events-none opacity-50' : ''
-                  }
-                />
-              </PaginationItem>
-              <PaginationRange
-                totalPages={totalPages}
-                currentPage={currentPage}
-              >
-                {(item) =>
-                  item.type === 'ellipsis' ? (
-                    <PaginationEllipsis />
-                  ) : (
-                    <PaginationLink
-                      onClick={() => handlePageChange(item.page)}
-                      isActive={item.isActive}
-                    >
-                      {item.page}
-                    </PaginationLink>
-                  )
-                }
-              </PaginationRange>
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() =>
-                    handlePageChange(Math.min(totalPages, currentPage + 1))
-                  }
-                  aria-disabled={currentPage >= totalPages}
-                  className={
-                    currentPage >= totalPages
-                      ? 'pointer-events-none opacity-50'
-                      : ''
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <div className="mt-12">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
         )}
       </Container>
     </Layout>
