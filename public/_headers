@@ -9,26 +9,26 @@
 
 # 3. API Routes
 /api/*
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=86400
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0
   Cloudflare-CDN-Cache-Control: max-age=604800
 
 # 4. HTML Pages
 /
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=86400
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0
   Cloudflare-CDN-Cache-Control: max-age=604800
 
 /about-us
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=86400
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0
   Cloudflare-CDN-Cache-Control: max-age=604800
 
 /contribute
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=86400
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0
   Cloudflare-CDN-Cache-Control: max-age=604800
 
 /idioms
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=86400
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0
   Cloudflare-CDN-Cache-Control: max-age=604800
 
 /idioms/*
-  Cache-Control: public, max-age=0, must-revalidate, s-maxage=86400
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0
   Cloudflare-CDN-Cache-Control: max-age=604800
