@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { normalizeUrl } from '@/lib/utils';
-import { contentRegistry } from '@/configurations/registry';
+import { contentRegistry, contentTypes } from '@/configurations/registry';
 import { getAllMetadata } from '@/configurations/utils';
 
 type SitemapEntry = {
@@ -16,7 +16,7 @@ const STATIC_PATHS = ['', 'about-us', 'contribute'];
 
 const indent = (str: string, level: number) => '  '.repeat(level) + str;
 
-export const main = () => {
+const generateSitemap = () => {
   const outputPath = path.join(process.cwd(), 'public', 'sitemap.xml');
   const urls: SitemapEntry[] = [];
 
@@ -77,7 +77,43 @@ export const main = () => {
   console.log(
     `✅ Generated sitemap at public/sitemap.xml (${urls.length} URLs)`,
   );
+};
 
+const generateCloudflareHeaders = () => {
+  const outputPath = path.join(process.cwd(), 'public', '_headers');
+  const entries = [
+    ...STATIC_PATHS.map((path) => `/${path}`),
+    ...contentTypes.flatMap((contentType) => [
+      `/${contentType}`,
+      `/${contentType}/*`,
+    ]),
+    '/api/*',
+  ];
+  const lines = entries.flatMap((path) => [
+    `${path}`,
+    '  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0',
+    '  Cloudflare-CDN-Cache-Control: max-age=604800',
+    '',
+  ]);
+
+  const content = `/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=86400, s-maxage=86400
+  Cloudflare-CDN-Cache-Control: max-age=2592000
+  
+${lines.join('\n')}`;
+
+  fs.writeFileSync(outputPath, content, 'utf8');
+  console.log(
+    `✅ Generated Cloudflare _headers file to public/_headers (${entries.length} entries)`,
+  );
+};
+
+export const main = () => {
+  generateSitemap();
+  generateCloudflareHeaders();
   return 0;
 };
 

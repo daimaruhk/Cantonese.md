@@ -2,7 +2,7 @@
 
 import fs from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { main } from '@/scripts/generate-sitemap';
+import { main } from '@/scripts/generate-staticFiles';
 import type { ContentMetadata } from '@/configurations/types';
 
 vi.mock('node:fs', () => ({
@@ -68,14 +68,24 @@ describe('generate-sitemap', () => {
     expect(console.log).toHaveBeenCalledWith(
       '✅ Generated sitemap at public/sitemap.xml (6 URLs)',
     );
+    expect(console.log).toHaveBeenCalledWith(
+      '✅ Generated Cloudflare _headers file to public/_headers (6 entries)',
+    );
     expect(exitCode).toBe(0);
   });
 
   it('should write the sitemap to the correct output path', () => {
     main();
 
-    expect(writeFileSyncMock).toHaveBeenCalledWith(
+    expect(writeFileSyncMock).toHaveBeenNthCalledWith(
+      1,
       '/mock-cwd/public/sitemap.xml',
+      expect.any(String),
+      'utf8',
+    );
+    expect(writeFileSyncMock).toHaveBeenNthCalledWith(
+      2,
+      '/mock-cwd/public/_headers',
       expect.any(String),
       'utf8',
     );
@@ -86,7 +96,6 @@ describe('generate-sitemap', () => {
 
     const xml = writeFileSyncMock.mock.calls![0]![1] as string;
 
-    expect(writeFileSyncMock).toHaveBeenCalledOnce();
     expect(xml).toBe(`<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -123,5 +132,43 @@ describe('generate-sitemap', () => {
     <lastmod>2026-04-15T00:00:00.000Z</lastmod>
   </url>
 </urlset>`);
+  });
+
+  it('should generate the Cloudflare _headers content', () => {
+    main();
+
+    const headers = writeFileSyncMock.mock.calls![1]![1] as string;
+
+    expect(headers).toBe(`/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=86400, s-maxage=86400
+  Cloudflare-CDN-Cache-Control: max-age=2592000
+  
+/
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0
+  Cloudflare-CDN-Cache-Control: max-age=604800
+
+/about-us
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0
+  Cloudflare-CDN-Cache-Control: max-age=604800
+
+/contribute
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0
+  Cloudflare-CDN-Cache-Control: max-age=604800
+
+/idioms
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0
+  Cloudflare-CDN-Cache-Control: max-age=604800
+
+/idioms/*
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0
+  Cloudflare-CDN-Cache-Control: max-age=604800
+
+/api/*
+  Cache-Control: public, max-age=0, must-revalidate, s-maxage=0
+  Cloudflare-CDN-Cache-Control: max-age=604800
+`);
   });
 });

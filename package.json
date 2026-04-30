@@ -6,14 +6,14 @@
   "homepage": "https://github.com/daimaruhk/Cantonese.md",
   "scripts": {
     "dev": "next dev",
-    "prebuild": "pnpm gen:api && pnpm gen:sitemap",
+    "prebuild": "pnpm gen:api && pnpm gen:staticFiles",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
     "test": "vitest run",
     "gen:api": "tsx ./src/scripts/generate-api.ts",
-    "gen:sitemap": "tsx ./src/scripts/generate-sitemap.ts",
+    "gen:staticFiles": "tsx ./src/scripts/generate-staticFiles.ts",
     "gen:content": "tsx ./src/scripts/generate-content.ts"
   },
   "dependencies": {
