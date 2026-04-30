@@ -19,3 +19,27 @@ export const fetchContentMetadata = async <T extends ContentType>(
         });
   }
 };
+
+export type Dictionary = Record<string, TrieNode>;
+
+type TrieNode = {
+  j?: string;
+  [key: string]: TrieNode | string | undefined;
+};
+
+export const fetchDictionary = async () => {
+  try {
+    const response = await fetch('/api/dictionary.json');
+    if (!response.ok) {
+      throw new Error('Failed to fetch dictionary');
+    }
+    // We can safely cast because the api is generated in build time with thorough testing.
+    return response.json() as Promise<Dictionary>;
+  } catch (error) {
+    throw error instanceof Error
+      ? error
+      : new Error('Unknown error occurred while fetching dictionary', {
+          cause: error,
+        });
+  }
+};

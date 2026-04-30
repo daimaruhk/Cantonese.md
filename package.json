@@ -14,7 +14,8 @@
     "test": "vitest run",
     "gen:api": "tsx ./src/scripts/generate-api.ts",
     "gen:staticFiles": "tsx ./src/scripts/generate-staticFiles.ts",
-    "gen:content": "tsx ./src/scripts/generate-content.ts"
+    "gen:content": "tsx ./src/scripts/generate-content.ts",
+    "gen:dictionary": "tsx ./src/scripts/generate-dictionary.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.3.0",

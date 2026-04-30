@@ -48,7 +48,9 @@ next-env.d.ts
 
 skills-lock.json
 
+!public/api
 public/api/*
+!public/api/dictionary.json
 public/sitemap.xml
 public/_headers
 TODO.md
