@@ -50,4 +50,5 @@ skills-lock.json
 
 public/api/*
 public/sitemap.xml
+public/_headers
 TODO.md
