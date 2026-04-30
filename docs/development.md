@@ -31,16 +31,16 @@
 
 ## Build and Test Commands
 
-| Command                              | Description                                         |
-| :----------------------------------- | :-------------------------------------------------- |
-| `pnpm dev`                           | Start development server at `http://localhost:3000` |
-| `pnpm build`                         | Build the static export into `out/`                 |
-| `pnpm lint`                          | Run ESLint to check for code quality issues         |
-| `pnpm format`                        | Run Prettier to format the codebase                 |
-| `pnpm test`                          | Run the test suite using Vitest                     |
-| `pnpm gen:content <type> <fileName>` | Create a new entry template                         |
-| `pnpm gen:api`                       | Generate API files to `public/api/`                 |
-| `pnpm gen:sitemap`                   | Generate sitemap file to `public/sitemap.xml`       |
+| Command                              | Description                                                           |
+| :----------------------------------- | :-------------------------------------------------------------------- |
+| `pnpm dev`                           | Start development server at `http://localhost:3000`                   |
+| `pnpm build`                         | Build the static export into `out/`                                   |
+| `pnpm lint`                          | Run ESLint to check for code quality issues                           |
+| `pnpm format`                        | Run Prettier to format the codebase                                   |
+| `pnpm test`                          | Run the test suite using Vitest                                       |
+| `pnpm gen:content <type> <fileName>` | Create a new entry template                                           |
+| `pnpm gen:api`                       | Generate API files to `public/api/`                                   |
+| `pnpm gen:staticFiles`               | Generate static files to `public/`, include sitemap.xml and \_headers |
 
 ## Validation Checklist
 
