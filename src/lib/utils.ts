@@ -28,17 +28,17 @@ export const getGithubProfilePicUrl = (username: string) =>
 
 export const normalize = (text: string) => text.trim().toLowerCase();
 
-export const normalizeUrl = (path?: string) => {
-  const url = `https://cantonese.md/`;
+export const normalizeUrl = (path?: string, withTrailingSlash = false) => {
+  const url = `https://cantonese.md`;
 
   if (!path || path === '/') {
-    return url;
+    return withTrailingSlash ? `${url}/` : url;
   }
 
   path = path.startsWith('/') ? path.slice(1) : path; // remove leading slash
   path = path.endsWith('/') ? path.slice(0, -1) : path; // remove trailing slash
 
-  return `${url}${path}/`;
+  return `${url}/${path}${withTrailingSlash ? '/' : ''}`;
 };
 
 export const getDateString = (date: Date) => date.toISOString().slice(0, 10);

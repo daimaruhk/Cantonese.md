@@ -23,7 +23,7 @@ const generateSitemap = () => {
   STATIC_PATHS.forEach((path) => {
     // There is no accurate way to get the lastmod for static pages
     urls.push({
-      loc: normalizeUrl(path),
+      loc: normalizeUrl(path, true),
       changefreq: 'monthly',
       priority: path === '' ? '1.0' : '0.7',
     });
@@ -41,7 +41,10 @@ const generateSitemap = () => {
     ).toISOString();
     metadataList.forEach(({ fileName, updatedAt }) => {
       urls.push({
-        loc: normalizeUrl(`${contentType}/${encodeURIComponent(fileName)}`),
+        loc: normalizeUrl(
+          `${contentType}/${encodeURIComponent(fileName)}`,
+          true,
+        ),
         changefreq: 'monthly',
         priority: '0.6',
         lastmod: updatedAt,
@@ -50,7 +53,7 @@ const generateSitemap = () => {
 
     // List page
     urls.push({
-      loc: normalizeUrl(contentType),
+      loc: normalizeUrl(contentType, true),
       changefreq: 'weekly',
       priority: '0.8',
       lastmod: mostRecentUpdatedAt,
