@@ -20,9 +20,7 @@ export const fetchContentMetadata = async <T extends ContentType>(
   }
 };
 
-export type Dictionary = Record<string, TrieNode>;
-
-type TrieNode = {
+export type TrieNode = {
   j?: string;
   [key: string]: TrieNode | string | undefined;
 };
@@ -34,7 +32,7 @@ export const fetchDictionary = async () => {
       throw new Error('Failed to fetch dictionary');
     }
     // We can safely cast because the api is generated in build time with thorough testing.
-    return response.json() as Promise<Dictionary>;
+    return response.json() as Promise<TrieNode>;
   } catch (error) {
     throw error instanceof Error
       ? error

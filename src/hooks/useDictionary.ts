@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchDictionary, type Dictionary } from '@/lib/api';
+import { fetchDictionary, type TrieNode } from '@/lib/api';
 
 export const useDictionaryQuery = () => {
-  return useQuery<Dictionary>({
+  return useQuery<TrieNode>({
     queryKey: ['dictionary'],
     queryFn: fetchDictionary,
     staleTime: 'static' as const,
