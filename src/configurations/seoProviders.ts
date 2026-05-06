@@ -14,6 +14,7 @@ export type SeoMeta = {
   canonicalUrl: string;
   jsonLd?: {
     '@context': 'https://schema.org';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     '@graph': any[];
   };
 } & (
