@@ -37,6 +37,7 @@ vi.mock(import('@/configurations/utils'), async (importOriginal) => {
     termJyutping: 'maai6 jyu4 lou2 cung1 loeng4',
     answer: '冇晒聲氣',
     answerJyutping: 'mou5 saai3 seng1 hei3',
+    explanation: '形容事情冇下文。',
   };
   const mockFrontmatter2: Frontmatter<'idioms'> = {
     id: 'bbbbbbbbbbbb',
@@ -44,6 +45,8 @@ vi.mock(import('@/configurations/utils'), async (importOriginal) => {
     termJyutping: 'aa3 zai2 sik6 wong4 lin4',
     answer: '有苦自己知',
     answerJyutping: 'jau5 fu2 zi6 gei2 zi1',
+    explanation:
+      '比喻人受咗委屈、蝕底或者有難言之隱，但係因為某啲原因同顧慮而冇辦法同人講，唯有自己靜靜雞頂住。',
   };
   const mockGetContentFileNames: typeof actual.getContentFileNames = () => [
     '賣魚佬沖涼',
@@ -90,6 +93,8 @@ describe('main', () => {
             termJyutping: 'aa3 zai2 sik6 wong4 lin4',
             answer: '有苦自己知',
             answerJyutping: 'jau5 fu2 zi6 gei2 zi1',
+            explanation:
+              '比喻人受咗委屈、蝕底或者有難言之隱，但係因為某啲原因同顧慮而冇辦法同人講，唯有自己靜靜雞頂住。',
             contributors: ['Bob'],
             createdAt: '2026-04-01T12:34:56+00:00',
             updatedAt: '2026-04-20T12:34:56+00:00',
@@ -104,6 +109,7 @@ describe('main', () => {
             termJyutping: 'maai6 jyu4 lou2 cung1 loeng4',
             answer: '冇晒聲氣',
             answerJyutping: 'mou5 saai3 seng1 hei3',
+            explanation: '形容事情冇下文。',
             contributors: ['Alice', 'Bob'],
             createdAt: '2026-04-01T12:34:56+00:00',
             updatedAt: '2026-04-15T12:34:56+00:00',

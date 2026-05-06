@@ -6,6 +6,7 @@ export const IdiomFrontmatterSchema = BaseFrontmatterSchema.extend({
   termJyutping: JyutpingSchema,
   answer: z.string().min(1),
   answerJyutping: JyutpingSchema,
+  explanation: z.string().min(1),
 });
 
 export type IdiomFrontmatter = z.infer<typeof IdiomFrontmatterSchema>;

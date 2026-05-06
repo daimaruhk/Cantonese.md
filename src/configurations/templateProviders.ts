@@ -24,6 +24,7 @@ const templateObjectByContentType: {
     termJyutping: '',
     answer: '',
     answerJyutping: '',
+    explanation: '',
   },
 };
 

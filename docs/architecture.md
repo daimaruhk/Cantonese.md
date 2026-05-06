@@ -65,6 +65,7 @@ term: 阿茂整餅
 termJyutping: aa3 mau6 zing2 beng2
 answer: 冇嗰樣整嗰樣
 answerJyutping: mou5 go2 joeng6 zing2 go2 joeng6
+explanation: 用嚟形容人「多此一舉」、「冇嘢揾嘢嚟搞」，結果只係自製麻煩、加重負擔。
 ---
 
 # 阿茂整餅──冇嗰樣整嗰樣

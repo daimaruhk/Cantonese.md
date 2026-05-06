@@ -27,8 +27,8 @@ export default function ListPage<T extends ContentType>({
   contentType,
 }: ListPageProps<T>) {
   const renderer = renderers[contentType];
-  const seo = seoProviders[contentType].listPage();
   const { data: entries = [] } = useContentMetadataQuery({ contentType });
+  const seo = seoProviders[contentType].listPage(entries);
   const {
     paginatedEntries,
     sortOptions,
