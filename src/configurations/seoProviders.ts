@@ -12,7 +12,10 @@ export type SeoMeta = {
   title: string;
   description: string;
   canonicalUrl: string;
-  jsonLd?: Record<string, unknown>;
+  jsonLd?: {
+    '@context': 'https://schema.org';
+    '@graph': any[];
+  };
 } & (
   | {
       ogType: 'website';
@@ -37,26 +40,63 @@ const language = 'yue-Hant';
 export const seoProviders: SeoProviders = {
   idioms: (() => {
     const idiomsListPageCanonicalUrl = normalizeUrl('idioms');
+    const breadcrumbList = [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: '首頁',
+        item: normalizeUrl('/'),
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: '歇後語',
+        item: idiomsListPageCanonicalUrl,
+      },
+    ];
     return {
       listPage: () => {
-        const idiomsListPageTitle = toTitle(
-          '廣東話歇後語大全：解構粵語民間智慧、意思與由來',
-        );
-        const idiomsListPageDescription =
+        const title = toTitle('廣東話歇後語大全：解構粵語民間智慧、意思與由來');
+        const description =
           '收錄超過 200 個粵語歇後語，提供精準意思解釋、典故由來及生活化例句。暸解粵語文化必備手冊，助你探索和掌握最道地嘅粵語民間智慧。';
+        const definedTermSetId = toJsonLdId('idioms:defined_term_set');
+        const breadcrumbId = toJsonLdId('idioms:breadcrumb');
         return {
-          title: idiomsListPageTitle,
-          description: idiomsListPageDescription,
+          title,
+          description,
           canonicalUrl: idiomsListPageCanonicalUrl,
           ogType: 'website',
           jsonLd: {
             '@context': 'https://schema.org',
-            '@type': 'DefinedTermSet',
-            '@id': toJsonLdId('idioms:defined_term_set'),
-            inLanguage: language,
-            description: idiomsListPageDescription,
-            url: idiomsListPageCanonicalUrl,
-            name: idiomsListPageTitle,
+            '@graph': [
+              {
+                '@type': 'WebPage',
+                '@id': idiomsListPageCanonicalUrl,
+                url: idiomsListPageCanonicalUrl,
+                name: title,
+                description,
+                inLanguage: language,
+                breadcrumb: {
+                  '@id': breadcrumbId,
+                },
+                mainEntity: {
+                  '@id': definedTermSetId,
+                },
+              },
+              {
+                '@type': 'BreadcrumbList',
+                '@id': breadcrumbId,
+                itemListElement: breadcrumbList,
+              },
+              {
+                '@type': 'DefinedTermSet',
+                '@id': definedTermSetId,
+                name: title,
+                description,
+                url: idiomsListPageCanonicalUrl,
+                inLanguage: language,
+              },
+            ],
           },
         };
       },
@@ -64,42 +104,80 @@ export const seoProviders: SeoProviders = {
         const title = toTitle(
           `${contentData.term}：歇後語解釋、典故由來及生活化例句`,
         );
-        const descriptionWithoutPeriod = contentData.explanation.endsWith('。')
+        const explanationWithoutPeriod = contentData.explanation.endsWith('。')
           ? contentData.explanation.slice(0, -1)
           : contentData.explanation;
-        const description = `粵語歇後語「${contentData.term}──${contentData.answer}」，${descriptionWithoutPeriod}。立即查看更多有關依個歇後語嘅詳細解釋、典故由來及生活化例句。`;
+        const description = `粵語歇後語「${contentData.term}──${contentData.answer}」，${explanationWithoutPeriod}。立即查看更多有關依個歇後語嘅詳細解釋、典故由來及生活化例句。`;
+        const canonicalUrl = normalizeUrl(
+          `${contentData.contentType}/${contentData.fileName}`,
+        );
+        const defineTermId = toJsonLdId(
+          `${contentData.contentType}:${contentData.fileName}:defined_term`,
+        );
+        const breadcrumbId = toJsonLdId(
+          `${contentData.contentType}:${contentData.fileName}:breadcrumb`,
+        );
         return {
           title,
           description,
-          canonicalUrl: normalizeUrl(
-            `${contentData.contentType}/${contentData.fileName}`,
-          ),
+          canonicalUrl,
           ogType: 'article',
           publishedTime: contentData.createdAt,
           modifiedTime: contentData.updatedAt,
           authors: contentData.contributors.map(getGithubProfileUrl),
           jsonLd: {
             '@context': 'https://schema.org',
-            '@type': 'DefinedTerm',
-            '@id': toJsonLdId(
-              `${contentData.contentType}:${contentData.fileName}:defined_term`,
-            ),
-            name: title,
-            description,
-            inLanguage: language,
-            inDefinedTermSet: idiomsListPageCanonicalUrl,
-            pronunciation: [
+            '@graph': [
               {
-                '@type': 'PronounceableText',
-                textValue: contentData.term,
-                phoneticText: contentData.termJyutping,
+                '@type': 'WebPage',
+                '@id': canonicalUrl,
+                url: canonicalUrl,
+                name: title,
+                description,
                 inLanguage: language,
+                breadcrumb: {
+                  '@id': breadcrumbId,
+                },
+                mainEntity: {
+                  '@id': defineTermId,
+                },
               },
               {
-                '@type': 'PronounceableText',
-                textValue: contentData.answer,
-                phoneticText: contentData.answerJyutping,
-                inLanguage: language,
+                '@type': 'BreadcrumbList',
+                '@id': breadcrumbId,
+                itemListElement: [
+                  ...breadcrumbList,
+                  {
+                    '@type': 'ListItem',
+                    position: breadcrumbList.length + 1,
+                    name: contentData.term,
+                    item: canonicalUrl,
+                  },
+                ],
+              },
+              {
+                '@type': 'DefinedTerm',
+                '@id': defineTermId,
+                name: contentData.term,
+                description,
+                inDefinedTermSet: idiomsListPageCanonicalUrl,
+                url: canonicalUrl,
+              },
+              {
+                '@type': 'FAQPage',
+                '@id': toJsonLdId(
+                  `${contentData.contentType}:${contentData.fileName}:faq`,
+                ),
+                mainEntity: [
+                  {
+                    '@type': 'Question',
+                    name: `「${contentData.term}」呢句歇後語係咩意思？`,
+                    acceptedAnswer: {
+                      '@type': 'Answer',
+                      text: `${contentData.answer}：${contentData.explanation}`,
+                    },
+                  },
+                ],
               },
             ],
           },
