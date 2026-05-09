@@ -29,15 +29,16 @@ pnpm gen:content idioms <term>
 
 ### 第二步：填 Frontmatter
 
-Frontmatter 有五個 field：
+Frontmatter 有六個 field：
 
-| 欄位             | 說明                   | 例子                                  |
-| ---------------- | ---------------------- | ------------------------------------- |
-| `id`             | 自動生成，唔好郁佢     | `c6kCTZQ3G6kt`                        |
-| `term`           | 歇後語前半部分（謎面） | `一個酸梅兩個核`                      |
-| `termJyutping`   | term 嘅粵拼            | `jat1 go3 syun1 mui4 loeng5 go3 wat6` |
-| `answer`         | 歇後語後半部分（謎底） | `今時唔同往日`                        |
-| `answerJyutping` | answer 嘅粵拼          | `gam1 si4 m4 tung4 wong5 jat6`        |
+| 欄位             | 說明                             | 例子                                     |
+| ---------------- | -------------------------------- | ---------------------------------------- |
+| `id`             | 自動生成，唔好郁佢               | `c6kCTZQ3G6kt`                           |
+| `term`           | 歇後語前半部分（謎面）           | `一個酸梅兩個核`                         |
+| `termJyutping`   | term 嘅粵拼                      | `jat1 go3 syun1 mui4 loeng5 go3 wat6`    |
+| `answer`         | 歇後語後半部分（謎底）           | `今時唔同往日`                           |
+| `answerJyutping` | answer 嘅粵拼                    | `gam1 si4 m4 tung4 wong5 jat6`           |
+| `explanation`    | 簡短解釋（只用作 SEO，唔會展示） | `比喻時勢轉變，而家嘅情況同以前唔同晒。` |
 
 **Frontmatter 格式：** 唔好用雙引號（double quotes `"`）包住啲 value，直接寫文字就可以。✅ `term: 濕水欖核` ❌ `term: "濕水欖核"`。
 
