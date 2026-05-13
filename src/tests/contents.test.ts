@@ -38,7 +38,7 @@ describe('Content types', () => {
           contentRegistry[contentType].schema.safeParse(frontmatter);
         expect(
           result.success,
-          `File "${fileName}.md" does not satisfy the schema`,
+          `File "${fileName}.md" does not satisfy the schema: ${result.error}`,
         ).toBe(true);
         expect(
           content.trim().length,
